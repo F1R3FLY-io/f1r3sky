@@ -81,6 +81,7 @@
     "@emoji-mart/react": "^1.1.1",
     "@expo/html-elements": "^0.12.5",
     "@expo/webpack-config": "^19.0.1",
+    "@f1r3fly-io/embers-client-sdk": "^0.0.66",
     "@floating-ui/dom": "^1.6.3",
     "@floating-ui/react-dom": "^2.0.8",
     "@formatjs/intl-locale": "^4.2.8",
@@ -139,6 +140,7 @@
     "expo-clipboard": "~8.0.7",
     "expo-dev-client": "~6.0.16",
     "expo-device": "~8.0.9",
+    "expo-document-picker": "^14.0.7",
     "expo-file-system": "~19.0.17",
     "expo-font": "~14.0.9",
     "expo-haptics": "~15.0.7",
@@ -202,6 +204,7 @@
     "react-native-safe-area-context": "~5.6.0",
     "react-native-screens": "~4.16.0",
     "react-native-svg": "15.12.1",
+    "react-native-svg-charts": "^5.4.0",
     "react-native-uitextview": "^1.4.0",
     "react-native-url-polyfill": "^1.3.0",
     "react-native-uuid": "^2.0.3",
@@ -243,6 +246,7 @@
     "@types/psl": "^1.1.1",
     "@types/react": "^19.1.12",
     "@types/react-dom": "^19.1.9",
+    "@types/react-native-svg-charts": "^5.0.16",
     "@typescript-eslint/eslint-plugin": "^7.18.0",
     "@typescript-eslint/parser": "^7.18.0",
     "babel-jest": "^29.7.0",
@@ -349,7 +353,8 @@
     "path": "yarn.lock",
     "allowedHosts": [
       "npm",
-      "yarn"
+      "yarn",
+      "npm.pkg.github.com"
     ],
     "allowedSchemes": [
       "https:"

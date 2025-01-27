@@ -127,6 +127,8 @@ import {
 import {Wizard} from '#/screens/StarterPack/Wizard'
 import TopicScreen from '#/screens/Topic'
 import {VideoFeed} from '#/screens/VideoFeed'
+import {Wallet} from '#/screens/Wallet'
+import {Wallets} from '#/screens/Wallets'
 import {type Theme, useTheme} from '#/alf'
 import {
   EmailDialogScreenID,
@@ -606,6 +608,22 @@ function commonScreens(Stack: typeof Flat, unreadCountLabel?: string) {
         getComponent={() => BookmarksScreen}
         options={{
           title: title(msg`Saved Posts`),
+          requireAuth: true,
+        }}
+      />
+      <Stack.Screen
+        name="Wallets"
+        getComponent={() => Wallets}
+        options={{
+          title: title(msg`Wallets`),
+          requireAuth: true,
+        }}
+      />
+      <Stack.Screen
+        name="Wallet"
+        getComponent={() => Wallet}
+        options={{
+          title: title(msg`Wallet`),
           requireAuth: true,
         }}
       />

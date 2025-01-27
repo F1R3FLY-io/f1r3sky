@@ -70,6 +70,7 @@ import {
   UserCircle_Filled_Corner0_Rounded as UserCircleFilled,
   UserCircle_Stroke2_Corner0_Rounded as UserCircle,
 } from '#/components/icons/UserCircle'
+import {Wallet, WalletFilled} from '#/components/icons/Wallet'
 import {CENTER_COLUMN_OFFSET} from '#/components/Layout'
 import * as Menu from '#/components/Menu'
 import * as Prompt from '#/components/Prompt'
@@ -785,6 +786,12 @@ export function DesktopLeftNav() {
               />
             }
             label={_(msg`Profile`)}
+          />
+          <NavItem
+            href={'/wallets'}
+            icon={<Wallet />}
+            iconFilled={<WalletFilled />}
+            label={_(msg`Wallets`)}
           />
           <NavItem
             href="/settings"

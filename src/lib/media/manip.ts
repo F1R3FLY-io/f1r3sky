@@ -1,5 +1,6 @@
 import {Image as RNImage} from 'react-native'
 import uuid from 'react-native-uuid'
+import type * as DocumentPicker from 'expo-document-picker'
 import {
   cacheDirectory,
   copyAsync,
@@ -8,6 +9,7 @@ import {
   EncodingType,
   getInfoAsync,
   makeDirectoryAsync,
+  readAsStringAsync,
   StorageAccessFramework,
   writeAsStringAsync,
 } from 'expo-file-system/legacy'
@@ -421,4 +423,10 @@ async function downloadImage(uri: string, path: string, timeout: number) {
   }
 
   return normalizePath(dlRes.uri)
+}
+
+export async function downloadDocument(
+  document: DocumentPicker.DocumentPickerAsset,
+): Promise<string> {
+  return await readAsStringAsync(document.uri)
 }

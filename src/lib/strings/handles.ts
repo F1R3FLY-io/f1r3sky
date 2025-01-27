@@ -21,7 +21,7 @@ export function createFullHandle(name: string, domain: string): string {
   return `${name}.${domain}`
 }
 
-export function isInvalidHandle(handle: string): boolean {
+export function isInvalidHandle(handle?: string): boolean {
   return handle === 'handle.invalid'
 }
 
