@@ -1,0 +1,77 @@
+import {View} from 'react-native'
+import {Trans} from '@lingui/macro'
+import {useNavigation} from '@react-navigation/native'
+
+import {CommonNavigatorParams, NativeStackScreenProps} from '#/lib/routes/types'
+import {NavigationProp} from '#/lib/routes/types'
+import {useModalControls} from '#/state/modals'
+import {useWallets} from '#/state/wallets'
+import {PressableWithHover} from '#/view/com/util/PressableWithHover'
+import {atoms as a, useTheme} from '#/alf'
+import {Divider} from '#/components/Divider'
+import {AddWallet, Wallet} from '#/components/icons/Wallet'
+import * as Layout from '#/components/Layout'
+import {Text} from '#/components/Typography'
+
+export default function WalletsSelection({}: NativeStackScreenProps<
+  CommonNavigatorParams,
+  'Wallets'
+>) {
+  const t = useTheme()
+  const navigation = useNavigation<NavigationProp>()
+  const {openModal} = useModalControls()
+
+  const onPressItem = (position: number) =>
+    navigation.push('Wallet', {position: position + 1})
+
+  const {wallets} = useWallets()
+
+  return (
+    <Layout.Screen>
+      <Layout.Header.Outer>
+        <Layout.Header.BackButton />
+        <Layout.Header.Content align="left">
+          <Layout.Header.TitleText>
+            <Trans>Wallets</Trans>
+          </Layout.Header.TitleText>
+        </Layout.Header.Content>
+      </Layout.Header.Outer>
+      <Layout.Content>
+        {wallets.map((wallet, i) => (
+          <PressableWithHover
+            key={i}
+            hoverStyle={t.atoms.bg_contrast_25}
+            onPress={() => onPressItem(i)}>
+            <View style={[a.flex_row, a.align_center, a.p_2xl, a.gap_sm]}>
+              <Wallet />
+              <Text style={[a.text_md]}>
+                <Trans>Wallet</Trans> #{wallet.hash}
+              </Text>
+            </View>
+          </PressableWithHover>
+        ))}
+        <PressableWithHover
+          hoverStyle={t.atoms.bg_contrast_25}
+          onPress={() => openModal({name: 'create-wallet'})}>
+          <View style={[a.flex_row, a.align_center, a.p_2xl, a.gap_sm]}>
+            <AddWallet />
+            <Text style={[a.text_md]}>
+              <Trans>Create new wallet</Trans>
+            </Text>
+          </View>
+        </PressableWithHover>
+        <PressableWithHover
+          hoverStyle={t.atoms.bg_contrast_25}
+          onPress={() => openModal({name: 'add-wallet'})}>
+          <View style={[a.flex_row, a.align_center, a.p_2xl, a.gap_sm]}>
+            <AddWallet />
+            <Text style={[a.text_md]}>
+              <Trans>Add wallet</Trans>
+            </Text>
+          </View>
+        </PressableWithHover>
+        <Divider />
+      </Layout.Content>
+    </Layout.Screen>
+  )
+}

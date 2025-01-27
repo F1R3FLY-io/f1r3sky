@@ -141,6 +141,7 @@ export type InputProps = Omit<TextInputProps, 'value' | 'onChangeText'> & {
   onChangeText?: (value: string) => void
   isInvalid?: boolean
   inputRef?: React.RefObject<TextInput> | React.ForwardedRef<TextInput>
+  noBackground?: boolean
 }
 
 export function createInput(Component: typeof TextInput) {
@@ -154,6 +155,7 @@ export function createInput(Component: typeof TextInput) {
     isInvalid,
     inputRef,
     style,
+    noBackground,
     ...rest
   }: InputProps) {
     const t = useTheme()
@@ -257,6 +259,7 @@ export function createInput(Component: typeof TextInput) {
             (ctx.isInvalid || isInvalid) && (ctx.hovered || ctx.focused)
               ? chromeErrorHover
               : {},
+            noBackground && {backgroundColor: 'transparent'},
           ]}
         />
       </>

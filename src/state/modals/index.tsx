@@ -2,6 +2,7 @@ import React from 'react'
 import {type AppBskyGraphDefs} from '@atproto/api'
 
 import {useNonReactiveCallback} from '#/lib/hooks/useNonReactiveCallback'
+import {type Wallet} from '../wallets'
 
 export interface CreateOrEditListModal {
   name: 'create-or-edit-list'
@@ -43,6 +44,20 @@ export interface ChangePasswordModal {
   name: 'change-password'
 }
 
+export interface WalletTransfer {
+  name: 'wallet-transfer'
+  currentBalance: bigint
+  wallet: Wallet
+}
+
+export interface CreateWallet {
+  name: 'create-wallet'
+}
+
+export interface AddWallet {
+  name: 'add-wallet'
+}
+
 export type Modal =
   // Account
   | DeleteAccountModal
@@ -59,6 +74,11 @@ export type Modal =
   // Bluesky access
   | WaitlistModal
   | InviteCodesModal
+
+  // Generic
+  | WalletTransfer
+  | CreateWallet
+  | AddWallet
 
 const ModalContext = React.createContext<{
   isModalActive: boolean

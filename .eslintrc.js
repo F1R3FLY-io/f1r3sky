@@ -93,6 +93,7 @@ module.exports = {
       {prefer: 'type-imports', fixStyle: 'inline-type-imports'},
     ],
     'import/consistent-type-specifier-style': ['warn', 'prefer-inline'],
+    '@typescript-eslint/no-shadow': 0,
   },
   ignorePatterns: [
     '**/__mocks__/*.ts',

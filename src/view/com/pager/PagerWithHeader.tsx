@@ -65,7 +65,7 @@ export function PagerWithHeader({
   onCurrentPageSelected,
   allowHeaderOverScroll,
 }: PagerWithHeaderProps) {
-  const [currentPage, setCurrentPage] = useState(0)
+  const [currentPage, setCurrentPage] = useState(initialPage ?? 0)
   const [tabBarHeight, setTabBarHeight] = useState(0)
   const [headerOnlyHeight, setHeaderOnlyHeight] = useState(0)
   const scrollY = useSharedValue(0)

@@ -8,11 +8,14 @@ import {type Modal as ModalIface} from '#/state/modals'
 import {useModalControls, useModals} from '#/state/modals'
 import * as ChangePasswordModal from './ChangePassword'
 import * as CreateOrEditListModal from './CreateOrEditList'
+import * as AddWallet from './AddWallet'
+import * as CreateWallet from './CreateWallet'
 import * as DeleteAccountModal from './DeleteAccount'
 import * as InviteCodesModal from './InviteCodes'
 import * as ContentLanguagesSettingsModal from './lang-settings/ContentLanguagesSettings'
 import * as PostLanguagesSettingsModal from './lang-settings/PostLanguagesSettings'
 import * as UserAddRemoveLists from './UserAddRemoveLists'
+import * as WalletTransfer from './WalletTransfer'
 
 export function ModalsContainer() {
   const {isModalActive, activeModals} = useModals()
@@ -64,6 +67,12 @@ function Modal({modal}: {modal: ModalIface}) {
     element = <PostLanguagesSettingsModal.Component />
   } else if (modal.name === 'change-password') {
     element = <ChangePasswordModal.Component />
+  } else if (modal.name === 'wallet-transfer') {
+    element = <WalletTransfer.Component {...modal} />
+  } else if (modal?.name === 'create-wallet') {
+    element = <CreateWallet.Component />
+  } else if (modal?.name === 'add-wallet') {
+    element = <AddWallet.Component />
   } else {
     return null
   }

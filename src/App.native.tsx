@@ -58,6 +58,7 @@ import {Provider as ProgressGuideProvider} from '#/state/shell/progress-guide'
 import {Provider as SelectedFeedProvider} from '#/state/shell/selected-feed'
 import {Provider as StarterPackProvider} from '#/state/shell/starter-pack'
 import {Provider as HiddenRepliesProvider} from '#/state/threadgate-hidden-replies'
+import {Provider as WalletsStateProvider} from '#/state/wallets'
 import {TestCtrls} from '#/view/com/testing/TestCtrls'
 import * as Toast from '#/view/com/util/Toast'
 import {Shell} from '#/view/shell'
@@ -155,9 +156,11 @@ function InnerApp() {
                                                   <GestureHandlerRootView
                                                     style={s.h100pct}>
                                                     <IntentDialogProvider>
-                                                      <TestCtrls />
-                                                      <Shell />
-                                                      <NuxDialogs />
+                                                      <WalletsStateProvider>
+                                                        <TestCtrls />
+                                                        <Shell />
+                                                        <NuxDialogs />
+                                                      </WalletsStateProvider>
                                                     </IntentDialogProvider>
                                                   </GestureHandlerRootView>
                                                 </HideBottomBarBorderProvider>

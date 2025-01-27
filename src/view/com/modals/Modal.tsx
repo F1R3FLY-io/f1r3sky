@@ -7,13 +7,16 @@ import {usePalette} from '#/lib/hooks/usePalette'
 import {useModalControls, useModals} from '#/state/modals'
 import {FullWindowOverlay} from '#/components/FullWindowOverlay'
 import {createCustomBackdrop} from '../util/BottomSheetCustomBackdrop'
+import * as AddWallet from './AddWallet'
 import * as ChangePasswordModal from './ChangePassword'
 import * as CreateOrEditListModal from './CreateOrEditList'
+import * as CreateWallet from './CreateWallet'
 import * as DeleteAccountModal from './DeleteAccount'
 import * as InviteCodesModal from './InviteCodes'
 import * as ContentLanguagesSettingsModal from './lang-settings/ContentLanguagesSettings'
 import * as PostLanguagesSettingsModal from './lang-settings/PostLanguagesSettings'
 import * as UserAddRemoveListsModal from './UserAddRemoveLists'
+import * as WalletTransfer from './WalletTransfer'
 
 const DEFAULT_SNAPPOINTS = ['90%']
 const HANDLE_HEIGHT = 24
@@ -67,6 +70,15 @@ export function ModalsContainer() {
   } else if (activeModal?.name === 'change-password') {
     snapPoints = ChangePasswordModal.snapPoints
     element = <ChangePasswordModal.Component />
+  } else if (activeModal?.name === 'wallet-transfer') {
+    snapPoints = WalletTransfer.snapPoints
+    element = <WalletTransfer.Component {...activeModal} />
+  } else if (activeModal?.name === 'create-wallet') {
+    snapPoints = CreateWallet.snapPoints
+    element = <CreateWallet.Component />
+  } else if (activeModal?.name === 'add-wallet') {
+    snapPoints = AddWallet.snapPoints
+    element = <AddWallet.Component />
   } else {
     return null
   }

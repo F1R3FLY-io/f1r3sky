@@ -102,6 +102,8 @@ import {
 import {Wizard} from '#/screens/StarterPack/Wizard'
 import TopicScreen from '#/screens/Topic'
 import {VideoFeed} from '#/screens/VideoFeed'
+import Wallet from '#/screens/Wallets/Wallet'
+import Wallets from '#/screens/Wallets/WalletsSelection'
 import {type Theme, useTheme} from '#/alf'
 import {
   EmailDialogScreenID,
@@ -559,6 +561,22 @@ function commonScreens(Stack: typeof Flat, unreadCountLabel?: string) {
         getComponent={() => VideoFeed}
         options={{
           title: title(msg`Video Feed`),
+          requireAuth: true,
+        }}
+      />
+      <Stack.Screen
+        name="Wallets"
+        getComponent={() => Wallets}
+        options={{
+          title: title(msg`Wallets`),
+          requireAuth: true,
+        }}
+      />
+      <Stack.Screen
+        name="Wallet"
+        getComponent={() => Wallet}
+        options={{
+          title: title(msg`Wallet`),
           requireAuth: true,
         }}
       />

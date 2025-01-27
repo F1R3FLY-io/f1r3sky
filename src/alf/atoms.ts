@@ -225,6 +225,9 @@ export const atoms = {
   justify_between: {
     justifyContent: 'space-between',
   },
+  justify_evenly: {
+    justifyContent: 'space-evenly',
+  },
   justify_end: {
     justifyContent: 'flex-end',
   },
@@ -331,6 +334,9 @@ export const atoms = {
   },
   font_bold: {
     fontWeight: tokens.fontWeight.bold,
+  },
+  font_heavy_bold: {
+    fontWeight: tokens.fontWeight.heavy_bold,
   },
   font_heavy: {
     fontWeight: tokens.fontWeight.heavy,
@@ -1009,7 +1015,7 @@ export const atoms = {
   }),
 
   /*
-   * Animaations
+   * Animations
    */
   fade_in: web({
     animation: 'fadeIn ease-out 0.15s',
