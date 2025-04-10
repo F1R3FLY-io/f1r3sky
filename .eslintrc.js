@@ -81,6 +81,7 @@ module.exports = {
     ],
     'simple-import-sort/exports': 'error',
     'react-compiler/react-compiler': 'warn',
+    '@typescript-eslint/no-shadow': 0,
   },
   ignorePatterns: [
     '**/__mocks__/*.ts',
