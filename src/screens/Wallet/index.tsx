@@ -187,7 +187,7 @@ export default function Wallet({}: NativeStackScreenProps<
   }
 
   return (
-    <Layout.Screen testID="listsScreen">
+    <Layout.Screen>
       <Layout.Header.Outer>
         <Layout.Header.BackButton />
         <Layout.Header.Content align="left">
