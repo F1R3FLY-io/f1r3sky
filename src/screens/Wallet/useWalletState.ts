@@ -50,38 +50,37 @@ export default function () {
       })
         .then(req => req.json())
         .then(
-          json =>
-            ({
-              address: json.address,
-              balance: json.balance,
-              requests: json.requests.map(
-                (item: any) =>
-                  ({
-                    date: new Date(item.date),
-                    amount: item.amount,
-                    status: item.status,
-                  } as WalletRequest),
-              ),
-              boosts: json.boosts.map(
-                (item: any) =>
-                  ({
-                    direction: item.direction,
-                    date: new Date(item.date),
-                    amount: item.amount,
-                    username: item.username,
-                    post: item.post,
-                  } as WalletBoost),
-              ),
-              transfers: json.transfers.map(
-                (item: any) =>
-                  ({
-                    direction: item.direction,
-                    date: new Date(item.date),
-                    amount: item.amount,
-                    to_address: item.to_address,
-                  } as WalletTransfer),
-              ),
-            } as WalletState),
+          (json): WalletState => ({
+            address: json.address,
+            balance: json.balance,
+            requests: json.requests.map(
+              (item: any): WalletRequest => ({
+                id: item.id,
+                date: new Date(item.date),
+                amount: item.amount,
+                status: item.status,
+              }),
+            ),
+            boosts: json.boosts.map(
+              (item: any): WalletBoost => ({
+                id: item.id,
+                direction: item.direction,
+                date: new Date(item.date),
+                amount: item.amount,
+                username: item.username,
+                post: item.post,
+              }),
+            ),
+            transfers: json.transfers.map(
+              (item: any): WalletTransfer => ({
+                id: item.id,
+                direction: item.direction,
+                date: new Date(item.date),
+                amount: item.amount,
+                to_address: item.to_address,
+              }),
+            ),
+          }),
         ),
   })
 }
