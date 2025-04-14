@@ -117,6 +117,7 @@ const Table = <T extends string, V>({
 
           const commonCelStyles = [
             a.py_md,
+            a.pl_sm,
             firstHeader && a.pl_2xl,
             lastHeader && a.pr_2xl,
           ]
