@@ -175,7 +175,7 @@ msgstr "{0}n"
 msgid "{0}s"
 msgstr "{0}s"
 
-#: src/view/shell/desktop/LeftNav.tsx:382
+#: src/view/shell/desktop/LeftNav.tsx:383
 msgid "{count, plural, one {# unread item} other {# unread items}}"
 msgstr ""
 
@@ -301,6 +301,11 @@ msgstr "Chláraigh {profileName} le Bluesky {0} ó shin"
 msgid "{profileName} joined Bluesky using a starter pack {0} ago"
 msgstr "Chláraigh {profileName} le Bluesky le pacáiste fáilte {0} ó shin"
 
+#: src/screens/Wallet/WalletBalanceGraph.tsx:190
+#: src/screens/Wallet/WalletBalanceGraph.tsx:209
+msgid "{scale}"
+msgstr ""
+
 #: src/screens/StarterPack/Wizard/index.tsx:449
 msgctxt "profiles"
 msgid "<0>{0}, </0><1>{1}, </1>and {2, plural, one {# other} other {# others}} are included in your starter pack"
@@ -363,7 +368,7 @@ msgstr "30 lá"
 msgid "7 days"
 msgstr "7 lá"
 
-#: src/Navigation.tsx:383
+#: src/Navigation.tsx:384
 #: src/screens/Settings/AboutSettings.tsx:34
 #: src/screens/Settings/Settings.tsx:215
 #: src/screens/Settings/Settings.tsx:218
@@ -390,15 +395,16 @@ msgstr "Glac leis an iarratas"
 msgid "Accessibility"
 msgstr "Inrochtaineacht"
 
-#: src/Navigation.tsx:343
+#: src/Navigation.tsx:344
 msgid "Accessibility Settings"
 msgstr "Socruithe Inrochtaineachta"
 
-#: src/Navigation.tsx:359
+#: src/Navigation.tsx:360
 #: src/screens/Login/LoginForm.tsx:194
 #: src/screens/Settings/AccountSettings.tsx:45
 #: src/screens/Settings/Settings.tsx:153
 #: src/screens/Settings/Settings.tsx:156
+#: src/screens/Wallet/index.tsx:141
 msgid "Account"
 msgstr "Cuntas"
 
@@ -412,6 +418,10 @@ msgstr ""
 #: src/view/com/profile/ProfileMenu.tsx:154
 msgctxt "toast"
 msgid "Account followed"
+msgstr ""
+
+#: src/screens/Wallet/index.tsx:154
+msgid "Account ID"
 msgstr ""
 
 #: src/view/com/profile/ProfileMenu.tsx:117
@@ -499,8 +509,8 @@ msgstr "Cuir téacs malartach leis seo (roghnach)"
 
 #: src/screens/Settings/Settings.tsx:373
 #: src/screens/Settings/Settings.tsx:376
-#: src/view/shell/desktop/LeftNav.tsx:280
-#: src/view/shell/desktop/LeftNav.tsx:284
+#: src/view/shell/desktop/LeftNav.tsx:281
+#: src/view/shell/desktop/LeftNav.tsx:285
 msgid "Add another account"
 msgstr "Cuir cuntas eile leis"
 
@@ -799,7 +809,7 @@ msgstr "Iompar Frithshóisialta"
 msgid "Anybody can interact"
 msgstr "Tá gach duine in ann idirghníomhú leis"
 
-#: src/Navigation.tsx:391
+#: src/Navigation.tsx:392
 #: src/screens/Settings/AppIconSettings/index.tsx:67
 #: src/screens/Settings/AppIconSettings/SettingsListItem.tsx:18
 #: src/screens/Settings/AppIconSettings/SettingsListItem.tsx:23
@@ -836,7 +846,7 @@ msgstr "Caithfidh ainm pasfhocal aipe a bheith ar a laghad ceithre charachtar ar
 msgid "App passwords"
 msgstr "Pasfhocail aipe"
 
-#: src/Navigation.tsx:311
+#: src/Navigation.tsx:312
 #: src/screens/Settings/AppPasswords.tsx:51
 msgid "App Passwords"
 msgstr "Pasfhocail aipe"
@@ -872,7 +882,7 @@ msgstr ""
 msgid "Appeal this decision"
 msgstr "Déan achomharc i gcoinne an chinnidh seo"
 
-#: src/Navigation.tsx:351
+#: src/Navigation.tsx:352
 #: src/screens/Settings/AppearanceSettings.tsx:85
 #: src/screens/Settings/Settings.tsx:183
 #: src/screens/Settings/Settings.tsx:186
@@ -991,6 +1001,14 @@ msgstr "Ar ais"
 msgid "Back to Chats"
 msgstr ""
 
+#: src/screens/Wallet/index.tsx:191
+msgid "Balance"
+msgstr ""
+
+#: src/screens/Wallet/WalletBalanceGraph.tsx:181
+msgid "Balance graph scale"
+msgstr ""
+
 #: src/view/screens/Lists.tsx:81
 #: src/view/screens/ModerationModlists.tsx:81
 msgid "Before creating a list, you must first verify your email."
@@ -1083,7 +1101,7 @@ msgstr "Blocáilte"
 msgid "Blocked accounts"
 msgstr "Cuntais bhlocáilte"
 
-#: src/Navigation.tsx:160
+#: src/Navigation.tsx:161
 #: src/view/screens/ModerationBlockedAccounts.tsx:101
 msgid "Blocked Accounts"
 msgstr "Cuntais bhlocáilte"
@@ -1276,7 +1294,7 @@ msgstr "Ceamara"
 #: src/view/com/modals/VerifyEmail.tsx:261
 #: src/view/com/util/post-ctrls/RepostButton.tsx:213
 #: src/view/screens/Search/Search.tsx:890
-#: src/view/shell/desktop/LeftNav.tsx:208
+#: src/view/shell/desktop/LeftNav.tsx:209
 msgid "Cancel"
 msgstr "Cealaigh"
 
@@ -1399,9 +1417,9 @@ msgstr ""
 msgid "Changes hosting provider"
 msgstr ""
 
-#: src/Navigation.tsx:408
+#: src/Navigation.tsx:409
 #: src/view/shell/bottom-bar/BottomBar.tsx:205
-#: src/view/shell/desktop/LeftNav.tsx:534
+#: src/view/shell/desktop/LeftNav.tsx:535
 #: src/view/shell/Drawer.tsx:422
 msgid "Chat"
 msgstr "Comhrá"
@@ -1417,7 +1435,7 @@ msgctxt "toast"
 msgid "Chat muted"
 msgstr ""
 
-#: src/Navigation.tsx:418
+#: src/Navigation.tsx:419
 #: src/screens/Messages/components/InboxPreview.tsx:24
 msgid "Chat request inbox"
 msgstr ""
@@ -1429,7 +1447,7 @@ msgstr ""
 
 #: src/components/dms/ConvoMenu.tsx:75
 #: src/components/dms/MessageMenu.tsx:83
-#: src/Navigation.tsx:413
+#: src/Navigation.tsx:414
 #: src/screens/Messages/ChatList.tsx:327
 msgid "Chat settings"
 msgstr "Socruithe comhrá"
@@ -1644,7 +1662,7 @@ msgstr "Greann"
 msgid "Comics"
 msgstr "Greannáin"
 
-#: src/Navigation.tsx:301
+#: src/Navigation.tsx:302
 #: src/view/screens/CommunityGuidelines.tsx:34
 msgid "Community Guidelines"
 msgstr "Treoirlínte an phobail"
@@ -1657,7 +1675,7 @@ msgstr "Críochnaigh agus tosaigh ag baint úsáide as do chuntas."
 msgid "Complete the challenge"
 msgstr "Freagair an dúshlán"
 
-#: src/view/shell/desktop/LeftNav.tsx:499
+#: src/view/shell/desktop/LeftNav.tsx:500
 msgid "Compose new post"
 msgstr "Cum postáil nua"
 
@@ -1748,7 +1766,7 @@ msgstr "Ábhar agus Meáin"
 msgid "Content and media"
 msgstr "Ábhar agus meáin"
 
-#: src/Navigation.tsx:375
+#: src/Navigation.tsx:376
 msgid "Content and Media"
 msgstr "Ábhar agus Meáin"
 
@@ -1921,7 +1939,7 @@ msgstr "Cóipeáil an cód QR"
 msgid "Copy TXT record value"
 msgstr "Cóipeáil an taifead TXT"
 
-#: src/Navigation.tsx:306
+#: src/Navigation.tsx:307
 #: src/view/screens/CopyrightPolicy.tsx:31
 msgid "Copyright Policy"
 msgstr "An polasaí maidir le cóipcheart"
@@ -1957,7 +1975,7 @@ msgstr "Cruthaigh cód QR le haghaidh pacáiste fáilte"
 
 #: src/components/StarterPack/ProfileStarterPacks.tsx:173
 #: src/components/StarterPack/ProfileStarterPacks.tsx:269
-#: src/Navigation.tsx:443
+#: src/Navigation.tsx:444
 msgid "Create a starter pack"
 msgstr "Cruthaigh pacáiste fáilte"
 
@@ -2078,6 +2096,10 @@ msgstr "Réamhshocrú"
 #: src/screens/Settings/AppIconSettings/index.tsx:75
 msgid "Default icons"
 msgstr "Deilbhíní réamhshocraithe"
+
+#: src/screens/Wallet/index.tsx:167
+msgid "Default token"
+msgstr ""
 
 #: src/components/dms/MessageMenu.tsx:154
 #: src/screens/Messages/components/ChatStatusInfo.tsx:55
@@ -2497,7 +2519,7 @@ msgstr "Athraigh mionsonraí an liosta"
 msgid "Edit Moderation List"
 msgstr "Athraigh liosta na modhnóireachta"
 
-#: src/Navigation.tsx:316
+#: src/Navigation.tsx:317
 #: src/view/screens/Feeds.tsx:515
 msgid "Edit My Feeds"
 msgstr "Athraigh mo chuid fothaí"
@@ -2547,7 +2569,7 @@ msgstr "Cuir an t-ainm taispeána in eagar"
 msgid "Edit your profile description"
 msgstr "Athraigh an cur síos i do phróifíl"
 
-#: src/Navigation.tsx:448
+#: src/Navigation.tsx:449
 msgid "Edit your starter pack"
 msgstr "Cuir do phacáiste fáilte in eagar"
 
@@ -2897,7 +2919,7 @@ msgstr "Meáin sheachtracha"
 msgid "External media may allow websites to collect information about you and your device. No information is sent or requested until you press the \"play\" button."
 msgstr "Is féidir le meáin sheachtracha cumas a thabhairt do shuíomhanna ar an nGréasán eolas fútsa agus faoi do ghléas a chnuasach. Ní sheoltar ná iarrtar aon eolas go dtí go mbrúnn tú an cnaipe “play”."
 
-#: src/Navigation.tsx:335
+#: src/Navigation.tsx:336
 #: src/screens/Settings/ExternalMediaPreferences.tsx:31
 msgid "External Media Preferences"
 msgstr "Roghanna maidir le meáin sheachtracha"
@@ -3026,7 +3048,7 @@ msgstr "Theip ar uaslódáil an fhíseáin"
 msgid "Failed to verify handle. Please try again."
 msgstr "Theip ar dhearbhú an leasainm. Bain triail eile as."
 
-#: src/Navigation.tsx:251
+#: src/Navigation.tsx:252
 msgid "Feed"
 msgstr "Fotha"
 
@@ -3055,13 +3077,13 @@ msgctxt "toast"
 msgid "Feedback sent!"
 msgstr ""
 
-#: src/Navigation.tsx:428
+#: src/Navigation.tsx:429
 #: src/screens/StarterPack/StarterPackScreen.tsx:185
 #: src/view/screens/Feeds.tsx:508
 #: src/view/screens/Profile.tsx:225
 #: src/view/screens/SavedFeeds.tsx:96
 #: src/view/screens/Search/Search.tsx:531
-#: src/view/shell/desktop/LeftNav.tsx:651
+#: src/view/shell/desktop/LeftNav.tsx:652
 #: src/view/shell/Drawer.tsx:486
 msgid "Feeds"
 msgstr "Fothaí"
@@ -3224,7 +3246,7 @@ msgstr "Leanta ag <0>{0}</0> agus <1>{1}</1>"
 msgid "Followed by <0>{0}</0>, <1>{1}</1>, and {2, plural, one {# other} other {# others}}"
 msgstr "Leanta ag <0>{0}</0>, <1>{1}</1>, agus {2, plural, one {duine amháin eile} two {beirt eile} few {# dhuine eile} many {# nduine eile} other {# duine eile}}"
 
-#: src/Navigation.tsx:205
+#: src/Navigation.tsx:206
 msgid "Followers of @{0} that you know"
 msgstr "Leantóirí de chuid @{0} a bhfuil aithne agat orthu"
 
@@ -3263,7 +3285,7 @@ msgstr "Ag leanacht {name}"
 msgid "Following feed preferences"
 msgstr "Roghanna le haghaidh an fhotha Following"
 
-#: src/Navigation.tsx:322
+#: src/Navigation.tsx:323
 #: src/screens/Settings/FollowingFeedPreferences.tsx:53
 msgid "Following Feed Preferences"
 msgstr "Roghanna don Fhotha Following"
@@ -3464,7 +3486,7 @@ msgstr "Haptaic"
 msgid "Harassment, trolling, or intolerance"
 msgstr "Ciapadh, trolláil, nó éadulaingt"
 
-#: src/Navigation.tsx:398
+#: src/Navigation.tsx:399
 msgid "Hashtag"
 msgstr "Haischlib"
 
@@ -3610,10 +3632,10 @@ msgstr "Hmmm, ní raibh muid in ann an tseirbhís modhnóireachta sin a lódáil
 msgid "Hold up! We’re gradually giving access to video, and you’re still waiting in line. Check back soon!"
 msgstr "Foighne ort! Tá físeáin á seoladh de réir a chéile, agus tá tú fós ag fanacht ar d'uain. Déan iarracht go luath!"
 
-#: src/Navigation.tsx:627
-#: src/Navigation.tsx:647
+#: src/Navigation.tsx:636
+#: src/Navigation.tsx:656
 #: src/view/shell/bottom-bar/BottomBar.tsx:162
-#: src/view/shell/desktop/LeftNav.tsx:595
+#: src/view/shell/desktop/LeftNav.tsx:596
 #: src/view/shell/Drawer.tsx:396
 msgid "Home"
 msgstr "Baile"
@@ -3884,7 +3906,7 @@ msgstr "Lipéid ar do chuid ábhair"
 msgid "Language selection"
 msgstr "Rogha teanga"
 
-#: src/Navigation.tsx:178
+#: src/Navigation.tsx:179
 msgid "Language Settings"
 msgstr "Socruithe teanga"
 
@@ -4022,8 +4044,8 @@ msgid "Like this labeler"
 msgstr ""
 
 #: src/components/LikesDialog.tsx:85
-#: src/Navigation.tsx:256
-#: src/Navigation.tsx:261
+#: src/Navigation.tsx:257
+#: src/Navigation.tsx:262
 msgid "Liked by"
 msgstr "Molta ag"
 
@@ -4058,7 +4080,7 @@ msgstr "Moltaí don phostáil seo"
 msgid "Linear"
 msgstr "Líneach"
 
-#: src/Navigation.tsx:211
+#: src/Navigation.tsx:212
 msgid "List"
 msgstr "Liosta"
 
@@ -4116,11 +4138,11 @@ msgctxt "toast"
 msgid "List unmuted"
 msgstr ""
 
-#: src/Navigation.tsx:140
+#: src/Navigation.tsx:141
 #: src/view/screens/Lists.tsx:62
 #: src/view/screens/Profile.tsx:219
 #: src/view/screens/Profile.tsx:227
-#: src/view/shell/desktop/LeftNav.tsx:669
+#: src/view/shell/desktop/LeftNav.tsx:670
 #: src/view/shell/Drawer.tsx:501
 msgid "Lists"
 msgstr "Liostaí"
@@ -4152,11 +4174,13 @@ msgstr "Lódáil fógraí nua"
 msgid "Load new posts"
 msgstr "Lódáil postálacha nua"
 
+#: src/screens/Wallet/index.tsx:109
+#: src/screens/Wallet/index.tsx:198
 #: src/view/com/composer/text-input/mobile/Autocomplete.tsx:94
 msgid "Loading..."
 msgstr "Ag lódáil …"
 
-#: src/Navigation.tsx:281
+#: src/Navigation.tsx:282
 msgid "Log"
 msgstr "Logleabhar"
 
@@ -4276,7 +4300,7 @@ msgstr "Réimse ionchur teachtaireachtaí"
 msgid "Message is too long"
 msgstr "Tá an teachtaireacht rófhada"
 
-#: src/Navigation.tsx:642
+#: src/Navigation.tsx:651
 msgid "Messages"
 msgstr "Teachtaireachtaí"
 
@@ -4295,7 +4319,7 @@ msgstr "Cuntas atá Míthreorach"
 msgid "Misleading Post"
 msgstr "Postáil atá Míthreorach"
 
-#: src/Navigation.tsx:145
+#: src/Navigation.tsx:146
 #: src/screens/Moderation/index.tsx:89
 #: src/screens/Settings/Settings.tsx:167
 #: src/screens/Settings/Settings.tsx:170
@@ -4334,7 +4358,7 @@ msgstr ""
 msgid "Moderation lists"
 msgstr "Liostaí modhnóireachta"
 
-#: src/Navigation.tsx:150
+#: src/Navigation.tsx:151
 #: src/view/screens/ModerationModlists.tsx:62
 msgid "Moderation Lists"
 msgstr "Liostaí modhnóireachta"
@@ -4343,7 +4367,7 @@ msgstr "Liostaí modhnóireachta"
 msgid "moderation settings"
 msgstr "socruithe modhnóireachta"
 
-#: src/Navigation.tsx:271
+#: src/Navigation.tsx:272
 msgid "Moderation states"
 msgstr "Stádais modhnóireachta"
 
@@ -4466,7 +4490,7 @@ msgstr "Balbhaigh focail ⁊ clibeanna"
 msgid "Muted accounts"
 msgstr "Cuntais a balbhaíodh"
 
-#: src/Navigation.tsx:155
+#: src/Navigation.tsx:156
 #: src/view/screens/ModerationMutedAccounts.tsx:100
 msgid "Muted Accounts"
 msgstr "Cuntais a balbhaíodh"
@@ -4604,7 +4628,7 @@ msgctxt "action"
 msgid "New post"
 msgstr "Postáil nua"
 
-#: src/view/shell/desktop/LeftNav.tsx:507
+#: src/view/shell/desktop/LeftNav.tsx:508
 msgctxt "action"
 msgid "New Post"
 msgstr "Postáil nua"
@@ -4775,7 +4799,7 @@ msgstr "Lomnochtacht Neamhghnéasach"
 msgid "Not followed by anyone you're following"
 msgstr ""
 
-#: src/Navigation.tsx:135
+#: src/Navigation.tsx:136
 #: src/view/screens/Profile.tsx:122
 msgid "Not Found"
 msgstr "Ní bhfuarthas é sin"
@@ -4803,7 +4827,7 @@ msgstr "Tada anseo"
 msgid "Notification filters"
 msgstr "Scagairí fógra"
 
-#: src/Navigation.tsx:423
+#: src/Navigation.tsx:424
 #: src/view/screens/Notifications.tsx:134
 msgid "Notification settings"
 msgstr "Socruithe fógra"
@@ -4820,10 +4844,10 @@ msgstr "Fuaimeanna fógra"
 msgid "Notification Sounds"
 msgstr "Fuaimeanna Fógra"
 
-#: src/Navigation.tsx:637
+#: src/Navigation.tsx:646
 #: src/view/screens/Notifications.tsx:128
 #: src/view/shell/bottom-bar/BottomBar.tsx:236
-#: src/view/shell/desktop/LeftNav.tsx:632
+#: src/view/shell/desktop/LeftNav.tsx:633
 #: src/view/shell/Drawer.tsx:449
 msgid "Notifications"
 msgstr "Fógraí"
@@ -5190,11 +5214,11 @@ msgstr "Cuir an físeán ar shos"
 msgid "People"
 msgstr "Daoine"
 
-#: src/Navigation.tsx:198
+#: src/Navigation.tsx:199
 msgid "People followed by @{0}"
 msgstr "Na daoine atá leanta ag @{0}"
 
-#: src/Navigation.tsx:191
+#: src/Navigation.tsx:192
 msgid "People following @{0}"
 msgstr "Na leantóirí atá ag @{0}"
 
@@ -5417,10 +5441,10 @@ msgstr "Postáil Uile"
 msgid "Post by {0}"
 msgstr "Postáil ó {0}"
 
-#: src/Navigation.tsx:224
-#: src/Navigation.tsx:231
-#: src/Navigation.tsx:238
-#: src/Navigation.tsx:245
+#: src/Navigation.tsx:225
+#: src/Navigation.tsx:232
+#: src/Navigation.tsx:239
+#: src/Navigation.tsx:246
 msgid "Post by @{0}"
 msgstr "Postáil ó @{0}"
 
@@ -5455,7 +5479,7 @@ msgstr "Postáil a chuir tú i bhfolach"
 msgid "Post interaction settings"
 msgstr "Socruithe idirghníomhaíochta na postála"
 
-#: src/Navigation.tsx:166
+#: src/Navigation.tsx:167
 #: src/screens/ModerationInteractionSettings/index.tsx:34
 msgid "Post Interaction Settings"
 msgstr ""
@@ -5547,12 +5571,12 @@ msgstr "Príobháideacht"
 msgid "Privacy and security"
 msgstr "Príobháideacht agus slándáil"
 
-#: src/Navigation.tsx:367
+#: src/Navigation.tsx:368
 #: src/screens/Settings/PrivacyAndSecuritySettings.tsx:36
 msgid "Privacy and Security"
 msgstr "Príobháideacht agus Slándáil"
 
-#: src/Navigation.tsx:291
+#: src/Navigation.tsx:292
 #: src/screens/Settings/AboutSettings.tsx:51
 #: src/screens/Settings/AboutSettings.tsx:54
 #: src/view/screens/PrivacyPolicy.tsx:31
@@ -5576,7 +5600,7 @@ msgid "profile"
 msgstr "próifíl"
 
 #: src/view/shell/bottom-bar/BottomBar.tsx:286
-#: src/view/shell/desktop/LeftNav.tsx:687
+#: src/view/shell/desktop/LeftNav.tsx:688
 #: src/view/shell/Drawer.tsx:71
 #: src/view/shell/Drawer.tsx:526
 msgid "Profile"
@@ -6287,17 +6311,17 @@ msgstr "Fill ar an mbarr"
 #: src/components/dms/dialogs/SearchablePeopleList.tsx:491
 #: src/components/forms/SearchInput.tsx:34
 #: src/components/forms/SearchInput.tsx:36
-#: src/Navigation.tsx:632
+#: src/Navigation.tsx:641
 #: src/view/com/modals/ListAddRemoveUsers.tsx:76
 #: src/view/screens/Search/Search.tsx:570
 #: src/view/screens/Search/Search.tsx:848
 #: src/view/shell/bottom-bar/BottomBar.tsx:182
-#: src/view/shell/desktop/LeftNav.tsx:613
+#: src/view/shell/desktop/LeftNav.tsx:614
 #: src/view/shell/Drawer.tsx:370
 msgid "Search"
 msgstr "Cuardaigh"
 
-#: src/Navigation.tsx:217
+#: src/Navigation.tsx:218
 #: src/screens/Profile/ProfileSearch.tsx:34
 msgid "Search @{0}'s posts"
 msgstr ""
@@ -6586,9 +6610,9 @@ msgstr "Socraigh do chuntas"
 msgid "Sets email for password reset"
 msgstr "Socraíonn sé seo an seoladh ríomhphoist le haghaidh athshocrú an phasfhocail"
 
-#: src/Navigation.tsx:173
+#: src/Navigation.tsx:174
 #: src/screens/Settings/Settings.tsx:80
-#: src/view/shell/desktop/LeftNav.tsx:705
+#: src/view/shell/desktop/LeftNav.tsx:712
 #: src/view/shell/Drawer.tsx:539
 msgid "Settings"
 msgstr "Socruithe"
@@ -6675,7 +6699,7 @@ msgstr "Roinn an pacáiste fáilte seo agus cuidigh le daoine páirt a ghlacadh 
 msgid "Share your favorite feed!"
 msgstr "Roinn an fotha is fearr leat!"
 
-#: src/Navigation.tsx:276
+#: src/Navigation.tsx:277
 msgid "Shared Preferences Tester"
 msgstr "Tástáil Roghanna Comhroinnte"
 
@@ -6849,9 +6873,9 @@ msgstr ""
 #: src/screens/SignupQueued.tsx:93
 #: src/screens/SignupQueued.tsx:96
 #: src/screens/Takendown.tsx:85
-#: src/view/shell/desktop/LeftNav.tsx:207
-#: src/view/shell/desktop/LeftNav.tsx:287
-#: src/view/shell/desktop/LeftNav.tsx:290
+#: src/view/shell/desktop/LeftNav.tsx:208
+#: src/view/shell/desktop/LeftNav.tsx:288
+#: src/view/shell/desktop/LeftNav.tsx:291
 msgid "Sign out"
 msgstr "Logáil amach"
 
@@ -6860,7 +6884,7 @@ msgid "Sign Out"
 msgstr ""
 
 #: src/screens/Settings/Settings.tsx:256
-#: src/view/shell/desktop/LeftNav.tsx:204
+#: src/view/shell/desktop/LeftNav.tsx:205
 msgid "Sign out?"
 msgstr "Logáil amach?"
 
@@ -6999,8 +7023,8 @@ msgstr "Cuir tús le daoine a leanúint!"
 msgid "Start chat with {displayName}"
 msgstr "Tosaigh comhrá le {displayName}"
 
-#: src/Navigation.tsx:433
-#: src/Navigation.tsx:438
+#: src/Navigation.tsx:434
+#: src/Navigation.tsx:439
 #: src/screens/StarterPack/Wizard/index.tsx:186
 msgid "Starter Pack"
 msgstr "Pacáiste Fáilte"
@@ -7043,7 +7067,7 @@ msgstr "Céim {0} as {1}"
 msgid "Storage cleared, you need to restart the app now."
 msgstr "Stóráil scriosta, tá ort an aip a atosú anois."
 
-#: src/Navigation.tsx:266
+#: src/Navigation.tsx:267
 #: src/screens/Settings/Settings.tsx:325
 msgid "Storybook"
 msgstr ""
@@ -7116,7 +7140,7 @@ msgctxt "Name of app icon variant"
 msgid "Sunset"
 msgstr ""
 
-#: src/Navigation.tsx:286
+#: src/Navigation.tsx:287
 #: src/view/screens/Support.tsx:31
 #: src/view/screens/Support.tsx:34
 msgid "Support"
@@ -7125,7 +7149,7 @@ msgstr "Tacaíocht"
 #: src/screens/Settings/Settings.tsx:102
 #: src/screens/Settings/Settings.tsx:116
 #: src/screens/Settings/Settings.tsx:412
-#: src/view/shell/desktop/LeftNav.tsx:242
+#: src/view/shell/desktop/LeftNav.tsx:243
 msgid "Switch account"
 msgstr "Athraigh an cuntas"
 
@@ -7134,11 +7158,11 @@ msgstr "Athraigh an cuntas"
 msgid "Switch Account"
 msgstr "Athraigh an cuntas"
 
-#: src/view/shell/desktop/LeftNav.tsx:106
+#: src/view/shell/desktop/LeftNav.tsx:107
 msgid "Switch accounts"
 msgstr ""
 
-#: src/view/shell/desktop/LeftNav.tsx:250
+#: src/view/shell/desktop/LeftNav.tsx:251
 msgid "Switch to {0}"
 msgstr ""
 
@@ -7197,7 +7221,7 @@ msgstr "Abair beagán níos mó"
 msgid "Terms"
 msgstr "Téarmaí"
 
-#: src/Navigation.tsx:296
+#: src/Navigation.tsx:297
 #: src/screens/Settings/AboutSettings.tsx:43
 #: src/screens/Settings/AboutSettings.tsx:46
 #: src/view/screens/TermsOfService.tsx:31
@@ -7693,7 +7717,7 @@ msgstr "Modh snáithithe"
 msgid "Threaded mode"
 msgstr "Modh snáithithe"
 
-#: src/Navigation.tsx:329
+#: src/Navigation.tsx:330
 msgid "Threads Preferences"
 msgstr "Roghanna Snáitheanna"
 
@@ -7739,9 +7763,13 @@ msgstr ""
 msgid "Top"
 msgstr "Barr"
 
-#: src/Navigation.tsx:403
+#: src/Navigation.tsx:404
 msgid "Topic"
 msgstr "Ábhar"
+
+#: src/screens/Wallet/index.tsx:216
+msgid "Transactions history"
+msgstr ""
 
 #: src/components/dms/MessageMenu.tsx:105
 #: src/components/dms/MessageMenu.tsx:107
@@ -8214,7 +8242,7 @@ msgstr "Físeán"
 msgid "Video failed to process"
 msgstr "Theip ar phróiseáil an fhíseáin"
 
-#: src/Navigation.tsx:454
+#: src/Navigation.tsx:455
 msgid "Video Feed"
 msgstr ""
 
@@ -8377,6 +8405,16 @@ msgstr "Tabhair cuairt ar an suíomh"
 #: src/view/com/util/post-embeds/VideoEmbedInner/web-controls/VolumeControl.tsx:80
 msgid "Volume"
 msgstr "Airde fuaime"
+
+#: src/Navigation.tsx:463
+#: src/screens/Wallet/index.tsx:134
+#: src/view/shell/desktop/LeftNav.tsx:694
+msgid "Wallet"
+msgstr ""
+
+#: src/screens/Wallet/index.tsx:163
+msgid "Wallet address"
+msgstr ""
 
 #: src/components/moderation/LabelPreference.tsx:136
 #: src/lib/moderation/useLabelBehaviorDescription.ts:17
@@ -8823,7 +8861,7 @@ msgid "You previously deactivated @{0}."
 msgstr "Rinne tú díghníomhú ar @{0} cheana."
 
 #: src/screens/Settings/Settings.tsx:257
-#: src/view/shell/desktop/LeftNav.tsx:205
+#: src/view/shell/desktop/LeftNav.tsx:206
 msgid "You will be signed out of all your accounts."
 msgstr "Logálfar amach as gach cuntas thú."
 

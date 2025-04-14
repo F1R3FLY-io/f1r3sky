@@ -50,12 +50,12 @@ const GroupContext = React.createContext<{
   setFieldValue: () => {},
 })
 
-export type GroupProps = React.PropsWithChildren<{
+export type GroupProps<T extends string> = React.PropsWithChildren<{
   type?: 'radio' | 'checkbox'
-  values: string[]
+  values: T[]
   maxSelections?: number
   disabled?: boolean
-  onChange: (value: string[]) => void
+  onChange: (value: T[]) => void
   label: string
 }>
 
@@ -74,7 +74,7 @@ export function useItemContext() {
   return React.useContext(ItemContext)
 }
 
-export function Group({
+export function Group<T extends string>({
   children,
   values: providedValues,
   onChange,
@@ -82,7 +82,7 @@ export function Group({
   type = 'checkbox',
   maxSelections,
   label,
-}: GroupProps) {
+}: GroupProps<T>) {
   const groupRole = type === 'radio' ? 'radiogroup' : undefined
   const values = type === 'radio' ? providedValues.slice(0, 1) : providedValues
   const [maxReached, setMaxReached] = React.useState(false)
@@ -93,10 +93,10 @@ export function Group({
     ({name, value}) => {
       if (type === 'checkbox') {
         const pruned = values.filter(v => v !== name)
-        const next = value ? pruned.concat(name) : pruned
+        const next = value ? pruned.concat(name as T) : pruned
         onChange(next)
       } else {
-        onChange([name])
+        onChange([name as T])
       }
     },
     [type, onChange, values],
