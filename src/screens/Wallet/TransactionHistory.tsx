@@ -42,11 +42,7 @@ export default function TransactionHistory({
           <Table {...requestsData} />
         </View>
       )}
-      {() => (
-        <View style={[a.px_3xl, a.py_lg]}>
-          <Table {...requestsData} />
-        </View>
-      )}
+      {() => <View style={[a.px_3xl, a.py_lg]} />}
       {() => (
         <View style={[a.px_3xl, a.py_lg]}>
           <Table {...transfersData} />

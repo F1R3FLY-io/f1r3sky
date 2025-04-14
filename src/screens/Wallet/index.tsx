@@ -1,4 +1,4 @@
-import {useCallback, useMemo, useState} from 'react'
+import {useCallback, useState} from 'react'
 import {TouchableOpacity, View} from 'react-native'
 import {Trans} from '@lingui/macro'
 
@@ -23,138 +23,12 @@ export default function Wallet({}: NativeStackScreenProps<
   const t = useTheme()
   const {currentAccount} = useSession()
   const {data: profile} = useProfileQuery({did: currentAccount?.did})
-  const {data: walletStateOld, isLoading} = useWalletState()
+  const {data: walletState, isLoading} = useWalletState()
 
   const [showAddress, setShowAddres] = useState(false)
   const flipShowAddress = useCallback(
     () => setShowAddres(state => !state),
     [setShowAddres],
-  )
-
-  const walletState: typeof walletStateOld = useMemo(
-    () =>
-      walletStateOld && {
-        address: walletStateOld.address || 'dummy_address',
-        balance: walletStateOld.balance || 31.128,
-        requests:
-          walletStateOld.requests.length !== 0
-            ? walletStateOld.requests
-            : [
-                {
-                  id: 'deade3123f',
-                  date: new Date(2025, 3, 2, 12, 0, 0),
-                  amount: 12,
-                  status: 'ongoing',
-                },
-                {
-                  id: 'darggxc45',
-                  date: new Date(2025, 2, 12, 12, 0, 0),
-                  amount: 37,
-                  status: 'done',
-                },
-                {
-                  id: 'j634gf5',
-                  date: new Date(2025, 2, 20, 12, 0, 0),
-                  amount: 13,
-                  status: 'cancelled',
-                },
-                {
-                  id: 'deade3123f',
-                  date: new Date(2025, 3, 2, 12, 0, 0),
-                  amount: 12,
-                  status: 'ongoing',
-                },
-                {
-                  id: 'darggxc45',
-                  date: new Date(2025, 2, 12, 12, 0, 0),
-                  amount: 37,
-                  status: 'done',
-                },
-                {
-                  id: 'j634gf5',
-                  date: new Date(2025, 2, 20, 12, 0, 0),
-                  amount: 13,
-                  status: 'cancelled',
-                },
-                {
-                  id: 'deade3123f',
-                  date: new Date(2025, 3, 2, 12, 0, 0),
-                  amount: 12,
-                  status: 'ongoing',
-                },
-                {
-                  id: 'darggxc45',
-                  date: new Date(2025, 2, 12, 12, 0, 0),
-                  amount: 37,
-                  status: 'done',
-                },
-                {
-                  id: 'j634gf5',
-                  date: new Date(2025, 2, 20, 12, 0, 0),
-                  amount: 13,
-                  status: 'cancelled',
-                },
-                {
-                  id: 'deade3123f',
-                  date: new Date(2025, 3, 2, 12, 0, 0),
-                  amount: 12,
-                  status: 'ongoing',
-                },
-                {
-                  id: 'darggxc45',
-                  date: new Date(2025, 2, 12, 12, 0, 0),
-                  amount: 37,
-                  status: 'done',
-                },
-                {
-                  id: 'j634gf5',
-                  date: new Date(2025, 2, 20, 12, 0, 0),
-                  amount: 13,
-                  status: 'cancelled',
-                },
-              ],
-        boosts:
-          walletStateOld.boosts.length !== 0
-            ? walletStateOld.boosts
-            : [
-                {
-                  id: 'deade3123f',
-                  direction: 'outgoing',
-                  date: new Date(2025, 1, 12, 14, 0, 0),
-                  amount: 33,
-                  username: 'foo.test',
-                  post: '3lmeun6nxfc27',
-                },
-                {
-                  id: 'darggxc45',
-                  direction: 'incoming',
-                  date: new Date(2025, 1, 20, 11, 0, 0),
-                  amount: 12,
-                  username: 'SomeUser33',
-                  post: '1234412',
-                },
-              ],
-        transfers:
-          walletStateOld.transfers.length !== 0
-            ? walletStateOld.transfers
-            : [
-                {
-                  id: 'j634gf5',
-                  direction: 'incoming',
-                  date: new Date(2025, 2, 6, 12, 0, 0),
-                  amount: 40,
-                  to_address: '1DkyAJL8Kt8O67GJNKJbdd9083Qh26jklQepA',
-                },
-                {
-                  id: 'darggxc45',
-                  direction: 'outgoing',
-                  date: new Date(2025, 2, 12, 12, 0, 0),
-                  amount: 7,
-                  to_address: '1DkyAJL8Kt8O67GJNKJbdd9083Qh26jklQepA',
-                },
-              ],
-      },
-    [walletStateOld],
   )
 
   const shareAddress = useCallback(() => {
