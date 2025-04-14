@@ -1,42 +1,49 @@
 import {useQuery} from '@tanstack/react-query'
+import {z} from 'zod'
 
 import {useAgent} from '#/state/session'
 
-export type WalletRequestState = 'done' | 'ongoing' | 'cancelled'
+const WalletRequestState = z.enum(['done', 'ongoing', 'cancelled'])
+export type WalletRequestState = z.infer<typeof WalletRequestState>
 
-export type WalletRequest = {
-  id: string
-  date: Date
-  amount: number
-  status: WalletRequestState
-}
+const WalletRequest = z.object({
+  id: z.string(),
+  date: z.coerce.date(),
+  amount: z.number(),
+  status: WalletRequestState,
+})
+export type WalletRequest = z.infer<typeof WalletRequest>
 
-export type TransferDirection = 'incoming' | 'outgoing'
+const TransferDirection = z.enum(['incoming', 'outgoing'])
+export type TransferDirection = z.infer<typeof TransferDirection>
 
-export type WalletBoost = {
-  id: string
-  direction: TransferDirection
-  date: Date
-  amount: number
-  username: string
-  post: string
-}
+const WalletBoost = z.object({
+  id: z.string(),
+  direction: TransferDirection,
+  date: z.coerce.date(),
+  amount: z.number(),
+  username: z.string(),
+  post: z.string(),
+})
+export type WalletBoost = z.infer<typeof WalletBoost>
 
-export type WalletTransfer = {
-  id: string
-  direction: TransferDirection
-  date: Date
-  amount: number
-  to_address: string
-}
+const WalletTransfer = z.object({
+  id: z.string(),
+  direction: TransferDirection,
+  date: z.coerce.date(),
+  amount: z.number(),
+  to_address: z.string(),
+})
+export type WalletTransfer = z.infer<typeof WalletTransfer>
 
-export type WalletState = {
-  address: string
-  balance: number
-  requests: WalletRequest[]
-  boosts: WalletBoost[]
-  transfers: WalletTransfer[]
-}
+const WalletState = z.object({
+  address: z.string(),
+  balance: z.number(),
+  requests: z.array(WalletRequest),
+  boosts: z.array(WalletBoost),
+  transfers: z.array(WalletTransfer),
+})
+export type WalletState = z.infer<typeof WalletState>
 
 export default function () {
   const agent = useAgent()
@@ -49,38 +56,6 @@ export default function () {
         }),
       })
         .then(req => req.json())
-        .then(
-          (json): WalletState => ({
-            address: json.address,
-            balance: json.balance,
-            requests: json.requests.map(
-              (item: any): WalletRequest => ({
-                id: item.id,
-                date: new Date(item.date),
-                amount: item.amount,
-                status: item.status,
-              }),
-            ),
-            boosts: json.boosts.map(
-              (item: any): WalletBoost => ({
-                id: item.id,
-                direction: item.direction,
-                date: new Date(item.date),
-                amount: item.amount,
-                username: item.username,
-                post: item.post,
-              }),
-            ),
-            transfers: json.transfers.map(
-              (item: any): WalletTransfer => ({
-                id: item.id,
-                direction: item.direction,
-                date: new Date(item.date),
-                amount: item.amount,
-                to_address: item.to_address,
-              }),
-            ),
-          }),
-        ),
+        .then(json => WalletState.parse(json)),
   })
 }

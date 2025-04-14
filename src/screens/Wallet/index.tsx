@@ -5,7 +5,6 @@ import {Trans} from '@lingui/macro'
 import {CommonNavigatorParams, NativeStackScreenProps} from '#/lib/routes/types'
 import {shareUrl} from '#/lib/sharing'
 import {sanitizeHandle} from '#/lib/strings/handles'
-import {useProfileQuery} from '#/state/queries/profile'
 import {useSession} from '#/state/session'
 import {atoms as a, useTheme} from '#/alf'
 import {Divider} from '#/components/Divider'
@@ -22,7 +21,6 @@ export default function Wallet({}: NativeStackScreenProps<
 >) {
   const t = useTheme()
   const {currentAccount} = useSession()
-  const {data: profile} = useProfileQuery({did: currentAccount?.did})
   const {data: walletState, isLoading} = useWalletState()
 
   const [showAddress, setShowAddres] = useState(false)
@@ -109,7 +107,7 @@ export default function Wallet({}: NativeStackScreenProps<
                   a.font_heavy_bold,
                   t.atoms.text_contrast_medium,
                 ]}>
-                @{sanitizeHandle(profile?.handle)}
+                @{sanitizeHandle(currentAccount?.handle)}
               </Text>
               <View style={[a.flex_row, a.align_center, a.gap_sm]}>
                 {walletAddresLine}
