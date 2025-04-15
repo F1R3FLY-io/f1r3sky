@@ -399,7 +399,7 @@ msgstr ""
 #: src/screens/Settings/AccountSettings.tsx:45
 #: src/screens/Settings/Settings.tsx:153
 #: src/screens/Settings/Settings.tsx:156
-#: src/screens/Wallet/index.tsx:141
+#: src/screens/Wallet/index.tsx:74
 msgid "Account"
 msgstr ""
 
@@ -415,7 +415,7 @@ msgctxt "toast"
 msgid "Account followed"
 msgstr ""
 
-#: src/screens/Wallet/index.tsx:154
+#: src/screens/Wallet/index.tsx:87
 msgid "Account ID"
 msgstr ""
 
@@ -996,7 +996,7 @@ msgstr ""
 msgid "Back to Chats"
 msgstr ""
 
-#: src/screens/Wallet/index.tsx:191
+#: src/screens/Wallet/index.tsx:124
 msgid "Balance"
 msgstr ""
 
@@ -2092,7 +2092,7 @@ msgstr ""
 msgid "Default icons"
 msgstr ""
 
-#: src/screens/Wallet/index.tsx:167
+#: src/screens/Wallet/index.tsx:100
 msgid "Default token"
 msgstr ""
 
@@ -4169,8 +4169,8 @@ msgstr ""
 msgid "Load new posts"
 msgstr ""
 
-#: src/screens/Wallet/index.tsx:109
-#: src/screens/Wallet/index.tsx:198
+#: src/screens/Wallet/index.tsx:42
+#: src/screens/Wallet/index.tsx:131
 #: src/view/com/composer/text-input/mobile/Autocomplete.tsx:94
 msgid "Loading..."
 msgstr ""
@@ -7762,7 +7762,7 @@ msgstr ""
 msgid "Topic"
 msgstr ""
 
-#: src/screens/Wallet/index.tsx:216
+#: src/screens/Wallet/index.tsx:149
 msgid "Transactions history"
 msgstr ""
 
@@ -8402,12 +8402,12 @@ msgid "Volume"
 msgstr ""
 
 #: src/Navigation.tsx:463
-#: src/screens/Wallet/index.tsx:134
+#: src/screens/Wallet/index.tsx:67
 #: src/view/shell/desktop/LeftNav.tsx:694
 msgid "Wallet"
 msgstr ""
 
-#: src/screens/Wallet/index.tsx:163
+#: src/screens/Wallet/index.tsx:96
 msgid "Wallet address"
 msgstr ""
 
