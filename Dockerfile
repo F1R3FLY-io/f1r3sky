@@ -11,7 +11,7 @@ ENV NVM_DIR=/usr/share/nvm
 # Go
 ENV GODEBUG="netdns=go"
 ENV GOOS="linux"
-ENV GOARCH="amd64"
+ENV GOARCH="arm64"
 ENV CGO_ENABLED=1
 ENV GOEXPERIMENT="loopvar"
 
@@ -47,21 +47,16 @@ RUN find ./bskyweb/static && find ./web-build/static
 #
 # Generate the bskyweb Go binary.
 #
-RUN cd bskyweb/ && \
-  go mod download && \
-  go mod verify
+WORKDIR /usr/src/social-app/bskyweb/
+RUN go mod download
+RUN go mod verify
 
-RUN cd bskyweb/ && \
-  go build \
-    -v  \
-    -trimpath \
-    -tags timetzdata \
-    -o /bskyweb \
-    ./cmd/bskyweb
+##RUN cd bskyweb/
+RUN go build  -v -trimpath -tags timetzdata -o /bskyweb ./cmd/bskyweb
 
 FROM debian:bullseye-slim
 
-ENV GODEBUG=netdns=go
+ENV GODEBUG="netdns=go"
 ENV TZ=Etc/UTC
 ENV DEBIAN_FRONTEND=noninteractive
 
