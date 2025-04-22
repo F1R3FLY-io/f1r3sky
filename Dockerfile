@@ -11,7 +11,6 @@ ENV NVM_DIR=/usr/share/nvm
 # Go
 ENV GODEBUG="netdns=go"
 ENV GOOS="linux"
-ENV GOARCH="amd64"
 ENV CGO_ENABLED=1
 ENV GOEXPERIMENT="loopvar"
 
