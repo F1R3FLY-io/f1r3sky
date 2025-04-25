@@ -1,18 +1,21 @@
 import {useCallback, useState} from 'react'
 import {TouchableOpacity, View} from 'react-native'
-import {Trans} from '@lingui/macro'
+import {msg, Trans} from '@lingui/macro'
+import {useLingui} from '@lingui/react'
 
 import {CommonNavigatorParams, NativeStackScreenProps} from '#/lib/routes/types'
 import {shareUrl} from '#/lib/sharing'
 import {sanitizeHandle} from '#/lib/strings/handles'
+import {useModalControls} from '#/state/modals'
+import {useWalletState} from '#/state/queries/wallet'
 import {useSession} from '#/state/session'
+import {Button} from '#/view/com/util/forms/Button'
 import {atoms as a, useTheme} from '#/alf'
 import {Divider} from '#/components/Divider'
 import {Copy, Hide, Show, WalletTranscation} from '#/components/icons/Wallet'
 import * as Layout from '#/components/Layout'
 import {Text} from '#/components/Typography'
 import TransactionHistory from './TransactionHistory'
-import useWalletState from './useWalletState'
 import WalletBalanceGraph from './WalletBalanceGraph'
 
 export default function Wallet({}: NativeStackScreenProps<
@@ -20,6 +23,9 @@ export default function Wallet({}: NativeStackScreenProps<
   'Wallet'
 >) {
   const t = useTheme()
+  const {_} = useLingui()
+  const {openModal} = useModalControls()
+
   const {currentAccount} = useSession()
   const {data: walletState, isLoading} = useWalletState()
 
@@ -137,6 +143,24 @@ export default function Wallet({}: NativeStackScreenProps<
                 requests={walletState?.requests ?? []}
                 boosts={walletState?.boosts ?? []}
                 transfers={walletState?.transfers ?? []}
+              />
+              <Button
+                type="primary"
+                onPress={() => {
+                  if (isLoading) {
+                    return
+                  }
+
+                  openModal({
+                    name: 'wallet-transfer',
+                    currentBalance: walletState!.balance,
+                  })
+                }}
+                accessibilityLabel={_(msg`Transfer tokens`)}
+                accessibilityHint=""
+                label={_(msg`Transfer tokens`)}
+                labelContainerStyle={[a.justify_center, a.p_xs]}
+                labelStyle={[a.text_lg]}
               />
             </View>
           </View>

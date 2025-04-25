@@ -1,4 +1,4 @@
-import {useQuery} from '@tanstack/react-query'
+import {useMutation, useQuery, useQueryClient} from '@tanstack/react-query'
 import {z} from 'zod'
 
 import {useAgent} from '#/state/session'
@@ -45,7 +45,7 @@ const WalletState = z.object({
 })
 export type WalletState = z.infer<typeof WalletState>
 
-export default function () {
+export function useWalletState() {
   const agent = useAgent()
   return useQuery({
     queryKey: ['wallet-state'],
@@ -57,5 +57,28 @@ export default function () {
       })
         .then(req => req.json())
         .then(json => WalletState.parse(json)),
+  })
+}
+
+export type TransferProps = {
+  amount: number
+  description: string
+  to_address: string
+}
+
+export function useTransferMutation() {
+  const queryClient = useQueryClient()
+  const agent = useAgent()
+  return useMutation({
+    mutationFn: (props: TransferProps) =>
+      fetch(`${agent.serviceUrl.origin}/api/wallet/transfer`, {
+        method: 'POST',
+        headers: new Headers({
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${agent.session?.accessJwt}`,
+        }),
+        body: JSON.stringify(props),
+      }),
+    onMutate: () => queryClient.invalidateQueries({queryKey: ['wallet-state']}),
   })
 }
