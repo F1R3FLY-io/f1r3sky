@@ -19,6 +19,7 @@ import * as LinkWarningModal from './LinkWarning'
 import * as ListAddUserModal from './ListAddRemoveUsers'
 import * as UserAddRemoveLists from './UserAddRemoveLists'
 import * as VerifyEmailModal from './VerifyEmail'
+import * as WalletTransfer from './WalletTransfer'
 
 export function ModalsContainer() {
   const {isModalActive, activeModals} = useModals()
@@ -85,6 +86,8 @@ function Modal({modal}: {modal: ModalIface}) {
     element = <ChangePasswordModal.Component />
   } else if (modal.name === 'link-warning') {
     element = <LinkWarningModal.Component {...modal} />
+  } else if (modal.name === 'wallet-transfer') {
+    element = <WalletTransfer.Component {...modal} />
   } else {
     return null
   }

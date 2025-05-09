@@ -20,6 +20,7 @@ import * as LinkWarningModal from './LinkWarning'
 import * as ListAddUserModal from './ListAddRemoveUsers'
 import * as UserAddRemoveListsModal from './UserAddRemoveLists'
 import * as VerifyEmailModal from './VerifyEmail'
+import * as WalletTransfer from './WalletTransfer'
 
 const DEFAULT_SNAPPOINTS = ['90%']
 const HANDLE_HEIGHT = 24
@@ -91,6 +92,9 @@ export function ModalsContainer() {
   } else if (activeModal?.name === 'in-app-browser-consent') {
     snapPoints = InAppBrowserConsentModal.snapPoints
     element = <InAppBrowserConsentModal.Component {...activeModal} />
+  } else if (activeModal?.name === 'wallet-transfer') {
+    snapPoints = WalletTransfer.snapPoints
+    element = <WalletTransfer.Component {...activeModal} />
   } else {
     return null
   }
