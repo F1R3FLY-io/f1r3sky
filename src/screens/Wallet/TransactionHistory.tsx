@@ -291,11 +291,11 @@ function flipSortOrder<T>(current: Sort<T>, flip: keyof T): Sort<T> {
 
 function compare<T>(l: T, r: T): number {
   if (l instanceof Date && r instanceof Date) {
-    return l.getTime() - r.getTime()
+    return r.getTime() - l.getTime()
   } else if (typeof l === 'string' && typeof r === 'string') {
-    return l.localeCompare(r)
+    return r.localeCompare(l)
   } else if (typeof l === 'number' && typeof r === 'number') {
-    return l - r
+    return r - l
   }
   throw new Error('wrong types')
 }

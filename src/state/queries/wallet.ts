@@ -6,9 +6,11 @@ import {useAgent} from '#/state/session'
 const WalletRequestState = z.enum(['done', 'ongoing', 'cancelled'])
 export type WalletRequestState = z.infer<typeof WalletRequestState>
 
+const UnixDate = z.number().transform(num => new Date(num * 1000))
+
 const WalletRequest = z.object({
   id: z.string(),
-  date: z.coerce.date(),
+  date: UnixDate,
   amount: z.coerce.bigint(),
   status: WalletRequestState,
 })
@@ -20,7 +22,7 @@ export type TransferDirection = z.infer<typeof TransferDirection>
 const WalletBoost = z.object({
   id: z.string(),
   direction: TransferDirection,
-  date: z.coerce.date(),
+  date: UnixDate,
   amount: z.coerce.bigint(),
   username: z.string(),
   post: z.string(),
@@ -30,9 +32,10 @@ export type WalletBoost = z.infer<typeof WalletBoost>
 const WalletTransfer = z.object({
   id: z.string(),
   direction: TransferDirection,
-  date: z.coerce.date(),
+  date: UnixDate,
   amount: z.coerce.bigint(),
   to_address: z.string(),
+  cost: z.coerce.bigint(),
 })
 export type WalletTransfer = z.infer<typeof WalletTransfer>
 

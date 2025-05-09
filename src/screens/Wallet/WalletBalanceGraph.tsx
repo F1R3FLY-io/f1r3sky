@@ -114,15 +114,15 @@ export default function WalletBalanceGraph({
             case 'boost': {
               value =
                 item.value.direction === 'incoming'
-                  ? lastBalance + item.value.amount
-                  : lastBalance - item.value.amount
+                  ? lastBalance - item.value.amount
+                  : lastBalance + item.value.amount
               break
             }
             case 'transfer': {
               value =
                 item.value.direction === 'incoming'
-                  ? lastBalance + item.value.amount
-                  : lastBalance - item.value.amount
+                  ? lastBalance - item.value.amount
+                  : lastBalance + item.value.amount + item.value.cost
               break
             }
           }
@@ -157,6 +157,7 @@ export default function WalletBalanceGraph({
       allWalletStates.length !== 0 &&
       allWalletStates.at(-1)!.date <= minDate
     ) {
+      // patch balance on minDate position when first transaction is out of range
       minBoundary = [
         allWalletStates.reduceRight(
           (state, item) =>
@@ -166,12 +167,12 @@ export default function WalletBalanceGraph({
                   date: minDate,
                 }
               : state,
-          {
-            date: minDate,
-            value: balance,
-          },
+          allWalletStates.at(-1)!,
         ),
       ]
+    } else if (inRange.length !== 0) {
+      // patch balance on minDate position when first transaction is in range
+      inRange.at(-1)!.date = minDate
     }
 
     return [maxBoundary, ...inRange, ...minBoundary]
