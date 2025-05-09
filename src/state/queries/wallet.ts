@@ -9,7 +9,7 @@ export type WalletRequestState = z.infer<typeof WalletRequestState>
 const WalletRequest = z.object({
   id: z.string(),
   date: z.coerce.date(),
-  amount: z.number(),
+  amount: z.coerce.bigint(),
   status: WalletRequestState,
 })
 export type WalletRequest = z.infer<typeof WalletRequest>
@@ -21,7 +21,7 @@ const WalletBoost = z.object({
   id: z.string(),
   direction: TransferDirection,
   date: z.coerce.date(),
-  amount: z.number(),
+  amount: z.coerce.bigint(),
   username: z.string(),
   post: z.string(),
 })
@@ -31,14 +31,14 @@ const WalletTransfer = z.object({
   id: z.string(),
   direction: TransferDirection,
   date: z.coerce.date(),
-  amount: z.number(),
+  amount: z.coerce.bigint(),
   to_address: z.string(),
 })
 export type WalletTransfer = z.infer<typeof WalletTransfer>
 
 const WalletState = z.object({
   address: z.string(),
-  balance: z.number(),
+  balance: z.coerce.bigint(),
   requests: z.array(WalletRequest),
   boosts: z.array(WalletBoost),
   transfers: z.array(WalletTransfer),
@@ -61,9 +61,13 @@ export function useWalletState() {
 }
 
 export type TransferProps = {
-  amount: number
-  description: string
+  amount: bigint
   to_address: string
+  description?: string
+}
+
+function replacer(_: any, value: any) {
+  return typeof value === 'bigint' ? value.toString() : value
 }
 
 export function useTransferMutation() {
@@ -77,8 +81,9 @@ export function useTransferMutation() {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${agent.session?.accessJwt}`,
         }),
-        body: JSON.stringify(props),
+        body: JSON.stringify(props, replacer),
       }),
-    onMutate: () => queryClient.invalidateQueries({queryKey: ['wallet-state']}),
+    onSuccess: () =>
+      queryClient.invalidateQueries({queryKey: ['wallet-state']}),
   })
 }

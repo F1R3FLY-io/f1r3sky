@@ -5,20 +5,24 @@ import {AreaChart, XAxis} from 'react-native-svg-charts'
 import {msg, Trans} from '@lingui/macro'
 import {useLingui} from '@lingui/react'
 
+import {
+  WalletBoost,
+  WalletRequest,
+  WalletTransfer,
+} from '#/state/queries/wallet'
 import {atoms as a, useTheme} from '#/alf'
 import * as Toggle from '#/components/forms/Toggle'
-import {WalletBoost, WalletRequest, WalletTransfer} from './useWalletState'
 
 const BALANCE_GRAPH_SCALES = ['1W', '1M', '3M', '6M'] as const
 type BalanceGraphScale = (typeof BALANCE_GRAPH_SCALES)[number]
 
 type GraphEntry = {
-  value: number
+  value: bigint
   date: Date
 }
 
 export type WalletBalanceGraphProps = {
-  balance: number
+  balance: bigint
   requests: WalletRequest[]
   boosts: WalletBoost[]
   transfers: WalletTransfer[]
@@ -101,7 +105,7 @@ export default function WalletBalanceGraph({
       .sort((l, r) => r.value.date.getTime() - l.value.date.getTime())
       .reduce(
         ([allWalletStates, lastBalance], item) => {
-          let value: number
+          let value: bigint
           switch (item.type) {
             case 'request': {
               value = lastBalance + item.value.amount
@@ -134,7 +138,7 @@ export default function WalletBalanceGraph({
             value,
           ]
         },
-        [[], balance] as [GraphEntry[], number],
+        [[], balance] as [GraphEntry[], bigint],
       )
 
     return allWalletStates
@@ -221,7 +225,7 @@ export default function WalletBalanceGraph({
         xMin={minDate as any}
         xMax={maxDate as any}
         xAccessor={({item}) => item.date as any}
-        yAccessor={({item}) => item.value}
+        yAccessor={({item}) => Number(item.value)}
         style={{height: 115}}
         contentInset={{
           top: a.pt_2xl.paddingTop,

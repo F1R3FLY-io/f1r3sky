@@ -134,12 +134,16 @@ export default function Wallet({}: NativeStackScreenProps<
             <View style={[a.p_2xl]}>
               <View style={[a.flex_row, a.align_end, a.gap_sm]}>
                 <Layout.Header.TitleText>
-                  {isLoading ? <Trans>Loading...</Trans> : walletState!.balance}
+                  {isLoading ? (
+                    <Trans>Loading...</Trans>
+                  ) : (
+                    walletState!.balance.toString()
+                  )}
                 </Layout.Header.TitleText>
                 <Text style={[a.text_xs, a.pb_xs]}>F1R3CAP</Text>
               </View>
               <WalletBalanceGraph
-                balance={walletState?.balance ?? 0}
+                balance={walletState?.balance ?? 0n}
                 requests={walletState?.requests ?? []}
                 boosts={walletState?.boosts ?? []}
                 transfers={walletState?.transfers ?? []}
@@ -154,6 +158,7 @@ export default function Wallet({}: NativeStackScreenProps<
                   openModal({
                     name: 'wallet-transfer',
                     currentBalance: walletState!.balance,
+                    userAddress: walletState!.address,
                   })
                 }}
                 accessibilityLabel={_(msg`Transfer tokens`)}

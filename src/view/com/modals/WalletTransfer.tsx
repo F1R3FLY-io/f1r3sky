@@ -1,12 +1,16 @@
-import {useCallback, useState} from 'react'
+import {useReducer} from 'react'
 import {SafeAreaView, View} from 'react-native'
 import {msg, Trans} from '@lingui/macro'
-import {useLingui} from '@lingui/react'
+import {I18nContext, useLingui} from '@lingui/react'
+import {base16, base58} from '@scure/base'
+import {blake2bHex} from 'blakejs'
 
 import {usePalette} from '#/lib/hooks/usePalette'
 import {useModalControls} from '#/state/modals'
 import {useTransferMutation} from '#/state/queries/wallet'
+import * as Toast from '#/view/com/util/Toast'
 import {atoms as a, useTheme} from '#/alf'
+import {FormError} from '#/components/forms/FormError'
 import * as TextField from '#/components/forms/TextField'
 import {Text} from '#/components/Typography'
 import {Button} from '../util/forms/Button'
@@ -15,33 +19,23 @@ import {ScrollView} from './util'
 export const snapPoints = ['90%']
 
 export type Props = {
-  currentBalance: number
+  currentBalance: bigint
+  userAddress: string
 }
 
-export function Component({currentBalance}: Props) {
+export function Component({currentBalance, userAddress}: Props) {
   const t = useTheme()
   const pal = usePalette('default')
   const {_} = useLingui()
   const {closeModal} = useModalControls()
 
-  const [amount, setAmount] = useState<number | null>(null)
-  const [inputAmountValue, setInputAmountValue] = useState('')
-  const setAmountInput = useCallback(
-    (text: string) => {
-      const amount = Number(text)
+  const [state, dispatch] = useReducer(handleTransferAction, {
+    amount: {},
+    address: {},
+    description: {},
+  })
 
-      if (isNaN(amount) || amount < 0) {
-        return
-      }
-
-      setInputAmountValue(text)
-      setAmount(amount)
-    },
-    [setAmount],
-  )
-
-  const [description, setDescription] = useState('')
-  const [address, setAddress] = useState('')
+  const error = formatErrorMsg(_, state)
 
   const {mutateAsync: submit, isPending} = useTransferMutation()
 
@@ -59,78 +53,117 @@ export function Component({currentBalance}: Props) {
               request instantly.
             </Trans>
           </Text>
-          <View style={[a.gap_sm]}>
+          <View
+            style={[
+              a.gap_sm,
+              a.justify_center,
+              a.align_center,
+              a.self_stretch,
+            ]}>
             <Text
               style={[
-                a.text_md,
+                a.text_sm,
                 a.font_bold,
+                a.mb_sm,
                 a.text_center,
                 t.atoms.text_contrast_medium,
               ]}>
               <Trans>Amount</Trans>
             </Text>
-            <TextField.Input
-              label={_(msg`Transfet amount`)}
-              placeholder="0.0"
-              keyboardType="numeric"
-              value={inputAmountValue}
-              onChangeText={setAmountInput}
-            />
+
+            <TextField.Root>
+              <TextField.Input
+                label={_(msg`Transfet amount`)}
+                placeholder="0.0"
+                keyboardType="numeric"
+                onChangeText={amount => {
+                  let number
+                  try {
+                    number = BigInt(amount)
+                  } catch {
+                    number = undefined
+                  }
+
+                  dispatch({
+                    type: 'setAmount',
+                    amount: number,
+                    currentBalance,
+                  })
+                }}
+                isInvalid={!!state.amount.error}
+                style={[
+                  a.text_5xl,
+                  a.font_bold,
+                  a.text_center,
+                  a.self_stretch,
+                  a.py_xs,
+                ]}
+                noBackground
+              />
+            </TextField.Root>
           </View>
           <View style={[a.flex_row, a.gap_sm]}>
             <Text
               style={[a.text_sm, a.font_bold, t.atoms.text_contrast_medium]}>
               <Trans>Available Balance</Trans>
             </Text>
-            <Text style={[a.text_sm, a.font_bold]}>{currentBalance}</Text>
+            <Text style={[a.text_sm, a.font_bold]}>
+              {currentBalance.toString()}
+            </Text>
           </View>
           <View style={[a.gap_sm, a.self_start, a.align_start, a.self_stretch]}>
-            <Text
-              style={[
-                a.text_md,
-                a.font_bold,
-                a.text_center,
-                t.atoms.text_contrast_medium,
-              ]}>
+            <TextField.LabelText>
               <Trans>Receiver Wallet address</Trans>
-            </Text>
-            <TextField.Input
-              label={_(msg`Add wallet address`)}
-              onChangeText={setAddress}
-            />
+            </TextField.LabelText>
+            <TextField.Root isInvalid={!!state.address.error}>
+              <TextField.Input
+                label={_(msg`Add wallet address`)}
+                onChangeText={address =>
+                  dispatch({type: 'setAddress', address, userAddress})
+                }
+              />
+            </TextField.Root>
           </View>
           <View style={[a.gap_sm, a.self_start, a.align_start, a.self_stretch]}>
-            <Text
-              style={[
-                a.text_md,
-                a.font_bold,
-                a.text_center,
-                t.atoms.text_contrast_medium,
-              ]}>
+            <TextField.LabelText>
               <Trans>Note</Trans>
-            </Text>
-            <TextField.Input
-              label={_(msg`Note`)}
-              placeholder={_(msg`Placeholder`)}
-              onChangeText={setDescription}
-              multiline
-            />
+            </TextField.LabelText>
+            <TextField.Root>
+              <TextField.Input
+                label={_(msg`Note`)}
+                placeholder={_(msg`Placeholder`)}
+                onChangeText={description =>
+                  dispatch({type: 'setDescription', description})
+                }
+                multiline
+              />
+            </TextField.Root>
           </View>
+          <FormError error={error} />
           <View style={[a.gap_sm, a.self_stretch]}>
             <Button
               type="primary"
-              onPress={() =>
-                submit({
-                  to_address: address,
-                  description,
-                  amount: amount!,
-                }).then(() => {
+              onPress={async () => {
+                if (
+                  state.amount.value !== undefined &&
+                  state.amount.error === undefined &&
+                  state.address.value !== undefined &&
+                  state.address.error === undefined
+                ) {
+                  await submit({
+                    amount: state.amount.value,
+                    to_address: state.address.value,
+                    description: state.description.value,
+                  })
                   closeModal()
-                })
-              }
+                  Toast.show(_(msg`Transfer submitted`), 'clipboard-check')
+                } else {
+                  dispatch({type: 'revalidateAll', currentBalance, userAddress})
+                }
+              }}
               withLoading
               accessibilityLabel={_(msg`Transfer tokens`)}
-              accessibilityHint=""
+              accessibilityHint={_(msg`Click to transfer transfer`)}
               label={_(msg`Transfer tokens`)}
               labelContainerStyle={[a.justify_center, a.p_xs]}
               labelStyle={[a.text_lg]}
@@ -142,7 +175,7 @@ export function Component({currentBalance}: Props) {
               }}
               disabled={isPending}
               accessibilityLabel={_(msg`Cancel`)}
-              accessibilityHint=""
+              accessibilityHint={_(msg`Click to cancel transfer`)}
               label={_(msg`Cancel`)}
               labelContainerStyle={[a.justify_center, a.p_xs]}
               labelStyle={[a.text_lg]}
@@ -152,4 +185,168 @@ export function Component({currentBalance}: Props) {
       </ScrollView>
     </SafeAreaView>
   )
+}
+
+type ControlState = {
+  amount: {
+    value?: bigint
+    error?: 'invalid' | 'lowBalance'
+  }
+  address: {
+    value?: string
+    error?: 'invalid' | 'sameAddress'
+  }
+  description: {
+    value?: string
+  }
+}
+
+type TransferActrion =
+  | {
+      type: 'setAmount'
+      amount?: bigint
+      currentBalance: bigint
+    }
+  | {type: 'setAddress'; address?: string; userAddress: string}
+  | {type: 'setDescription'; description?: string}
+  | {type: 'revalidateAll'; currentBalance: bigint; userAddress: string}
+
+function handleTransferAction(
+  state: ControlState,
+  action: TransferActrion,
+): ControlState {
+  switch (action.type) {
+    case 'setAmount': {
+      const thisProp = 'amount'
+
+      if (action.amount === undefined || action.amount <= 0) {
+        return {
+          ...state,
+          [thisProp]: {
+            value: action.amount,
+            error: 'invalid',
+          },
+        }
+      }
+
+      if (action.amount > action.currentBalance) {
+        return {
+          ...state,
+          [thisProp]: {
+            value: action.amount,
+            error: 'lowBalance',
+          },
+        }
+      }
+
+      return {
+        ...state,
+        [thisProp]: {
+          value: action.amount,
+        },
+      }
+    }
+    case 'setAddress': {
+      const thisProp = 'address'
+      if (
+        action.address === undefined ||
+        action.address === '' ||
+        !verifyRevAddr(action.address)
+      ) {
+        return {
+          ...state,
+          [thisProp]: {
+            value: action.address,
+            error: 'invalid',
+          },
+        }
+      }
+
+      if (action.address === action.userAddress) {
+        return {
+          ...state,
+          address: {
+            value: action.address,
+            error: 'sameAddress',
+          },
+        }
+      }
+
+      return {
+        ...state,
+        [thisProp]: {
+          value: action.address,
+        },
+      }
+    }
+    case 'setDescription': {
+      const thisProp = 'description'
+      return {
+        ...state,
+        [thisProp]: {
+          value: action.description,
+        },
+      }
+    }
+    case 'revalidateAll': {
+      let newState = handleTransferAction(state, {
+        type: 'setAmount',
+        amount: state.amount.value,
+        currentBalance: action.currentBalance,
+      })
+
+      newState = handleTransferAction(newState, {
+        type: 'setAddress',
+        address: state.address.value,
+        userAddress: action.userAddress,
+      })
+
+      return handleTransferAction(newState, {
+        type: 'setDescription',
+        description: state.description.value,
+      })
+    }
+  }
+}
+
+function formatErrorMsg(
+  _: I18nContext['_'],
+  state: ControlState,
+): string | undefined {
+  switch (state.amount.error) {
+    case 'invalid':
+      return _(msg`Invalid amount`)
+    case 'lowBalance':
+      return _(msg`Not enough funds for transfer`)
+    case undefined:
+      break
+  }
+
+  switch (state.address.error) {
+    case 'invalid':
+      return _(msg`Invalid address`)
+    case 'sameAddress':
+      return _(msg`Destination address and source address are the same`)
+    case undefined:
+      break
+  }
+}
+
+function verifyRevAddr(revAddr: string): boolean {
+  try {
+    const revBytes = base58.decode(revAddr)
+    const revHex = base16.encode(revBytes)
+
+    const payload = revHex.slice(0, -8)
+    const checksum = revHex.slice(-8).toLowerCase()
+
+    const payloadBytes = base16.decode(payload)
+    const checksumCalc = blake2bHex(payloadBytes, undefined, 32)
+      .slice(0, 8)
+      .toLowerCase()
+
+    return checksum === checksumCalc
+  } catch {
+    return false
+  }
 }

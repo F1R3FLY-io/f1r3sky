@@ -4,6 +4,11 @@ import {To} from '@react-navigation/native/lib/typescript/src/useLinkTo'
 
 import {AllNavigatorParams} from '#/lib/routes/types'
 import {sanitizeHandle} from '#/lib/strings/handles'
+import {
+  WalletBoost,
+  WalletRequest,
+  WalletTransfer,
+} from '#/state/queries/wallet'
 import {PagerWithHeader} from '#/view/com/pager/PagerWithHeader'
 import {atoms as a, useTheme} from '#/alf'
 import {Divider} from '#/components/Divider'
@@ -16,7 +21,6 @@ import {
 } from '#/components/icons/Wallet'
 import {InlineLinkText} from '#/components/Link'
 import {Text} from '#/components/Typography'
-import {WalletBoost, WalletRequest, WalletTransfer} from './useWalletState'
 
 const TABLE_VIEWS = ['Requests', 'Exchanges', 'Transfers', 'Boosts']
 
@@ -70,7 +74,7 @@ type CommonRow<T> = {
 type TextRow<T> = {
   type: 'text'
   maxLineNumber: number
-  field: KeyOfType<T, string | number>
+  field: KeyOfType<T, string>
   navigate?: (data: T) => To<AllNavigatorParams>
 }
 
@@ -337,9 +341,9 @@ function useRequestTableDate(
         {
           name: REQUEST_COLUMNS[2],
           flex: 2,
-          type: 'text',
+          type: 'custom',
           maxLineNumber: 1,
-          field: 'amount',
+          formatCel: request => request.amount.toString(),
         },
       ],
       data: sortBySortOrder(requests, requestsOrder),
@@ -387,9 +391,9 @@ function useTransferTableDate(
         {
           name: TRANSFER_COLUMNS[2],
           flex: 2,
-          type: 'text',
+          type: 'custom',
           maxLineNumber: 1,
-          field: 'amount',
+          formatCel: request => request.amount.toString(),
         },
         {
           name: TRANSFER_COLUMNS[3],
@@ -445,9 +449,9 @@ function useBoostTableData(
         {
           name: BOOST_COLUMNS[2],
           flex: 2,
-          type: 'text',
+          type: 'custom',
           maxLineNumber: 1,
-          field: 'amount',
+          formatCel: request => request.amount.toString(),
         },
         {
           name: BOOST_COLUMNS[3],

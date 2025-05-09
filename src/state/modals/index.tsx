@@ -92,7 +92,8 @@ export interface InAppBrowserConsentModal {
 
 export interface WalletTransfer {
   name: 'wallet-transfer'
-  currentBalance: number
+  currentBalance: bigint
+  userAddress: string
 }
 
 export type Modal =
