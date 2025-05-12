@@ -40,7 +40,7 @@ export default function TransactionHistory({
   const boostsData = useBoostTableData(boosts)
 
   return (
-    <PagerWithHeader items={TABLE_VIEWS} isHeaderReady={true} initialPage={3}>
+    <PagerWithHeader items={TABLE_VIEWS} isHeaderReady={true} initialPage={2}>
       {() => (
         <View style={[a.px_3xl, a.py_lg]}>
           <Table {...requestsData} />

@@ -24,6 +24,7 @@ export type ButtonType =
   | 'inverted'
   | 'primary-outline'
   | 'secondary-outline'
+  | 'transparent-outline'
   | 'primary-light'
   | 'secondary-light'
   | 'default-light'
@@ -94,6 +95,10 @@ export function Button({
         borderWidth: 1,
         borderColor: theme.palette.secondary.border,
       },
+      'transparent-outline': {
+        borderWidth: 1,
+        borderColor: theme.palette.primary.background,
+      },
       'primary-light': {
         backgroundColor: theme.palette.default.background,
       },
@@ -130,6 +135,9 @@ export function Button({
       'secondary-outline': {
         color: theme.palette.secondary.textInverted,
         fontWeight: theme.palette.secondary.isLowContrast ? '600' : undefined,
+      },
+      'transparent-outline': {
+        color: theme.palette.secondary.text,
       },
       'primary-light': {
         color: theme.palette.primary.textInverted,

@@ -12,7 +12,13 @@ import {useSession} from '#/state/session'
 import {Button} from '#/view/com/util/forms/Button'
 import {atoms as a, useTheme} from '#/alf'
 import {Divider} from '#/components/Divider'
-import {Copy, Hide, Show, WalletTranscation} from '#/components/icons/Wallet'
+import {
+  Copy,
+  Hide,
+  Show,
+  Transfer,
+  WalletTranscation,
+} from '#/components/icons/Wallet'
 import * as Layout from '#/components/Layout'
 import {Text} from '#/components/Typography'
 import TransactionHistory from './TransactionHistory'
@@ -148,25 +154,31 @@ export default function Wallet({}: NativeStackScreenProps<
                 boosts={walletState?.boosts ?? []}
                 transfers={walletState?.transfers ?? []}
               />
-              <Button
-                type="primary"
-                onPress={() => {
-                  if (isLoading) {
-                    return
-                  }
+              <View style={[a.self_start, a.pt_xl]}>
+                <Button
+                  type="transparent-outline"
+                  style={[{borderRadius: 6}]}
+                  onPress={() => {
+                    if (isLoading) {
+                      return
+                    }
 
-                  openModal({
-                    name: 'wallet-transfer',
-                    currentBalance: walletState!.balance,
-                    userAddress: walletState!.address,
-                  })
-                }}
-                accessibilityLabel={_(msg`Transfer tokens`)}
-                accessibilityHint=""
-                label={_(msg`Transfer tokens`)}
-                labelContainerStyle={[a.justify_center, a.p_xs]}
-                labelStyle={[a.text_lg]}
-              />
+                    openModal({
+                      name: 'wallet-transfer',
+                      currentBalance: walletState!.balance,
+                      userAddress: walletState!.address,
+                    })
+                  }}
+                  accessibilityLabel={_(msg`Transfer`)}
+                  accessibilityHint="">
+                  <View style={[a.flex_row, a.align_center, a.gap_sm]}>
+                    <Transfer />
+                    <Text style={[a.text_sm, a.font_bold]}>
+                      <Trans>Transfer</Trans>
+                    </Text>
+                  </View>
+                </Button>
+              </View>
             </View>
           </View>
         </View>
