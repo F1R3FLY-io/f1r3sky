@@ -265,7 +265,7 @@ function handleTransferAction(
       if (action.address === action.userAddress) {
         return {
           ...state,
-          address: {
+          [thisProp]: {
             value: action.address,
             error: 'sameAddress',
           },
