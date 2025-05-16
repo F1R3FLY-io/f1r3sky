@@ -3,10 +3,12 @@ import {z} from 'zod'
 
 import {useAgent} from '#/state/session'
 
+const FIREFLY_API_URL = process.env.FIREFLY_API_URL
+
 const WalletRequestState = z.enum(['done', 'ongoing', 'cancelled'])
 export type WalletRequestState = z.infer<typeof WalletRequestState>
 
-const UnixDate = z.number().transform(num => new Date(num * 1000))
+const UnixDate = z.coerce.number().transform(num => new Date(num * 1000))
 
 const WalletRequest = z.object({
   id: z.string(),
@@ -53,7 +55,7 @@ export function useWalletState() {
   return useQuery({
     queryKey: ['wallet-state'],
     queryFn: () =>
-      fetch(`${agent.serviceUrl.origin}/api/wallet/state`, {
+      fetch(`${FIREFLY_API_URL}/api/wallet/state`, {
         headers: new Headers({
           Authorization: `Bearer ${agent.session?.accessJwt}`,
         }),
@@ -78,7 +80,7 @@ export function useTransferMutation() {
   const agent = useAgent()
   return useMutation({
     mutationFn: (props: TransferProps) =>
-      fetch(`${agent.serviceUrl.origin}/api/wallet/transfer`, {
+      fetch(`${FIREFLY_API_URL}/api/wallet/transfer`, {
         method: 'POST',
         headers: new Headers({
           'Content-Type': 'application/json',
