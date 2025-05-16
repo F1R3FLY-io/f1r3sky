@@ -90,6 +90,12 @@ export interface InAppBrowserConsentModal {
   href: string
 }
 
+export interface WalletTransfer {
+  name: 'wallet-transfer'
+  currentBalance: bigint
+  userAddress: string
+}
+
 export type Modal =
   // Account
   | DeleteAccountModal
@@ -119,6 +125,7 @@ export type Modal =
   // Generic
   | LinkWarningModal
   | InAppBrowserConsentModal
+  | WalletTransfer
 
 const ModalContext = React.createContext<{
   isModalActive: boolean

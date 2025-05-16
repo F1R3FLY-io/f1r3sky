@@ -4,6 +4,11 @@ import {To} from '@react-navigation/native/lib/typescript/src/useLinkTo'
 
 import {AllNavigatorParams} from '#/lib/routes/types'
 import {sanitizeHandle} from '#/lib/strings/handles'
+import {
+  WalletBoost,
+  WalletRequest,
+  WalletTransfer,
+} from '#/state/queries/wallet'
 import {PagerWithHeader} from '#/view/com/pager/PagerWithHeader'
 import {atoms as a, useTheme} from '#/alf'
 import {Divider} from '#/components/Divider'
@@ -16,7 +21,6 @@ import {
 } from '#/components/icons/Wallet'
 import {InlineLinkText} from '#/components/Link'
 import {Text} from '#/components/Typography'
-import {WalletBoost, WalletRequest, WalletTransfer} from './useWalletState'
 
 const TABLE_VIEWS = ['Requests', 'Exchanges', 'Transfers', 'Boosts']
 
@@ -36,7 +40,7 @@ export default function TransactionHistory({
   const boostsData = useBoostTableData(boosts)
 
   return (
-    <PagerWithHeader items={TABLE_VIEWS} isHeaderReady={true} initialPage={3}>
+    <PagerWithHeader items={TABLE_VIEWS} isHeaderReady={true} initialPage={2}>
       {() => (
         <View style={[a.px_3xl, a.py_lg]}>
           <Table {...requestsData} />
@@ -70,7 +74,7 @@ type CommonRow<T> = {
 type TextRow<T> = {
   type: 'text'
   maxLineNumber: number
-  field: KeyOfType<T, string | number>
+  field: KeyOfType<T, string>
   navigate?: (data: T) => To<AllNavigatorParams>
 }
 
@@ -117,7 +121,7 @@ const Table = <T extends string, V>({
 
           const commonCelStyles = [
             a.py_md,
-            a.pl_sm,
+            a.px_xs,
             firstHeader && a.pl_2xl,
             lastHeader && a.pr_2xl,
           ]
@@ -287,11 +291,11 @@ function flipSortOrder<T>(current: Sort<T>, flip: keyof T): Sort<T> {
 
 function compare<T>(l: T, r: T): number {
   if (l instanceof Date && r instanceof Date) {
-    return l.getTime() - r.getTime()
+    return r.getTime() - l.getTime()
   } else if (typeof l === 'string' && typeof r === 'string') {
-    return l.localeCompare(r)
+    return r.localeCompare(l)
   } else if (typeof l === 'number' && typeof r === 'number') {
-    return l - r
+    return r - l
   }
   throw new Error('wrong types')
 }
@@ -337,9 +341,9 @@ function useRequestTableDate(
         {
           name: REQUEST_COLUMNS[2],
           flex: 2,
-          type: 'text',
+          type: 'custom',
           maxLineNumber: 1,
-          field: 'amount',
+          formatCel: request => request.amount.toString(),
         },
       ],
       data: sortBySortOrder(requests, requestsOrder),
@@ -387,9 +391,9 @@ function useTransferTableDate(
         {
           name: TRANSFER_COLUMNS[2],
           flex: 2,
-          type: 'text',
+          type: 'custom',
           maxLineNumber: 1,
-          field: 'amount',
+          formatCel: request => request.amount.toString(),
         },
         {
           name: TRANSFER_COLUMNS[3],
@@ -445,9 +449,9 @@ function useBoostTableData(
         {
           name: BOOST_COLUMNS[2],
           flex: 2,
-          type: 'text',
+          type: 'custom',
           maxLineNumber: 1,
-          field: 'amount',
+          formatCel: request => request.amount.toString(),
         },
         {
           name: BOOST_COLUMNS[3],

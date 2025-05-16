@@ -1,18 +1,27 @@
 import {useCallback, useState} from 'react'
 import {TouchableOpacity, View} from 'react-native'
-import {Trans} from '@lingui/macro'
+import {msg, Trans} from '@lingui/macro'
+import {useLingui} from '@lingui/react'
 
 import {CommonNavigatorParams, NativeStackScreenProps} from '#/lib/routes/types'
 import {shareUrl} from '#/lib/sharing'
 import {sanitizeHandle} from '#/lib/strings/handles'
+import {useModalControls} from '#/state/modals'
+import {useWalletState} from '#/state/queries/wallet'
 import {useSession} from '#/state/session'
+import {Button} from '#/view/com/util/forms/Button'
 import {atoms as a, useTheme} from '#/alf'
 import {Divider} from '#/components/Divider'
-import {Copy, Hide, Show, WalletTranscation} from '#/components/icons/Wallet'
+import {
+  Copy,
+  Hide,
+  Show,
+  Transfer,
+  WalletTranscation,
+} from '#/components/icons/Wallet'
 import * as Layout from '#/components/Layout'
 import {Text} from '#/components/Typography'
 import TransactionHistory from './TransactionHistory'
-import useWalletState from './useWalletState'
 import WalletBalanceGraph from './WalletBalanceGraph'
 
 export default function Wallet({}: NativeStackScreenProps<
@@ -20,6 +29,9 @@ export default function Wallet({}: NativeStackScreenProps<
   'Wallet'
 >) {
   const t = useTheme()
+  const {_} = useLingui()
+  const {openModal} = useModalControls()
+
   const {currentAccount} = useSession()
   const {data: walletState, isLoading} = useWalletState()
 
@@ -128,16 +140,45 @@ export default function Wallet({}: NativeStackScreenProps<
             <View style={[a.p_2xl]}>
               <View style={[a.flex_row, a.align_end, a.gap_sm]}>
                 <Layout.Header.TitleText>
-                  {isLoading ? <Trans>Loading...</Trans> : walletState!.balance}
+                  {isLoading ? (
+                    <Trans>Loading...</Trans>
+                  ) : (
+                    walletState!.balance.toString()
+                  )}
                 </Layout.Header.TitleText>
                 <Text style={[a.text_xs, a.pb_xs]}>F1R3CAP</Text>
               </View>
               <WalletBalanceGraph
-                balance={walletState?.balance ?? 0}
+                balance={walletState?.balance ?? 0n}
                 requests={walletState?.requests ?? []}
                 boosts={walletState?.boosts ?? []}
                 transfers={walletState?.transfers ?? []}
               />
+              <View style={[a.self_start, a.pt_xl]}>
+                <Button
+                  type="transparent-outline"
+                  style={[{borderRadius: 6}]}
+                  onPress={() => {
+                    if (isLoading) {
+                      return
+                    }
+
+                    openModal({
+                      name: 'wallet-transfer',
+                      currentBalance: walletState!.balance,
+                      userAddress: walletState!.address,
+                    })
+                  }}
+                  accessibilityLabel={_(msg`Transfer`)}
+                  accessibilityHint="">
+                  <View style={[a.flex_row, a.align_center, a.gap_sm]}>
+                    <Transfer />
+                    <Text style={[a.text_sm, a.font_bold]}>
+                      <Trans>Transfer</Trans>
+                    </Text>
+                  </View>
+                </Button>
+              </View>
             </View>
           </View>
         </View>
