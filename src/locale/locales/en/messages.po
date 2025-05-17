@@ -296,8 +296,8 @@ msgstr ""
 msgid "{profileName} joined Bluesky using a starter pack {0} ago"
 msgstr ""
 
-#: src/screens/Wallet/WalletBalanceGraph.tsx:190
-#: src/screens/Wallet/WalletBalanceGraph.tsx:209
+#: src/screens/Wallet/WalletBalanceGraph.tsx:195
+#: src/screens/Wallet/WalletBalanceGraph.tsx:214
 msgid "{scale}"
 msgstr ""
 
@@ -399,7 +399,7 @@ msgstr ""
 #: src/screens/Settings/AccountSettings.tsx:45
 #: src/screens/Settings/Settings.tsx:153
 #: src/screens/Settings/Settings.tsx:156
-#: src/screens/Wallet/index.tsx:74
+#: src/screens/Wallet/index.tsx:86
 msgid "Account"
 msgstr ""
 
@@ -415,7 +415,7 @@ msgctxt "toast"
 msgid "Account followed"
 msgstr ""
 
-#: src/screens/Wallet/index.tsx:87
+#: src/screens/Wallet/index.tsx:99
 msgid "Account ID"
 msgstr ""
 
@@ -577,6 +577,10 @@ msgstr ""
 msgid "Add to my feeds"
 msgstr ""
 
+#: src/view/com/modals/WalletTransfer.tsx:120
+msgid "Add wallet address"
+msgstr ""
+
 #: src/view/com/modals/ListAddRemoveUsers.tsx:192
 #: src/view/com/modals/UserAddRemoveLists.tsx:162
 msgid "Added to list"
@@ -694,6 +698,10 @@ msgstr ""
 #: src/view/com/composer/GifAltText.tsx:179
 #: src/view/com/composer/photos/ImageAltTextDialog.tsx:139
 msgid "Alt text will be truncated. Limit: {0} characters."
+msgstr ""
+
+#: src/view/com/modals/WalletTransfer.tsx:71
+msgid "Amount"
 msgstr ""
 
 #: src/screens/Settings/components/DisableEmail2FADialog.tsx:93
@@ -973,6 +981,10 @@ msgstr ""
 msgid "Autoplay videos and GIFs"
 msgstr ""
 
+#: src/view/com/modals/WalletTransfer.tsx:108
+msgid "Available Balance"
+msgstr ""
+
 #: src/components/dms/MessagesListHeader.tsx:82
 #: src/components/moderation/LabelsOnMeDialog.tsx:315
 #: src/components/moderation/LabelsOnMeDialog.tsx:316
@@ -996,11 +1008,11 @@ msgstr ""
 msgid "Back to Chats"
 msgstr ""
 
-#: src/screens/Wallet/index.tsx:124
+#: src/screens/Wallet/index.tsx:136
 msgid "Balance"
 msgstr ""
 
-#: src/screens/Wallet/WalletBalanceGraph.tsx:181
+#: src/screens/Wallet/WalletBalanceGraph.tsx:186
 msgid "Balance graph scale"
 msgstr ""
 
@@ -1287,6 +1299,8 @@ msgstr ""
 #: src/view/com/modals/LinkWarning.tsx:107
 #: src/view/com/modals/VerifyEmail.tsx:255
 #: src/view/com/modals/VerifyEmail.tsx:261
+#: src/view/com/modals/WalletTransfer.tsx:177
+#: src/view/com/modals/WalletTransfer.tsx:179
 #: src/view/com/util/post-ctrls/RepostButton.tsx:213
 #: src/view/screens/Search/Search.tsx:890
 #: src/view/shell/desktop/LeftNav.tsx:209
@@ -1535,6 +1549,10 @@ msgstr ""
 msgid "click here"
 msgstr ""
 
+#: src/view/com/modals/WalletTransfer.tsx:178
+msgid "Click to cancel transfer"
+msgstr ""
+
 #: src/components/dialogs/PostInteractionSettingsDialog.tsx:337
 msgid "Click to disable quote posts of this post."
 msgstr ""
@@ -1549,6 +1567,10 @@ msgstr ""
 
 #: src/components/dms/MessageItem.tsx:241
 msgid "Click to retry failed message"
+msgstr ""
+
+#: src/view/com/modals/WalletTransfer.tsx:166
+msgid "Click to transfer transfer"
 msgstr ""
 
 #: src/screens/Onboarding/index.tsx:32
@@ -2092,7 +2114,7 @@ msgstr ""
 msgid "Default icons"
 msgstr ""
 
-#: src/screens/Wallet/index.tsx:100
+#: src/screens/Wallet/index.tsx:112
 msgid "Default token"
 msgstr ""
 
@@ -2219,6 +2241,10 @@ msgstr ""
 #: src/view/com/composer/GifAltText.tsx:150
 #: src/view/com/composer/photos/ImageAltTextDialog.tsx:114
 msgid "Descriptive alt text"
+msgstr ""
+
+#: src/view/com/modals/WalletTransfer.tsx:329
+msgid "Destination address and source address are the same"
 msgstr ""
 
 #: src/view/com/util/forms/PostDropdownBtnMenuItems.tsx:613
@@ -3786,6 +3812,14 @@ msgstr ""
 msgid "Invalid 2FA confirmation code."
 msgstr ""
 
+#: src/view/com/modals/WalletTransfer.tsx:327
+msgid "Invalid address"
+msgstr ""
+
+#: src/view/com/modals/WalletTransfer.tsx:318
+msgid "Invalid amount"
+msgstr ""
+
 #: src/screens/Settings/components/ChangeHandleDialog.tsx:578
 msgid "Invalid handle. Please try a different one."
 msgstr ""
@@ -4169,8 +4203,8 @@ msgstr ""
 msgid "Load new posts"
 msgstr ""
 
-#: src/screens/Wallet/index.tsx:42
-#: src/screens/Wallet/index.tsx:131
+#: src/screens/Wallet/index.tsx:54
+#: src/screens/Wallet/index.tsx:144
 #: src/view/com/composer/text-input/mobile/Autocomplete.tsx:94
 msgid "Loading..."
 msgstr ""
@@ -4790,6 +4824,10 @@ msgstr ""
 msgid "Non-sexual Nudity"
 msgstr ""
 
+#: src/view/com/modals/WalletTransfer.tsx:320
+msgid "Not enough funds for transfer"
+msgstr ""
+
 #: src/components/KnownFollowers.tsx:255
 msgid "Not followed by anyone you're following"
 msgstr ""
@@ -4802,6 +4840,11 @@ msgstr ""
 #: src/view/com/modals/VerifyEmail.tsx:254
 #: src/view/com/modals/VerifyEmail.tsx:260
 msgid "Not right now"
+msgstr ""
+
+#: src/view/com/modals/WalletTransfer.tsx:129
+#: src/view/com/modals/WalletTransfer.tsx:133
+msgid "Note"
 msgstr ""
 
 #: src/view/com/profile/ProfileMenu.tsx:406
@@ -5286,6 +5329,10 @@ msgstr ""
 msgid "Pinned to your feeds"
 msgstr ""
 
+#: src/view/com/modals/WalletTransfer.tsx:134
+msgid "Placeholder"
+msgstr ""
+
 #: src/view/com/util/post-embeds/GifEmbed.tsx:43
 #: src/view/com/util/post-embeds/VideoEmbedInner/VideoEmbedInnerNative.tsx:140
 #: src/view/com/util/post-embeds/VideoEmbedInner/web-controls/VideoControls.tsx:370
@@ -5714,6 +5761,10 @@ msgstr ""
 
 #: src/components/dms/ReportDialog.tsx:212
 msgid "Reason:"
+msgstr ""
+
+#: src/view/com/modals/WalletTransfer.tsx:116
+msgid "Receiver Wallet address"
 msgstr ""
 
 #: src/view/screens/Search/Search.tsx:1036
@@ -6595,6 +6646,10 @@ msgstr ""
 
 #: src/screens/Login/SetNewPasswordForm.tsx:106
 msgid "Set new password"
+msgstr ""
+
+#: src/view/com/modals/WalletTransfer.tsx:51
+msgid "Set the amount, choose the receiver, add message and generate your request instantly."
 msgstr ""
 
 #: src/screens/Onboarding/Layout.tsx:47
@@ -7762,8 +7817,27 @@ msgstr ""
 msgid "Topic"
 msgstr ""
 
-#: src/screens/Wallet/index.tsx:149
+#: src/screens/Wallet/index.tsx:190
 msgid "Transactions history"
+msgstr ""
+
+#: src/screens/Wallet/index.tsx:172
+#: src/screens/Wallet/index.tsx:177
+msgid "Transfer"
+msgstr ""
+
+#: src/view/com/modals/WalletTransfer.tsx:159
+msgid "Transfer submitted"
+msgstr ""
+
+#: src/view/com/modals/WalletTransfer.tsx:47
+#: src/view/com/modals/WalletTransfer.tsx:165
+#: src/view/com/modals/WalletTransfer.tsx:167
+msgid "Transfer tokens"
+msgstr ""
+
+#: src/view/com/modals/WalletTransfer.tsx:76
+msgid "Transfet amount"
 msgstr ""
 
 #: src/components/dms/MessageMenu.tsx:105
@@ -8402,12 +8476,12 @@ msgid "Volume"
 msgstr ""
 
 #: src/Navigation.tsx:463
-#: src/screens/Wallet/index.tsx:67
+#: src/screens/Wallet/index.tsx:79
 #: src/view/shell/desktop/LeftNav.tsx:694
 msgid "Wallet"
 msgstr ""
 
-#: src/screens/Wallet/index.tsx:96
+#: src/screens/Wallet/index.tsx:108
 msgid "Wallet address"
 msgstr ""
 
