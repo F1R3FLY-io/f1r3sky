@@ -8,7 +8,7 @@ const FIREFLY_API_URL = process.env.FIREFLY_API_URL
 const WalletRequestState = z.enum(['done', 'ongoing', 'cancelled'])
 export type WalletRequestState = z.infer<typeof WalletRequestState>
 
-const UnixDate = z.coerce.number().transform(num => new Date(num * 1000))
+const UnixDate = z.coerce.number().transform(num => new Date(num))
 
 const WalletRequest = z.object({
   id: z.string(),
