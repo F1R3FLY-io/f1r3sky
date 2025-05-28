@@ -106,7 +106,8 @@ import {PrivacyAndSecuritySettingsScreen} from './screens/Settings/PrivacyAndSec
 import {SettingsScreen} from './screens/Settings/Settings'
 import {ThreadPreferencesScreen} from './screens/Settings/ThreadPreferences'
 import TopicScreen from './screens/Topic'
-import Wallet from './screens/Wallet'
+import Wallet from './screens/Wallets/Wallet'
+import Wallets from './screens/Wallets/WalletsSelection'
 
 const navigationRef = createNavigationContainerRef<AllNavigatorParams>()
 
@@ -453,6 +454,14 @@ function commonScreens(Stack: typeof HomeTab, unreadCountLabel?: string) {
         getComponent={() => VideoFeed}
         options={{
           title: title(msg`Video Feed`),
+          requireAuth: true,
+        }}
+      />
+      <Stack.Screen
+        name="Wallets"
+        getComponent={() => Wallets}
+        options={{
+          title: title(msg`Wallets`),
           requireAuth: true,
         }}
       />

@@ -48,6 +48,7 @@ import {Provider as SelectedFeedProvider} from '#/state/shell/selected-feed'
 import {Provider as StarterPackProvider} from '#/state/shell/starter-pack'
 import {Provider as HiddenRepliesProvider} from '#/state/threadgate-hidden-replies'
 import {Provider as TrendingConfigProvider} from '#/state/trending-config'
+import {Provider as WalletsStateProvider} from '#/state/wallets'
 import {Provider as ActiveVideoProvider} from '#/view/com/util/post-embeds/ActiveVideoWebContext'
 import {Provider as VideoVolumeProvider} from '#/view/com/util/post-embeds/VideoVolumeContext'
 import * as Toast from '#/view/com/util/Toast'
@@ -130,8 +131,10 @@ function InnerApp() {
                                             <ProgressGuideProvider>
                                               <TrendingConfigProvider>
                                                 <IntentDialogProvider>
-                                                  <Shell />
-                                                  <NuxDialogs />
+                                                  <WalletsStateProvider>
+                                                    <Shell />
+                                                    <NuxDialogs />
+                                                  </WalletsStateProvider>
                                                 </IntentDialogProvider>
                                               </TrendingConfigProvider>
                                             </ProgressGuideProvider>

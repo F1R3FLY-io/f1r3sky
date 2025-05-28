@@ -6,9 +6,11 @@ import {usePalette} from '#/lib/hooks/usePalette'
 import {useWebMediaQueries} from '#/lib/hooks/useWebMediaQueries'
 import type {Modal as ModalIface} from '#/state/modals'
 import {useModalControls, useModals} from '#/state/modals'
+import * as AddWallet from './AddWallet'
 import * as ChangeEmailModal from './ChangeEmail'
 import * as ChangePasswordModal from './ChangePassword'
 import * as CreateOrEditListModal from './CreateOrEditList'
+import * as CreateWallet from './CreateWallet'
 import * as CropImageModal from './CropImage.web'
 import * as DeleteAccountModal from './DeleteAccount'
 import * as EditProfileModal from './EditProfile'
@@ -88,6 +90,10 @@ function Modal({modal}: {modal: ModalIface}) {
     element = <LinkWarningModal.Component {...modal} />
   } else if (modal.name === 'wallet-transfer') {
     element = <WalletTransfer.Component {...modal} />
+  } else if (modal?.name === 'create-wallet') {
+    element = <CreateWallet.Component />
+  } else if (modal?.name === 'add-wallet') {
+    element = <AddWallet.Component />
   } else {
     return null
   }

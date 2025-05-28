@@ -1,25 +1,24 @@
-import {useCallback, useState} from 'react'
 import {TouchableOpacity, View} from 'react-native'
 import {msg, Trans} from '@lingui/macro'
 import {useLingui} from '@lingui/react'
+import {RouteProp, useRoute} from '@react-navigation/native'
+import {useNavigation} from '@react-navigation/native'
+import {base16} from '@scure/base'
 
 import {CommonNavigatorParams, NativeStackScreenProps} from '#/lib/routes/types'
+import {NavigationProp} from '#/lib/routes/types'
 import {shareUrl} from '#/lib/sharing'
-import {sanitizeHandle} from '#/lib/strings/handles'
+import {saveWalletToFS} from '#/lib/wallet'
 import {useModalControls} from '#/state/modals'
 import {useWalletState} from '#/state/queries/wallet'
-import {useSession} from '#/state/session'
+import {useWallets} from '#/state/wallets'
 import {Button} from '#/view/com/util/forms/Button'
 import {atoms as a, useTheme} from '#/alf'
 import {Divider} from '#/components/Divider'
-import {
-  Copy,
-  Hide,
-  Show,
-  Transfer,
-  WalletTranscation,
-} from '#/components/icons/Wallet'
+import {Download_Stroke2_Corner0_Rounded as DownloadIcon} from '#/components/icons/Download'
+import {Copy, Transfer, WalletTranscation} from '#/components/icons/Wallet'
 import * as Layout from '#/components/Layout'
+import {ToggleShow} from '#/components/ToggleText'
 import {Text} from '#/components/Typography'
 import TransactionHistory from './TransactionHistory'
 import WalletBalanceGraph from './WalletBalanceGraph'
@@ -30,44 +29,19 @@ export default function Wallet({}: NativeStackScreenProps<
 >) {
   const t = useTheme()
   const {_} = useLingui()
+
+  const {params} = useRoute<RouteProp<CommonNavigatorParams, 'Wallet'>>()
+  const {wallets} = useWallets()
+  const wallet = wallets.at(+params.position - 1)
+
+  const {data: walletState, isLoading} = useWalletState(wallet?.address)
+
   const {openModal} = useModalControls()
+  const navigation = useNavigation<NavigationProp>()
 
-  const {currentAccount} = useSession()
-  const {data: walletState, isLoading} = useWalletState()
-
-  const [showAddress, setShowAddres] = useState(false)
-  const flipShowAddress = useCallback(
-    () => setShowAddres(state => !state),
-    [setShowAddres],
-  )
-
-  const shareAddress = useCallback(() => {
-    if (walletState?.address) {
-      shareUrl(walletState.address)
-    }
-  }, [walletState?.address])
-
-  let walletAddresLine: JSX.Element
-  if (isLoading) {
-    walletAddresLine = (
-      <Text numberOfLines={1} style={[a.text_sm, a.py_2xs]}>
-        <Trans>Loading...</Trans>
-      </Text>
-    )
-  } else {
-    walletAddresLine = (
-      <>
-        <Text numberOfLines={1} style={[a.text_sm, a.py_2xs]}>
-          {showAddress ? walletState!.address : '********'}
-        </Text>
-        <TouchableOpacity onPress={flipShowAddress} accessibilityRole="button">
-          {showAddress ? <Hide /> : <Show />}
-        </TouchableOpacity>
-        <TouchableOpacity onPress={shareAddress} accessibilityRole="button">
-          <Copy />
-        </TouchableOpacity>
-      </>
-    )
+  if (wallet === undefined) {
+    navigation.navigate('Wallets')
+    return null
   }
 
   return (
@@ -76,7 +50,7 @@ export default function Wallet({}: NativeStackScreenProps<
         <Layout.Header.BackButton />
         <Layout.Header.Content align="left">
           <Layout.Header.TitleText>
-            <Trans>Wallet</Trans>
+            <Trans>Wallet #{wallet?.hash}</Trans>
           </Layout.Header.TitleText>
         </Layout.Header.Content>
       </Layout.Header.Outer>
@@ -93,10 +67,10 @@ export default function Wallet({}: NativeStackScreenProps<
               a.rounded_md,
               t.atoms.bg_contrast_25,
             ]}>
-            <View style={[a.gap_md, a.flex_col]}>
+            <View style={[a.flex_col, a.gap_md, a.justify_between]}>
               <Text
                 style={[a.text_sm, a.font_bold, t.atoms.text_contrast_medium]}>
-                <Trans>Account ID</Trans>
+                <Trans>Wallet address</Trans>
               </Text>
               <Text
                 style={[
@@ -105,26 +79,39 @@ export default function Wallet({}: NativeStackScreenProps<
                   a.py_2xs,
                   t.atoms.text_contrast_medium,
                 ]}>
-                <Trans>Wallet address</Trans>
+                <Trans>Private key</Trans>
               </Text>
               <Text
                 style={[a.text_sm, a.font_bold, t.atoms.text_contrast_medium]}>
                 <Trans>Default token</Trans>
               </Text>
             </View>
-            <View style={[a.flex_col, a.flex_shrink, a.gap_md]}>
-              <Text
-                style={[
-                  a.text_sm,
-                  a.font_heavy_bold,
-                  t.atoms.text_contrast_medium,
-                ]}>
-                @{sanitizeHandle(currentAccount?.handle)}
-              </Text>
-              <View style={[a.flex_row, a.align_center, a.gap_sm]}>
-                {walletAddresLine}
+            <View style={[a.flex_col, a.gap_md, a.justify_between, a.flex_1]}>
+              <View>
+                <ToggleShow
+                  text={wallet.address}
+                  textStyle={[a.text_sm]}
+                  numberOfLines={1}>
+                  <TouchableOpacity
+                    onPress={() => shareUrl(wallet.address)}
+                    accessibilityRole="button">
+                    <Copy />
+                  </TouchableOpacity>
+                </ToggleShow>
               </View>
-              <Text style={[a.text_sm]}>F1R3CAP</Text>
+              <ToggleShow
+                text={base16.encode(wallet.key)}
+                textStyle={[a.text_sm]}
+                numberOfLines={1}>
+                <TouchableOpacity
+                  onPress={() => saveWalletToFS(wallet)}
+                  accessibilityRole="button">
+                  <DownloadIcon />
+                </TouchableOpacity>
+              </ToggleShow>
+              <Text style={[a.text_sm]}>
+                <Trans>F1R3CAP</Trans>
+              </Text>
             </View>
           </View>
         </View>
@@ -166,7 +153,7 @@ export default function Wallet({}: NativeStackScreenProps<
                     openModal({
                       name: 'wallet-transfer',
                       currentBalance: walletState!.balance,
-                      userAddress: walletState!.address,
+                      wallet,
                     })
                   }}
                   accessibilityLabel={_(msg`Transfer`)}

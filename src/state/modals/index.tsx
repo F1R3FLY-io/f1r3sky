@@ -3,6 +3,7 @@ import {Image as RNImage} from 'react-native-image-crop-picker'
 import {AppBskyActorDefs, AppBskyGraphDefs} from '@atproto/api'
 
 import {useNonReactiveCallback} from '#/lib/hooks/useNonReactiveCallback'
+import {Wallet} from '../wallets'
 
 export interface EditProfileModal {
   name: 'edit-profile'
@@ -93,7 +94,15 @@ export interface InAppBrowserConsentModal {
 export interface WalletTransfer {
   name: 'wallet-transfer'
   currentBalance: bigint
-  userAddress: string
+  wallet: Wallet
+}
+
+export interface CreateWallet {
+  name: 'create-wallet'
+}
+
+export interface AddWallet {
+  name: 'add-wallet'
 }
 
 export type Modal =
@@ -126,6 +135,8 @@ export type Modal =
   | LinkWarningModal
   | InAppBrowserConsentModal
   | WalletTransfer
+  | CreateWallet
+  | AddWallet
 
 const ModalContext = React.createContext<{
   isModalActive: boolean

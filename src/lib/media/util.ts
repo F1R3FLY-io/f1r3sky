@@ -26,3 +26,18 @@ export function blobToDataUri(blob: Blob): Promise<string> {
     reader.readAsDataURL(blob)
   })
 }
+
+export function blobToText(blob: Blob): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader()
+    reader.onloadend = () => {
+      if (typeof reader.result === 'string') {
+        resolve(reader.result)
+      } else {
+        reject(new Error('Failed to read blob'))
+      }
+    }
+    reader.onerror = reject
+    reader.readAsText(blob)
+  })
+}

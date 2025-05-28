@@ -1,7 +1,8 @@
 import {Image as RNImage} from 'react-native-image-crop-picker'
+import * as DocumentPicker from 'expo-document-picker'
 
 import {Dimensions} from './types'
-import {blobToDataUri, getDataUriSize} from './util'
+import {blobToDataUri, blobToText, getDataUriSize} from './util'
 
 export async function compressIfNeeded(
   img: RNImage,
@@ -153,6 +154,15 @@ export async function saveBytesToDisk(
   return true
 }
 
+export async function saveToDevice(
+  filename: string,
+  encoded: string,
+  type: string,
+) {
+  const bytes = new TextEncoder().encode(encoded)
+  return await saveBytesToDisk(filename, bytes, type)
+}
+
 async function downloadUrl(href: string, filename: string) {
   const a = document.createElement('a')
   a.href = href
@@ -162,4 +172,10 @@ async function downloadUrl(href: string, filename: string) {
 
 export async function safeDeleteAsync() {
   // no-op
+}
+
+export async function downloadDocument(
+  document: DocumentPicker.DocumentPickerAsset,
+): Promise<string> {
+  return await blobToText(document.file!)
 }
