@@ -8,7 +8,8 @@ export const router = new Router({
   NotificationSettings: '/notifications/settings',
   Settings: '/settings',
   Lists: '/lists',
-  Wallet: '/wallet',
+  Wallets: '/wallets',
+  Wallet: '/wallets/:position',
   // moderation
   Moderation: '/moderation',
   ModerationModlists: '/moderation/modlists',

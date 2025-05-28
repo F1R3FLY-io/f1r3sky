@@ -7,9 +7,11 @@ import {usePalette} from '#/lib/hooks/usePalette'
 import {useModalControls, useModals} from '#/state/modals'
 import {FullWindowOverlay} from '#/components/FullWindowOverlay'
 import {createCustomBackdrop} from '../util/BottomSheetCustomBackdrop'
+import * as AddWallet from './AddWallet'
 import * as ChangeEmailModal from './ChangeEmail'
 import * as ChangePasswordModal from './ChangePassword'
 import * as CreateOrEditListModal from './CreateOrEditList'
+import * as CreateWallet from './CreateWallet'
 import * as DeleteAccountModal from './DeleteAccount'
 import * as EditProfileModal from './EditProfile'
 import * as InAppBrowserConsentModal from './InAppBrowserConsent'
@@ -95,6 +97,12 @@ export function ModalsContainer() {
   } else if (activeModal?.name === 'wallet-transfer') {
     snapPoints = WalletTransfer.snapPoints
     element = <WalletTransfer.Component {...activeModal} />
+  } else if (activeModal?.name === 'create-wallet') {
+    snapPoints = CreateWallet.snapPoints
+    element = <CreateWallet.Component />
+  } else if (activeModal?.name === 'add-wallet') {
+    snapPoints = AddWallet.snapPoints
+    element = <AddWallet.Component />
   } else {
     return null
   }

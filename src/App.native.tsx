@@ -59,6 +59,7 @@ import {Provider as SelectedFeedProvider} from '#/state/shell/selected-feed'
 import {Provider as StarterPackProvider} from '#/state/shell/starter-pack'
 import {Provider as HiddenRepliesProvider} from '#/state/threadgate-hidden-replies'
 import {Provider as TrendingConfigProvider} from '#/state/trending-config'
+import {Provider as WalletsStateProvider} from '#/state/wallets'
 import {TestCtrls} from '#/view/com/testing/TestCtrls'
 import {Provider as VideoVolumeProvider} from '#/view/com/util/post-embeds/VideoVolumeContext'
 import * as Toast from '#/view/com/util/Toast'
@@ -152,9 +153,11 @@ function InnerApp() {
                                               <GestureHandlerRootView
                                                 style={s.h100pct}>
                                                 <IntentDialogProvider>
-                                                  <TestCtrls />
-                                                  <Shell />
-                                                  <NuxDialogs />
+                                                  <WalletsStateProvider>
+                                                    <TestCtrls />
+                                                    <Shell />
+                                                    <NuxDialogs />
+                                                  </WalletsStateProvider>
                                                 </IntentDialogProvider>
                                               </GestureHandlerRootView>
                                             </TrendingConfigProvider>

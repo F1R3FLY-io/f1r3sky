@@ -8,7 +8,10 @@ export type {NativeStackScreenProps} from '@react-navigation/native-stack'
 export type CommonNavigatorParams = {
   NotFound: undefined
   Lists: undefined
-  Wallet: undefined
+  Wallets: undefined
+  Wallet: {
+    position: string | number
+  }
   Moderation: undefined
   ModerationModlists: undefined
   ModerationMutedAccounts: undefined

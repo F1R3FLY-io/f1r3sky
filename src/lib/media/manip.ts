@@ -1,6 +1,7 @@
 import {Image as RNImage, Share as RNShare} from 'react-native'
 import {Image} from 'react-native-image-crop-picker'
 import uuid from 'react-native-uuid'
+import * as DocumentPicker from 'expo-document-picker'
 import {
   cacheDirectory,
   copyAsync,
@@ -11,6 +12,7 @@ import {
   StorageAccessFramework,
   writeAsStringAsync,
 } from 'expo-file-system'
+import * as FileSystem from 'expo-file-system'
 import {manipulateAsync, SaveFormat} from 'expo-image-manipulator'
 import * as MediaLibrary from 'expo-media-library'
 import * as Sharing from 'expo-sharing'
@@ -352,4 +354,10 @@ export function getResizedDimensions(originalDims: {
     width: Math.round(originalDims.width * ratio),
     height: Math.round(originalDims.height * ratio),
   }
+}
+
+export async function downloadDocument(
+  document: DocumentPicker.DocumentPickerAsset,
+): Promise<string> {
+  return await FileSystem.readAsStringAsync(document.uri)
 }

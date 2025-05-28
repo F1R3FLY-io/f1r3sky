@@ -688,10 +688,10 @@ export function DesktopLeftNav() {
             label={_(msg`Profile`)}
           />
           <NavItem
-            href={'/wallet'}
+            href={'/wallets'}
             icon={<Wallet />}
             iconFilled={<WalletFilled />}
-            label={_(msg`Wallet`)}
+            label={_(msg`Wallets`)}
           />
           <NavItem
             href="/settings"

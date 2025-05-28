@@ -2,12 +2,12 @@ import {useReducer} from 'react'
 import {SafeAreaView, View} from 'react-native'
 import {msg, Trans} from '@lingui/macro'
 import {I18nContext, useLingui} from '@lingui/react'
-import {base16, base58} from '@scure/base'
-import {blake2bHex} from 'blakejs'
 
 import {usePalette} from '#/lib/hooks/usePalette'
+import {verifyRevAddr} from '#/lib/wallet'
 import {useModalControls} from '#/state/modals'
 import {useTransferMutation} from '#/state/queries/wallet'
+import {Wallet} from '#/state/wallets'
 import * as Toast from '#/view/com/util/Toast'
 import {atoms as a, useTheme} from '#/alf'
 import {FormError} from '#/components/forms/FormError'
@@ -20,10 +20,10 @@ export const snapPoints = ['90%']
 
 export type Props = {
   currentBalance: bigint
-  userAddress: string
+  wallet: Wallet
 }
 
-export function Component({currentBalance, userAddress}: Props) {
+export function Component({currentBalance, wallet}: Props) {
   const t = useTheme()
   const pal = usePalette('default')
   const {_} = useLingui()
@@ -37,7 +37,7 @@ export function Component({currentBalance, userAddress}: Props) {
 
   const error = formatErrorMsg(_, state)
 
-  const {mutateAsync: submit, isPending} = useTransferMutation()
+  const {mutateAsync: submit, isPending} = useTransferMutation(wallet)
 
   return (
     <SafeAreaView style={[pal.view, a.flex_1]}>
@@ -119,7 +119,11 @@ export function Component({currentBalance, userAddress}: Props) {
               <TextField.Input
                 label={_(msg`Add wallet address`)}
                 onChangeText={address =>
-                  dispatch({type: 'setAddress', address, userAddress})
+                  dispatch({
+                    type: 'setAddress',
+                    address,
+                    userAddress: wallet.address,
+                  })
                 }
               />
             </TextField.Root>
@@ -152,13 +156,17 @@ export function Component({currentBalance, userAddress}: Props) {
                 ) {
                   await submit({
                     amount: state.amount.value,
-                    to_address: state.address.value,
+                    toAddress: state.address.value,
                     description: state.description.value,
                   })
                   closeModal()
                   Toast.show(_(msg`Transfer submitted`), 'clipboard-check')
                 } else {
-                  dispatch({type: 'revalidateAll', currentBalance, userAddress})
+                  dispatch({
+                    type: 'revalidateAll',
+                    currentBalance,
+                    userAddress: wallet.address,
+                  })
                 }
               }}
               withLoading
@@ -329,24 +337,5 @@ function formatErrorMsg(
       return _(msg`Destination address and source address are the same`)
     case undefined:
       break
-  }
-}
-
-function verifyRevAddr(revAddr: string): boolean {
-  try {
-    const revBytes = base58.decode(revAddr)
-    const revHex = base16.encode(revBytes)
-
-    const payload = revHex.slice(0, -8)
-    const checksum = revHex.slice(-8).toLowerCase()
-
-    const payloadBytes = base16.decode(payload)
-    const checksumCalc = blake2bHex(payloadBytes, undefined, 32)
-      .slice(0, 8)
-      .toLowerCase()
-
-    return checksum === checksumCalc
-  } catch {
-    return false
   }
 }
