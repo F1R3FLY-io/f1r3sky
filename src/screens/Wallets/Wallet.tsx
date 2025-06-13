@@ -130,7 +130,7 @@ export default function Wallet({}: NativeStackScreenProps<
                   {isLoading ? (
                     <Trans>Loading...</Trans>
                   ) : (
-                    walletState?.balance.toString()
+                    walletState!.balance.toString()
                   )}
                 </Layout.Header.TitleText>
                 <Text style={[a.text_xs, a.pb_xs]}>F1R3CAP</Text>
