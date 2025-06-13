@@ -31,7 +31,7 @@ export function verifyRevAddr(revAddr: string): boolean {
 
     const checksumCalc = blake2b(payload, undefined, 32).slice(0, 4)
 
-    return checksum === checksumCalc
+    return checksum.every((byte, index) => byte === checksumCalc[index])
   } catch {
     return false
   }
