@@ -254,7 +254,6 @@ export default function WalletBalanceGraph({
         svg={{
           fill: t.atoms.text_contrast_medium.color,
           ...a.text_xs,
-          y: 10,
         }}
       />
     </View>
