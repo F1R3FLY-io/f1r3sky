@@ -195,7 +195,7 @@ msgstr ""
 msgid "{0}s"
 msgstr ""
 
-#: src/view/shell/desktop/LeftNav.tsx:401
+#: src/view/shell/desktop/LeftNav.tsx:402
 msgid "{count, plural, one {# unread item} other {# unread items}}"
 msgstr ""
 
@@ -407,6 +407,11 @@ msgstr ""
 msgid "{rank}."
 msgstr ""
 
+#: src/screens/Wallets/WalletBalanceGraph.tsx:195
+#: src/screens/Wallets/WalletBalanceGraph.tsx:214
+msgid "{scale}"
+msgstr ""
+
 #. trending topic time spent trending. should be as short as possible to fit in a pill
 #: src/screens/Search/modules/ExploreTrendingTopics.tsx:206
 msgid "{type}h ago"
@@ -497,7 +502,7 @@ msgstr ""
 msgid "A new form of verification"
 msgstr ""
 
-#: src/Navigation.tsx:490
+#: src/Navigation.tsx:492
 #: src/screens/Settings/AboutSettings.tsx:75
 #: src/screens/Settings/Settings.tsx:238
 #: src/screens/Settings/Settings.tsx:241
@@ -524,15 +529,16 @@ msgstr ""
 msgid "Accessibility"
 msgstr ""
 
-#: src/Navigation.tsx:365
+#: src/Navigation.tsx:367
 msgid "Accessibility Settings"
 msgstr ""
 
-#: src/Navigation.tsx:381
+#: src/Navigation.tsx:383
 #: src/screens/Login/LoginForm.tsx:194
 #: src/screens/Settings/AccountSettings.tsx:48
 #: src/screens/Settings/Settings.tsx:166
 #: src/screens/Settings/Settings.tsx:169
+#: src/screens/Wallets/Wallet.tsx:60
 msgid "Account"
 msgstr ""
 
@@ -641,8 +647,8 @@ msgstr ""
 
 #: src/screens/Settings/Settings.tsx:458
 #: src/screens/Settings/Settings.tsx:461
-#: src/view/shell/desktop/LeftNav.tsx:260
-#: src/view/shell/desktop/LeftNav.tsx:264
+#: src/view/shell/desktop/LeftNav.tsx:261
+#: src/view/shell/desktop/LeftNav.tsx:265
 msgid "Add another account"
 msgstr ""
 
@@ -725,6 +731,15 @@ msgstr ""
 
 #: src/components/dialogs/lists/ListAddRemoveUsersDialog.tsx:156
 msgid "Add user to list"
+msgstr ""
+
+#: src/screens/Wallets/WalletsSelection.tsx:69
+#: src/view/com/modals/AddWallet.tsx:61
+msgid "Add wallet"
+msgstr ""
+
+#: src/view/com/modals/WalletTransfer.tsx:120
+msgid "Add wallet address"
 msgstr ""
 
 #: src/components/dialogs/lists/ListAddRemoveUsersDialog.tsx:109
@@ -850,6 +865,10 @@ msgstr ""
 msgid "Alt text will be truncated. {MAX_ALT_TEXT, plural, other {Limit: {0} characters.}}"
 msgstr ""
 
+#: src/view/com/modals/WalletTransfer.tsx:71
+msgid "Amount"
+msgstr ""
+
 #: src/screens/Settings/components/DisableEmail2FADialog.tsx:93
 msgid "An email has been sent to {0}. It includes a confirmation code which you can enter below."
 msgstr ""
@@ -965,7 +984,7 @@ msgstr ""
 msgid "Anybody can interact"
 msgstr ""
 
-#: src/Navigation.tsx:498
+#: src/Navigation.tsx:500
 #: src/screens/Settings/AppIconSettings/index.tsx:67
 #: src/screens/Settings/AppIconSettings/SettingsListItem.tsx:18
 #: src/screens/Settings/AppIconSettings/SettingsListItem.tsx:23
@@ -1002,7 +1021,7 @@ msgstr ""
 msgid "App passwords"
 msgstr ""
 
-#: src/Navigation.tsx:333
+#: src/Navigation.tsx:335
 #: src/screens/Settings/AppPasswords.tsx:51
 msgid "App Passwords"
 msgstr ""
@@ -1038,7 +1057,7 @@ msgstr ""
 msgid "Appeal this decision"
 msgstr ""
 
-#: src/Navigation.tsx:373
+#: src/Navigation.tsx:375
 #: src/screens/Settings/AppearanceSettings.tsx:85
 #: src/screens/Settings/Settings.tsx:206
 #: src/screens/Settings/Settings.tsx:209
@@ -1142,6 +1161,10 @@ msgstr ""
 msgid "Autoplay videos and GIFs"
 msgstr ""
 
+#: src/view/com/modals/WalletTransfer.tsx:108
+msgid "Available Balance"
+msgstr ""
+
 #: src/components/dms/MessagesListHeader.tsx:84
 #: src/components/moderation/LabelsOnMeDialog.tsx:315
 #: src/components/moderation/LabelsOnMeDialog.tsx:316
@@ -1163,6 +1186,14 @@ msgstr ""
 
 #: src/screens/Messages/Inbox.tsx:238
 msgid "Back to Chats"
+msgstr ""
+
+#: src/screens/Wallets/Wallet.tsx:123
+msgid "Balance"
+msgstr ""
+
+#: src/screens/Wallets/WalletBalanceGraph.tsx:186
+msgid "Balance graph scale"
 msgstr ""
 
 #: src/view/screens/Lists.tsx:53
@@ -1258,7 +1289,7 @@ msgstr ""
 msgid "Blocked accounts"
 msgstr ""
 
-#: src/Navigation.tsx:174
+#: src/Navigation.tsx:176
 #: src/view/screens/ModerationBlockedAccounts.tsx:104
 msgid "Blocked Accounts"
 msgstr ""
@@ -1462,11 +1493,17 @@ msgstr ""
 #: src/view/com/composer/Composer.tsx:971
 #: src/view/com/composer/photos/EditImageDialog.web.tsx:43
 #: src/view/com/composer/photos/EditImageDialog.web.tsx:52
+#: src/view/com/modals/AddWallet.tsx:85
+#: src/view/com/modals/AddWallet.tsx:87
 #: src/view/com/modals/ChangePassword.tsx:279
 #: src/view/com/modals/ChangePassword.tsx:282
 #: src/view/com/modals/CreateOrEditList.tsx:333
+#: src/view/com/modals/CreateWallet.tsx:84
+#: src/view/com/modals/CreateWallet.tsx:86
 #: src/view/com/modals/CropImage.web.tsx:97
-#: src/view/shell/desktop/LeftNav.tsx:213
+#: src/view/com/modals/WalletTransfer.tsx:185
+#: src/view/com/modals/WalletTransfer.tsx:187
+#: src/view/shell/desktop/LeftNav.tsx:214
 msgid "Cancel"
 msgstr ""
 
@@ -1562,9 +1599,9 @@ msgid "Changes hosting provider"
 msgstr ""
 
 #: src/lib/hooks/useNotificationHandler.ts:90
-#: src/Navigation.tsx:515
+#: src/Navigation.tsx:517
 #: src/view/shell/bottom-bar/BottomBar.tsx:221
-#: src/view/shell/desktop/LeftNav.tsx:553
+#: src/view/shell/desktop/LeftNav.tsx:554
 #: src/view/shell/Drawer.tsx:455
 msgid "Chat"
 msgstr ""
@@ -1588,7 +1625,7 @@ msgctxt "toast"
 msgid "Chat muted"
 msgstr ""
 
-#: src/Navigation.tsx:525
+#: src/Navigation.tsx:527
 #: src/screens/Messages/components/InboxPreview.tsx:24
 msgid "Chat request inbox"
 msgstr ""
@@ -1599,7 +1636,7 @@ msgid "Chat requests"
 msgstr ""
 
 #: src/components/dms/ConvoMenu.tsx:75
-#: src/Navigation.tsx:520
+#: src/Navigation.tsx:522
 #: src/screens/Messages/ChatList.tsx:341
 msgid "Chat settings"
 msgstr ""
@@ -1700,12 +1737,29 @@ msgstr ""
 msgid "Click here to update your email"
 msgstr ""
 
+#: src/view/com/modals/AddWallet.tsx:86
+#: src/view/com/modals/CreateWallet.tsx:85
+msgid "Click to cancel"
+msgstr ""
+
+#: src/view/com/modals/WalletTransfer.tsx:186
+msgid "Click to cancel transfer"
+msgstr ""
+
 #: src/components/dialogs/PostInteractionSettingsDialog.tsx:341
 msgid "Click to disable quote posts of this post."
 msgstr ""
 
+#: src/view/com/modals/CreateWallet.tsx:74
+msgid "Click to download key and open wallet"
+msgstr ""
+
 #: src/components/dialogs/PostInteractionSettingsDialog.tsx:342
 msgid "Click to enable quote posts of this post."
+msgstr ""
+
+#: src/view/com/modals/AddWallet.tsx:75
+msgid "Click to open file selection screen"
 msgstr ""
 
 #: src/components/RichTextTag.tsx:54
@@ -1714,6 +1768,10 @@ msgstr ""
 
 #: src/components/dms/MessageItem.tsx:317
 msgid "Click to retry failed message"
+msgstr ""
+
+#: src/view/com/modals/WalletTransfer.tsx:174
+msgid "Click to transfer transfer"
 msgstr ""
 
 #: src/screens/Onboarding/index.tsx:32
@@ -1840,7 +1898,7 @@ msgstr ""
 msgid "Comics"
 msgstr ""
 
-#: src/Navigation.tsx:323
+#: src/Navigation.tsx:325
 #: src/view/screens/CommunityGuidelines.tsx:34
 msgid "Community Guidelines"
 msgstr ""
@@ -1853,7 +1911,7 @@ msgstr ""
 msgid "Complete the challenge"
 msgstr ""
 
-#: src/view/shell/desktop/LeftNav.tsx:518
+#: src/view/shell/desktop/LeftNav.tsx:519
 msgid "Compose new post"
 msgstr ""
 
@@ -1928,7 +1986,7 @@ msgstr ""
 msgid "Content and media"
 msgstr ""
 
-#: src/Navigation.tsx:474
+#: src/Navigation.tsx:476
 msgid "Content and Media"
 msgstr ""
 
@@ -2119,7 +2177,7 @@ msgstr ""
 msgid "Copy TXT record value"
 msgstr ""
 
-#: src/Navigation.tsx:328
+#: src/Navigation.tsx:330
 #: src/view/screens/CopyrightPolicy.tsx:31
 msgid "Copyright Policy"
 msgstr ""
@@ -2159,7 +2217,7 @@ msgstr ""
 
 #: src/components/StarterPack/ProfileStarterPacks.tsx:178
 #: src/components/StarterPack/ProfileStarterPacks.tsx:287
-#: src/Navigation.tsx:550
+#: src/Navigation.tsx:552
 msgid "Create a starter pack"
 msgstr ""
 
@@ -2205,9 +2263,17 @@ msgstr ""
 msgid "Create new account"
 msgstr ""
 
+#: src/screens/Wallets/WalletsSelection.tsx:59
+msgid "Create new wallet"
+msgstr ""
+
 #: src/components/moderation/ReportDialog/index.tsx:582
 #: src/components/ReportDialog/SelectReportOptionView.tsx:99
 msgid "Create report for {0}"
+msgstr ""
+
+#: src/view/com/modals/CreateWallet.tsx:49
+msgid "Create wallet"
 msgstr ""
 
 #: src/screens/Settings/AppPasswords.tsx:174
@@ -2284,6 +2350,10 @@ msgstr ""
 
 #: src/screens/Settings/AppIconSettings/index.tsx:75
 msgid "Default icons"
+msgstr ""
+
+#: src/screens/Wallets/Wallet.tsx:86
+msgid "Default token"
 msgstr ""
 
 #: src/components/dms/MessageContextMenu.tsx:191
@@ -2407,6 +2477,10 @@ msgstr ""
 #: src/view/com/composer/GifAltText.tsx:150
 #: src/view/com/composer/photos/ImageAltTextDialog.tsx:114
 msgid "Descriptive alt text"
+msgstr ""
+
+#: src/view/com/modals/WalletTransfer.tsx:337
+msgid "Destination address and source address are the same"
 msgstr ""
 
 #: src/components/PostControls/PostMenu/PostMenuItems.tsx:586
@@ -2630,6 +2704,14 @@ msgstr ""
 msgid "Download CAR file"
 msgstr ""
 
+#: src/view/com/modals/CreateWallet.tsx:75
+msgid "Download key & Open wallet"
+msgstr ""
+
+#: src/view/com/modals/CreateWallet.tsx:73
+msgid "Download key and open wallet"
+msgstr ""
+
 #: src/view/com/composer/text-input/TextInput.web.tsx:342
 msgid "Drop to add images"
 msgstr ""
@@ -2725,7 +2807,7 @@ msgstr ""
 msgid "Edit Moderation List"
 msgstr ""
 
-#: src/Navigation.tsx:338
+#: src/Navigation.tsx:340
 #: src/view/screens/Feeds.tsx:518
 msgid "Edit My Feeds"
 msgstr ""
@@ -2763,7 +2845,7 @@ msgstr ""
 msgid "Edit who can reply"
 msgstr ""
 
-#: src/Navigation.tsx:555
+#: src/Navigation.tsx:557
 msgid "Edit your starter pack"
 msgstr ""
 
@@ -3093,9 +3175,9 @@ msgstr ""
 msgid "Explicit sexual images."
 msgstr ""
 
-#: src/Navigation.tsx:712
+#: src/Navigation.tsx:730
 #: src/screens/Search/Shell.tsx:307
-#: src/view/shell/desktop/LeftNav.tsx:635
+#: src/view/shell/desktop/LeftNav.tsx:636
 #: src/view/shell/Drawer.tsx:403
 msgid "Explore"
 msgstr ""
@@ -3124,9 +3206,13 @@ msgstr ""
 msgid "External media may allow websites to collect information about you and your device. No information is sent or requested until you press the \"play\" button."
 msgstr ""
 
-#: src/Navigation.tsx:357
+#: src/Navigation.tsx:359
 #: src/screens/Settings/ExternalMediaPreferences.tsx:31
 msgid "External Media Preferences"
+msgstr ""
+
+#: src/screens/Wallets/Wallet.tsx:113
+msgid "F1R3CAP"
 msgstr ""
 
 #: src/screens/Messages/components/RequestButtons.tsx:220
@@ -3190,6 +3276,10 @@ msgstr ""
 msgid "Failed to load feeds preferences"
 msgstr ""
 
+#: src/view/com/modals/AddWallet.tsx:47
+msgid "Failed to load file!"
+msgstr ""
+
 #: src/components/dialogs/GifSelect.tsx:225
 msgid "Failed to load GIFs"
 msgstr ""
@@ -3238,6 +3328,10 @@ msgstr ""
 
 #: src/components/verification/VerificationRemovePrompt.tsx:34
 msgid "Failed to remove verification"
+msgstr ""
+
+#: src/view/com/modals/CreateWallet.tsx:37
+msgid "Failed to save file!"
 msgstr ""
 
 #: src/lib/media/save-image.ts:28
@@ -3303,7 +3397,7 @@ msgstr ""
 msgid "Failed to verify handle. Please try again."
 msgstr ""
 
-#: src/Navigation.tsx:273
+#: src/Navigation.tsx:275
 msgid "Feed"
 msgstr ""
 
@@ -3332,13 +3426,13 @@ msgctxt "toast"
 msgid "Feedback sent!"
 msgstr ""
 
-#: src/Navigation.tsx:535
+#: src/Navigation.tsx:537
 #: src/screens/Search/SearchResults.tsx:68
 #: src/screens/StarterPack/StarterPackScreen.tsx:190
 #: src/view/screens/Feeds.tsx:511
 #: src/view/screens/Profile.tsx:230
 #: src/view/screens/SavedFeeds.tsx:96
-#: src/view/shell/desktop/LeftNav.tsx:673
+#: src/view/shell/desktop/LeftNav.tsx:674
 #: src/view/shell/Drawer.tsx:519
 msgid "Feeds"
 msgstr ""
@@ -3362,6 +3456,7 @@ msgid "Fetch update"
 msgstr ""
 
 #: src/screens/Settings/components/ExportCarDialog.tsx:43
+#: src/view/com/modals/CreateWallet.tsx:35
 msgid "File saved successfully!"
 msgstr ""
 
@@ -3497,7 +3592,7 @@ msgstr ""
 msgid "Followed by <0>{0}</0>, <1>{1}</1>, and {2, plural, one {# other} other {# others}}"
 msgstr ""
 
-#: src/Navigation.tsx:227
+#: src/Navigation.tsx:229
 msgid "Followers of @{0} that you know"
 msgstr ""
 
@@ -3532,7 +3627,7 @@ msgstr ""
 msgid "Following feed preferences"
 msgstr ""
 
-#: src/Navigation.tsx:344
+#: src/Navigation.tsx:346
 #: src/screens/Settings/FollowingFeedPreferences.tsx:53
 msgid "Following Feed Preferences"
 msgstr ""
@@ -3795,7 +3890,7 @@ msgstr ""
 msgid "Harassment, trolling, or intolerance"
 msgstr ""
 
-#: src/Navigation.tsx:505
+#: src/Navigation.tsx:507
 msgid "Hashtag"
 msgstr ""
 
@@ -3952,10 +4047,10 @@ msgstr ""
 msgid "Hold up! We’re gradually giving access to video, and you’re still waiting in line. Check back soon!"
 msgstr ""
 
-#: src/Navigation.tsx:707
-#: src/Navigation.tsx:727
+#: src/Navigation.tsx:725
+#: src/Navigation.tsx:745
 #: src/view/shell/bottom-bar/BottomBar.tsx:178
-#: src/view/shell/desktop/LeftNav.tsx:617
+#: src/view/shell/desktop/LeftNav.tsx:618
 #: src/view/shell/Drawer.tsx:429
 msgid "Home"
 msgstr ""
@@ -4151,6 +4246,14 @@ msgstr ""
 msgid "Invalid 2FA confirmation code."
 msgstr ""
 
+#: src/view/com/modals/WalletTransfer.tsx:335
+msgid "Invalid address"
+msgstr ""
+
+#: src/view/com/modals/WalletTransfer.tsx:326
+msgid "Invalid amount"
+msgstr ""
+
 #: src/screens/Settings/components/ChangeHandleDialog.tsx:597
 msgid "Invalid handle. Please try a different one."
 msgstr ""
@@ -4266,7 +4369,7 @@ msgstr ""
 msgid "Language selection"
 msgstr ""
 
-#: src/Navigation.tsx:200
+#: src/Navigation.tsx:202
 msgid "Language Settings"
 msgstr ""
 
@@ -4410,7 +4513,7 @@ msgstr ""
 msgid "Like 10 posts to train the Discover feed"
 msgstr ""
 
-#: src/Navigation.tsx:426
+#: src/Navigation.tsx:428
 msgid "Like notifications"
 msgstr ""
 
@@ -4422,8 +4525,8 @@ msgstr ""
 msgid "Like this labeler"
 msgstr ""
 
-#: src/Navigation.tsx:278
-#: src/Navigation.tsx:283
+#: src/Navigation.tsx:280
+#: src/Navigation.tsx:285
 msgid "Liked by"
 msgstr ""
 
@@ -4458,7 +4561,7 @@ msgstr ""
 msgid "Likes of your reposts"
 msgstr ""
 
-#: src/Navigation.tsx:450
+#: src/Navigation.tsx:452
 msgid "Likes of your reposts notifications"
 msgstr ""
 
@@ -4474,7 +4577,7 @@ msgstr ""
 msgid "Linear"
 msgstr ""
 
-#: src/Navigation.tsx:233
+#: src/Navigation.tsx:235
 msgid "List"
 msgstr ""
 
@@ -4532,11 +4635,11 @@ msgctxt "toast"
 msgid "List unmuted"
 msgstr ""
 
-#: src/Navigation.tsx:154
+#: src/Navigation.tsx:156
 #: src/view/screens/Lists.tsx:65
 #: src/view/screens/Profile.tsx:224
 #: src/view/screens/Profile.tsx:232
-#: src/view/shell/desktop/LeftNav.tsx:691
+#: src/view/shell/desktop/LeftNav.tsx:692
 #: src/view/shell/Drawer.tsx:534
 msgid "Lists"
 msgstr ""
@@ -4581,11 +4684,12 @@ msgstr ""
 msgid "Load new posts"
 msgstr ""
 
+#: src/screens/Wallets/Wallet.tsx:131
 #: src/view/com/composer/text-input/mobile/Autocomplete.tsx:61
 msgid "Loading..."
 msgstr ""
 
-#: src/Navigation.tsx:303
+#: src/Navigation.tsx:305
 msgid "Log"
 msgstr ""
 
@@ -4676,7 +4780,7 @@ msgstr ""
 msgid "Media that may be disturbing or inappropriate for some audiences."
 msgstr ""
 
-#: src/Navigation.tsx:410
+#: src/Navigation.tsx:412
 msgid "Mention notifications"
 msgstr ""
 
@@ -4733,7 +4837,7 @@ msgstr ""
 msgid "Message options"
 msgstr ""
 
-#: src/Navigation.tsx:722
+#: src/Navigation.tsx:740
 msgid "Messages"
 msgstr ""
 
@@ -4742,7 +4846,7 @@ msgctxt "Name of app icon variant"
 msgid "Midnight"
 msgstr ""
 
-#: src/Navigation.tsx:466
+#: src/Navigation.tsx:468
 msgid "Miscellaneous notifications"
 msgstr ""
 
@@ -4756,7 +4860,7 @@ msgstr ""
 msgid "Misleading Post"
 msgstr ""
 
-#: src/Navigation.tsx:159
+#: src/Navigation.tsx:161
 #: src/screens/Moderation/index.tsx:93
 #: src/screens/Settings/Settings.tsx:180
 #: src/screens/Settings/Settings.tsx:183
@@ -4795,7 +4899,7 @@ msgstr ""
 msgid "Moderation lists"
 msgstr ""
 
-#: src/Navigation.tsx:164
+#: src/Navigation.tsx:166
 #: src/view/screens/ModerationModlists.tsx:65
 msgid "Moderation Lists"
 msgstr ""
@@ -4804,7 +4908,7 @@ msgstr ""
 msgid "moderation settings"
 msgstr ""
 
-#: src/Navigation.tsx:293
+#: src/Navigation.tsx:295
 msgid "Moderation states"
 msgstr ""
 
@@ -4927,7 +5031,7 @@ msgstr ""
 msgid "Muted accounts"
 msgstr ""
 
-#: src/Navigation.tsx:169
+#: src/Navigation.tsx:171
 #: src/view/screens/ModerationMutedAccounts.tsx:118
 msgid "Muted Accounts"
 msgstr ""
@@ -5037,7 +5141,7 @@ msgstr ""
 msgid "New Feature"
 msgstr ""
 
-#: src/Navigation.tsx:442
+#: src/Navigation.tsx:444
 msgid "New follower notifications"
 msgstr ""
 
@@ -5089,7 +5193,7 @@ msgctxt "action"
 msgid "New post"
 msgstr ""
 
-#: src/view/shell/desktop/LeftNav.tsx:526
+#: src/view/shell/desktop/LeftNav.tsx:527
 msgctxt "action"
 msgid "New Post"
 msgstr ""
@@ -5275,13 +5379,22 @@ msgstr ""
 msgid "Non-sexual Nudity"
 msgstr ""
 
+#: src/view/com/modals/WalletTransfer.tsx:328
+msgid "Not enough funds for transfer"
+msgstr ""
+
 #: src/components/KnownFollowers.tsx:255
 msgid "Not followed by anyone you're following"
 msgstr ""
 
-#: src/Navigation.tsx:149
+#: src/Navigation.tsx:151
 #: src/view/screens/Profile.tsx:125
 msgid "Not Found"
+msgstr ""
+
+#: src/view/com/modals/WalletTransfer.tsx:133
+#: src/view/com/modals/WalletTransfer.tsx:137
+msgid "Note"
 msgstr ""
 
 #: src/view/com/profile/ProfileMenu.tsx:480
@@ -5300,8 +5413,8 @@ msgstr ""
 msgid "Nothing here"
 msgstr ""
 
-#: src/Navigation.tsx:396
-#: src/Navigation.tsx:530
+#: src/Navigation.tsx:398
+#: src/Navigation.tsx:532
 #: src/view/screens/Notifications.tsx:136
 msgid "Notification settings"
 msgstr ""
@@ -5314,7 +5427,7 @@ msgstr ""
 msgid "Notification Sounds"
 msgstr ""
 
-#: src/Navigation.tsx:717
+#: src/Navigation.tsx:735
 #: src/screens/Settings/NotificationSettings/index.tsx:92
 #: src/screens/Settings/NotificationSettings/LikeNotificationSettings.tsx:30
 #: src/screens/Settings/NotificationSettings/LikesOnRepostsNotificationSettings.tsx:30
@@ -5329,7 +5442,7 @@ msgstr ""
 #: src/screens/Settings/Settings.tsx:192
 #: src/view/screens/Notifications.tsx:130
 #: src/view/shell/bottom-bar/BottomBar.tsx:252
-#: src/view/shell/desktop/LeftNav.tsx:654
+#: src/view/shell/desktop/LeftNav.tsx:655
 #: src/view/shell/Drawer.tsx:482
 msgid "Notifications"
 msgstr ""
@@ -5477,6 +5590,10 @@ msgstr ""
 #: src/screens/Profile/components/ProfileFeedHeader.tsx:291
 #: src/screens/Profile/components/ProfileFeedHeader.tsx:296
 msgid "Open feed options menu"
+msgstr ""
+
+#: src/view/com/modals/AddWallet.tsx:74
+msgid "Open file selection screen"
 msgstr ""
 
 #: src/components/dms/EmojiPopup.android.tsx:27
@@ -5725,11 +5842,11 @@ msgstr ""
 msgid "People"
 msgstr ""
 
-#: src/Navigation.tsx:220
+#: src/Navigation.tsx:222
 msgid "People followed by @{0}"
 msgstr ""
 
-#: src/Navigation.tsx:213
+#: src/Navigation.tsx:215
 msgid "People following @{0}"
 msgstr ""
 
@@ -5796,6 +5913,10 @@ msgstr ""
 
 #: src/view/screens/ProfileList.tsx:361
 msgid "Pinned to your feeds"
+msgstr ""
+
+#: src/view/com/modals/WalletTransfer.tsx:138
+msgid "Placeholder"
 msgstr ""
 
 #: src/components/Post/Embed/ExternalEmbed/Gif.tsx:43
@@ -5976,10 +6097,10 @@ msgstr ""
 msgid "Post by {0}"
 msgstr ""
 
-#: src/Navigation.tsx:246
-#: src/Navigation.tsx:253
-#: src/Navigation.tsx:260
-#: src/Navigation.tsx:267
+#: src/Navigation.tsx:248
+#: src/Navigation.tsx:255
+#: src/Navigation.tsx:262
+#: src/Navigation.tsx:269
 msgid "Post by @{0}"
 msgstr ""
 
@@ -6017,7 +6138,7 @@ msgstr ""
 msgid "Post interaction settings"
 msgstr ""
 
-#: src/Navigation.tsx:180
+#: src/Navigation.tsx:182
 #: src/screens/ModerationInteractionSettings/index.tsx:34
 msgid "Post Interaction Settings"
 msgstr ""
@@ -6109,18 +6230,22 @@ msgstr ""
 msgid "Privacy and security"
 msgstr ""
 
-#: src/Navigation.tsx:389
+#: src/Navigation.tsx:391
 #: src/screens/Settings/PrivacyAndSecuritySettings.tsx:36
 msgid "Privacy and Security"
 msgstr ""
 
-#: src/Navigation.tsx:313
+#: src/Navigation.tsx:315
 #: src/screens/Settings/AboutSettings.tsx:92
 #: src/screens/Settings/AboutSettings.tsx:95
 #: src/view/screens/PrivacyPolicy.tsx:31
 #: src/view/shell/Drawer.tsx:667
 #: src/view/shell/Drawer.tsx:668
 msgid "Privacy Policy"
+msgstr ""
+
+#: src/screens/Wallets/Wallet.tsx:82
+msgid "Private key"
 msgstr ""
 
 #: src/view/com/composer/Composer.tsx:1735
@@ -6138,7 +6263,7 @@ msgid "profile"
 msgstr ""
 
 #: src/view/shell/bottom-bar/BottomBar.tsx:316
-#: src/view/shell/desktop/LeftNav.tsx:709
+#: src/view/shell/desktop/LeftNav.tsx:710
 #: src/view/shell/Drawer.tsx:76
 #: src/view/shell/Drawer.tsx:559
 msgid "Profile"
@@ -6209,7 +6334,7 @@ msgstr ""
 msgid "QR code saved to your camera roll!"
 msgstr ""
 
-#: src/Navigation.tsx:418
+#: src/Navigation.tsx:420
 msgid "Quote notifications"
 msgstr ""
 
@@ -6325,6 +6450,10 @@ msgstr ""
 
 #: src/screens/Settings/NotificationSettings/components/PreferenceControls.tsx:111
 msgid "Receive push notifications"
+msgstr ""
+
+#: src/view/com/modals/WalletTransfer.tsx:116
+msgid "Receiver Wallet address"
 msgstr ""
 
 #: src/screens/Search/components/SearchHistory.tsx:49
@@ -6545,7 +6674,7 @@ msgstr ""
 msgid "Reply Hidden by You"
 msgstr ""
 
-#: src/Navigation.tsx:402
+#: src/Navigation.tsx:404
 msgid "Reply notifications"
 msgstr ""
 
@@ -6697,7 +6826,7 @@ msgstr ""
 msgid "Repost ({0, plural, one {# repost} other {# reposts}})"
 msgstr ""
 
-#: src/Navigation.tsx:434
+#: src/Navigation.tsx:436
 msgid "Repost notifications"
 msgstr ""
 
@@ -6742,7 +6871,7 @@ msgstr ""
 msgid "Reposts of your reposts"
 msgstr ""
 
-#: src/Navigation.tsx:458
+#: src/Navigation.tsx:460
 msgid "Reposts of your reposts notifications"
 msgstr ""
 
@@ -6955,7 +7084,7 @@ msgstr ""
 msgid "Search"
 msgstr ""
 
-#: src/Navigation.tsx:239
+#: src/Navigation.tsx:241
 #: src/screens/Profile/ProfileSearch.tsx:37
 msgid "Search @{0}'s posts"
 msgstr ""
@@ -7112,6 +7241,10 @@ msgstr ""
 msgid "Select how long to mute this word for."
 msgstr ""
 
+#: src/view/com/modals/AddWallet.tsx:76
+msgid "Select key"
+msgstr ""
+
 #: src/view/com/composer/videos/SubtitleDialog.tsx:248
 msgid "Select language..."
 msgstr ""
@@ -7130,6 +7263,10 @@ msgstr ""
 
 #: src/screens/Settings/LanguageSettings.tsx:131
 msgid "Select primary language"
+msgstr ""
+
+#: src/view/com/modals/AddWallet.tsx:65
+msgid "Select private key from your device."
 msgstr ""
 
 #: src/view/com/composer/videos/SubtitleFilePicker.tsx:59
@@ -7263,6 +7400,10 @@ msgstr ""
 msgid "Set new password"
 msgstr ""
 
+#: src/view/com/modals/WalletTransfer.tsx:51
+msgid "Set the amount, choose the receiver, add message and generate your request instantly."
+msgstr ""
+
 #: src/screens/Onboarding/Layout.tsx:47
 msgid "Set up your account"
 msgstr ""
@@ -7271,9 +7412,9 @@ msgstr ""
 msgid "Sets email for password reset"
 msgstr ""
 
-#: src/Navigation.tsx:195
+#: src/Navigation.tsx:197
 #: src/screens/Settings/Settings.tsx:93
-#: src/view/shell/desktop/LeftNav.tsx:727
+#: src/view/shell/desktop/LeftNav.tsx:734
 #: src/view/shell/Drawer.tsx:572
 msgid "Settings"
 msgstr ""
@@ -7403,7 +7544,7 @@ msgstr ""
 msgid "Share your favorite feed!"
 msgstr ""
 
-#: src/Navigation.tsx:298
+#: src/Navigation.tsx:300
 msgid "Shared Preferences Tester"
 msgstr ""
 
@@ -7587,9 +7728,9 @@ msgstr ""
 #: src/screens/SignupQueued.tsx:93
 #: src/screens/SignupQueued.tsx:96
 #: src/screens/Takendown.tsx:85
-#: src/view/shell/desktop/LeftNav.tsx:212
-#: src/view/shell/desktop/LeftNav.tsx:267
-#: src/view/shell/desktop/LeftNav.tsx:270
+#: src/view/shell/desktop/LeftNav.tsx:213
+#: src/view/shell/desktop/LeftNav.tsx:268
+#: src/view/shell/desktop/LeftNav.tsx:271
 msgid "Sign out"
 msgstr ""
 
@@ -7598,7 +7739,7 @@ msgid "Sign Out"
 msgstr ""
 
 #: src/screens/Settings/Settings.tsx:279
-#: src/view/shell/desktop/LeftNav.tsx:209
+#: src/view/shell/desktop/LeftNav.tsx:210
 msgid "Sign out?"
 msgstr ""
 
@@ -7694,8 +7835,8 @@ msgstr ""
 msgid "Something wrong? Let us know."
 msgstr ""
 
-#: src/App.native.tsx:122
-#: src/App.web.tsx:99
+#: src/App.native.tsx:123
+#: src/App.web.tsx:100
 msgid "Sorry! Your session expired. Please sign in again."
 msgstr ""
 
@@ -7759,8 +7900,8 @@ msgstr ""
 msgid "Start chat with {displayName}"
 msgstr ""
 
-#: src/Navigation.tsx:540
-#: src/Navigation.tsx:545
+#: src/Navigation.tsx:542
+#: src/Navigation.tsx:547
 #: src/screens/StarterPack/Wizard/index.tsx:186
 msgid "Starter Pack"
 msgstr ""
@@ -7804,7 +7945,7 @@ msgstr ""
 msgid "Storage cleared, you need to restart the app now."
 msgstr ""
 
-#: src/Navigation.tsx:288
+#: src/Navigation.tsx:290
 #: src/screens/Settings/Settings.tsx:403
 msgid "Storybook"
 msgstr ""
@@ -7881,7 +8022,7 @@ msgctxt "Name of app icon variant"
 msgid "Sunset"
 msgstr ""
 
-#: src/Navigation.tsx:308
+#: src/Navigation.tsx:310
 #: src/view/screens/Support.tsx:31
 #: src/view/screens/Support.tsx:34
 msgid "Support"
@@ -7890,7 +8031,7 @@ msgstr ""
 #: src/screens/Settings/Settings.tsx:115
 #: src/screens/Settings/Settings.tsx:129
 #: src/screens/Settings/Settings.tsx:498
-#: src/view/shell/desktop/LeftNav.tsx:246
+#: src/view/shell/desktop/LeftNav.tsx:247
 msgid "Switch account"
 msgstr ""
 
@@ -7899,11 +8040,11 @@ msgstr ""
 msgid "Switch Account"
 msgstr ""
 
-#: src/view/shell/desktop/LeftNav.tsx:110
+#: src/view/shell/desktop/LeftNav.tsx:111
 msgid "Switch accounts"
 msgstr ""
 
-#: src/view/shell/desktop/LeftNav.tsx:294
+#: src/view/shell/desktop/LeftNav.tsx:295
 msgid "Switch to {0}"
 msgstr ""
 
@@ -7968,7 +8109,7 @@ msgstr ""
 msgid "Terms"
 msgstr ""
 
-#: src/Navigation.tsx:318
+#: src/Navigation.tsx:320
 #: src/screens/Settings/AboutSettings.tsx:84
 #: src/screens/Settings/AboutSettings.tsx:87
 #: src/view/screens/TermsOfService.tsx:31
@@ -8350,6 +8491,10 @@ msgstr ""
 msgid "This is not a valid link"
 msgstr ""
 
+#: src/view/com/modals/CreateWallet.tsx:60
+msgid "This key will give you full access to your wallet — make sure to save it securely."
+msgstr ""
+
 #: src/components/moderation/ModerationDetailsDialog.tsx:168
 msgid "This label was applied by the author."
 msgstr ""
@@ -8500,12 +8645,16 @@ msgstr ""
 msgid "Threaded mode"
 msgstr ""
 
-#: src/Navigation.tsx:351
+#: src/Navigation.tsx:353
 msgid "Threads Preferences"
 msgstr ""
 
 #: src/components/Post/Embed/VideoEmbed/VideoEmbedInner/TimeIndicator.tsx:34
 msgid "Time remaining: {0, plural, one {# second} other {# seconds}}"
+msgstr ""
+
+#: src/view/com/modals/CreateWallet.tsx:54
+msgid "To create your wallet, we need to generate a private key."
 msgstr ""
 
 #: src/screens/Settings/components/DisableEmail2FADialog.tsx:99
@@ -8554,8 +8703,31 @@ msgstr ""
 msgid "Top replies first"
 msgstr ""
 
-#: src/Navigation.tsx:510
+#: src/Navigation.tsx:512
 msgid "Topic"
+msgstr ""
+
+#: src/screens/Wallets/Wallet.tsx:177
+msgid "Transactions history"
+msgstr ""
+
+#: src/screens/Wallets/Wallet.tsx:159
+#: src/screens/Wallets/Wallet.tsx:164
+msgid "Transfer"
+msgstr ""
+
+#: src/view/com/modals/WalletTransfer.tsx:163
+msgid "Transfer submitted"
+msgstr ""
+
+#: src/view/com/modals/WalletTransfer.tsx:47
+#: src/view/com/modals/WalletTransfer.tsx:173
+#: src/view/com/modals/WalletTransfer.tsx:175
+msgid "Transfer tokens"
+msgstr ""
+
+#: src/view/com/modals/WalletTransfer.tsx:76
+msgid "Transfet amount"
 msgstr ""
 
 #: src/components/dms/MessageContextMenu.tsx:143
@@ -9017,7 +9189,7 @@ msgstr ""
 msgid "Verification settings"
 msgstr ""
 
-#: src/Navigation.tsx:188
+#: src/Navigation.tsx:190
 #: src/screens/Moderation/VerificationSettings.tsx:32
 msgid "Verification Settings"
 msgstr ""
@@ -9084,7 +9256,7 @@ msgstr ""
 msgid "Video failed to process"
 msgstr ""
 
-#: src/Navigation.tsx:561
+#: src/Navigation.tsx:563
 msgid "Video Feed"
 msgstr ""
 
@@ -9259,6 +9431,29 @@ msgstr ""
 
 #: src/components/Post/Embed/VideoEmbed/VideoEmbedInner/web-controls/VolumeControl.tsx:81
 msgid "Volume"
+msgstr ""
+
+#: src/view/com/modals/AddWallet.tsx:52
+msgid "Walled added successfully!"
+msgstr ""
+
+#: src/Navigation.tsx:579
+#: src/screens/Wallets/WalletsSelection.tsx:48
+msgid "Wallet"
+msgstr ""
+
+#: src/screens/Wallets/Wallet.tsx:53
+msgid "Wallet #{0}"
+msgstr ""
+
+#: src/screens/Wallets/Wallet.tsx:73
+msgid "Wallet address"
+msgstr ""
+
+#: src/Navigation.tsx:571
+#: src/screens/Wallets/WalletsSelection.tsx:35
+#: src/view/shell/desktop/LeftNav.tsx:716
+msgid "Wallets"
 msgstr ""
 
 #: src/components/moderation/LabelPreference.tsx:136
@@ -9801,7 +9996,7 @@ msgid "You reacted {0} to {1}"
 msgstr ""
 
 #: src/screens/Settings/Settings.tsx:280
-#: src/view/shell/desktop/LeftNav.tsx:210
+#: src/view/shell/desktop/LeftNav.tsx:211
 msgid "You will be signed out of all your accounts."
 msgstr ""
 
@@ -9970,7 +10165,7 @@ msgstr ""
 msgid "Your full username will be <0>@{0}</0>"
 msgstr ""
 
-#: src/Navigation.tsx:482
+#: src/Navigation.tsx:484
 #: src/screens/Search/modules/ExploreInterestsCard.tsx:67
 #: src/screens/Settings/ContentAndMediaSettings.tsx:92
 #: src/screens/Settings/ContentAndMediaSettings.tsx:95
