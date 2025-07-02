@@ -58,6 +58,10 @@ export interface AddWallet {
   name: 'add-wallet'
 }
 
+export interface AddExternalWallet {
+  name: 'add-external-wallet'
+}
+
 export type Modal =
   // Account
   | DeleteAccountModal
@@ -79,6 +83,7 @@ export type Modal =
   | WalletTransfer
   | CreateWallet
   | AddWallet
+  | AddExternalWallet
 
 const ModalContext = React.createContext<{
   isModalActive: boolean

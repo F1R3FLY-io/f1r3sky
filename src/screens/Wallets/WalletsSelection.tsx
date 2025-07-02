@@ -2,8 +2,12 @@ import {View} from 'react-native'
 import {Trans} from '@lingui/macro'
 import {useNavigation} from '@react-navigation/native'
 
-import {CommonNavigatorParams, NativeStackScreenProps} from '#/lib/routes/types'
-import {NavigationProp} from '#/lib/routes/types'
+import {
+  type CommonNavigatorParams,
+  type NativeStackScreenProps,
+} from '#/lib/routes/types'
+import {type NavigationProp} from '#/lib/routes/types'
+import {generateAddressFromPrivateKey as getAddressFromPrivateKey} from '#/lib/wallet'
 import {useModalControls} from '#/state/modals'
 import {useWallets} from '#/state/wallets'
 import {PressableWithHover} from '#/view/com/util/PressableWithHover'
@@ -12,6 +16,7 @@ import {Divider} from '#/components/Divider'
 import {AddWallet, Wallet} from '#/components/icons/Wallet'
 import * as Layout from '#/components/Layout'
 import {Text} from '#/components/Typography'
+import {WalletAddress} from '#/components/WalletAddress'
 
 export default function WalletsSelection({}: NativeStackScreenProps<
   CommonNavigatorParams,
@@ -24,7 +29,7 @@ export default function WalletsSelection({}: NativeStackScreenProps<
   const onPressItem = (position: number) =>
     navigation.push('Wallet', {position: position + 1})
 
-  const {wallets} = useWallets()
+  const {getAll} = useWallets()
 
   return (
     <Layout.Screen>
@@ -37,7 +42,7 @@ export default function WalletsSelection({}: NativeStackScreenProps<
         </Layout.Header.Content>
       </Layout.Header.Outer>
       <Layout.Content>
-        {wallets.map((wallet, i) => (
+        {getAll().map((wallet, i) => (
           <PressableWithHover
             key={i}
             hoverStyle={t.atoms.bg_contrast_25}
@@ -45,7 +50,12 @@ export default function WalletsSelection({}: NativeStackScreenProps<
             <View style={[a.flex_row, a.align_center, a.p_2xl, a.gap_sm]}>
               <Wallet />
               <Text style={[a.text_md]}>
-                <Trans>Wallet</Trans> #{wallet.hash}
+                <Trans>
+                  Wallet #
+                  <WalletAddress
+                    value={getAddressFromPrivateKey(wallet.privateKey)}
+                  />
+                </Trans>
               </Text>
             </View>
           </PressableWithHover>
@@ -71,6 +81,16 @@ export default function WalletsSelection({}: NativeStackScreenProps<
           </View>
         </PressableWithHover>
         <Divider />
+        <PressableWithHover
+          hoverStyle={t.atoms.bg_contrast_25}
+          onPress={() => openModal({name: 'add-external-wallet'})}>
+          <View style={[a.flex_row, a.align_center, a.p_2xl, a.gap_sm]}>
+            <AddWallet />
+            <Text style={[a.text_md]}>
+              <Trans>Add external wallet</Trans>
+            </Text>
+          </View>
+        </PressableWithHover>
       </Layout.Content>
     </Layout.Screen>
   )

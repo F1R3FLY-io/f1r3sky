@@ -1,11 +1,19 @@
+import type AtpAgent from '@atproto/api'
 import {secp256k1} from '@noble/curves/secp256k1'
-import {base16, base58} from '@scure/base'
+import {base16, base58, base64} from '@scure/base'
 import {blake2b, blake2bHex} from 'blakejs'
 import {keccak256} from 'js-sha3'
 import {sha256} from 'js-sha256'
+import {type Hex} from 'viem'
+import {privateKeyToAccount} from 'viem/accounts'
 import {z} from 'zod'
 
-import {Wallet} from '#/state/wallets'
+import {FIREFLY_API_URL} from '#/state/queries/wallet'
+import {
+  type EtheriumWallet,
+  type F1r3SkyWallet,
+  type WalletPrivateKey,
+} from '#/state/wallets'
 import {saveToDevice} from './media/manip'
 
 export const WalletSerialized = z.object({
@@ -43,10 +51,7 @@ export function hashAddress(address: string): number {
   return (number % 1000000) + 1
 }
 
-export function generateKeyAndAddress(): Wallet {
-  const privateKey = secp256k1.utils.randomPrivateKey()
-  const publicKey = secp256k1.getPublicKey(privateKey, false)
-
+export function getAddressFromPublicKey(publicKey: Uint8Array): string {
   const publicKeyHash = keccak256(publicKey.slice(1)).slice(-40).toUpperCase()
   const ethHash = keccak256(base16.decode(publicKeyHash)).toUpperCase()
 
@@ -59,43 +64,65 @@ export function generateKeyAndAddress(): Wallet {
     .slice(0, 8)
     .toUpperCase()
 
-  const revAddress = base58.encode(base16.decode(payload + checksum))
-
-  return {
-    address: revAddress,
-    key: privateKey,
-    hash: hashAddress(revAddress),
-  }
+  return base58.encode(base16.decode(payload + checksum))
 }
 
-export async function saveWalletToFS(wallet: Wallet) {
-  const json: WalletSerialized = {
-    revAddress: wallet.address,
-    privateKey: base16.encode(wallet.key),
-  }
+export function getPublicKeyFromPrivateKey(
+  privateKey: Uint8Array | Hex,
+): Uint8Array {
+  return secp256k1.getPublicKey(privateKey, false)
+}
 
-  return await saveToDevice(
-    'walletKey.json',
-    JSON.stringify(json, undefined, 4),
-    'application/json',
+export function generateAddressFromPrivateKey(
+  privateKey: Uint8Array | Hex,
+): string {
+  const publicKey = getPublicKeyFromPrivateKey(privateKey)
+  return getAddressFromPublicKey(publicKey)
+}
+
+export function fetchF1r3SkyWalletState(
+  agent: AtpAgent,
+  wallet: F1r3SkyWallet,
+  returnCallback: (state: F1r3SkyWallet) => void,
+) {
+  const address = getAddressFromPublicKey(
+    getPublicKeyFromPrivateKey(wallet.privateKey),
   )
+
+  fetch(`${FIREFLY_API_URL}/api/wallets/${address}/state`, {
+    headers: new Headers({
+      Authorization: `Bearer ${agent.session?.accessJwt}`,
+    }),
+  })
+    .then(req => req.json())
+    .then(returnCallback)
 }
 
-export function parseWallet(content: string): Wallet | undefined {
-  try {
-    const json = JSON.parse(content)
-    const parsed = WalletSerialized.parse(json)
-    return {
-      key: base16.decode(parsed.privateKey),
-      address: parsed.revAddress,
-      hash: hashAddress(parsed.revAddress),
-    }
-  } catch {
-    return
-  }
+export function fetchEtheriumWalletState(
+  wallet: EtheriumWallet,
+  returnCallback: (state: EtheriumWallet) => void,
+) {
+  console.log(wallet)
+  let account = privateKeyToAccount(wallet.privateKey as Hex)
+
+  returnCallback({
+    ...wallet,
+    account,
+  })
 }
 
-export function signPayload(payload: Uint8Array, key: Uint8Array) {
+export function generateKeyAndAddress(): WalletPrivateKey {
+  return secp256k1.utils.randomPrivateKey()
+}
+
+export async function saveWalletToFS(key: WalletPrivateKey) {
+  const encodedKey = base64.encode(key as Uint8Array)
+  const content = `-----BEGIN EC PRIVATE KEY-----\n${encodedKey}\n-----END EC PRIVATE KEY-----`
+
+  return await saveToDevice('walletKey.pem', content, 'application/x-pem-file')
+}
+
+export function signPayload(payload: Uint8Array, key: WalletPrivateKey) {
   const signature = secp256k1
     .sign(blake2b(payload, undefined, 32), key)
     .toDERRawBytes()

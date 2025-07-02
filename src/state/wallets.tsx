@@ -1,29 +1,60 @@
 import React from 'react'
+import {type Account, type Hex} from 'viem'
 
-export type Wallet = {
-  key: Uint8Array
-  address: string
-  hash: number
+export enum WalletType {
+  F1R3CAP = 'F1R3CAP',
+  ETHERIUM = 'etherium',
 }
 
+export type F1r3SkyWallet = {
+  privateKey: WalletPrivateKey
+  tag: WalletType.F1R3CAP
+}
+
+export type WalletPrivateKey = Uint8Array | Hex
+
+export type EtheriumWallet = {
+  privateKey: WalletPrivateKey
+  tag: WalletType.ETHERIUM
+  account?: Account
+}
+
+export type Wallet = F1r3SkyWallet | EtheriumWallet
+
 export type WalletsStateContext = {
-  wallets: Wallet[]
-  addWallet: (key: Wallet) => void
+  addWallet: (key: Wallet) => number
+  getByIndex: (index: number) => Wallet | undefined
+  getAll: () => Wallet[]
+}
+
+const wallets: Wallet[] = []
+
+function getByIndex(index: number): Wallet | undefined {
+  return wallets.at(index)
+}
+
+function addWallet(key: Wallet): number {
+  return wallets.push(key) - 1
+}
+
+function getAll(): Wallet[] {
+  return [...wallets]
 }
 
 const WalletsContext = React.createContext<WalletsStateContext>({
-  wallets: [],
-  addWallet: () => {},
+  addWallet,
+  getByIndex,
+  getAll,
 })
 
 export function Provider({children}: React.PropsWithChildren<{}>) {
-  const [state, dispatch] = React.useReducer(
-    (state: Wallet[], newWallet: Wallet) => [...state, newWallet],
-    [],
-  )
-
   return (
-    <WalletsContext.Provider value={{wallets: state, addWallet: dispatch}}>
+    <WalletsContext.Provider
+      value={{
+        addWallet,
+        getByIndex,
+        getAll,
+      }}>
       {children}
     </WalletsContext.Provider>
   )

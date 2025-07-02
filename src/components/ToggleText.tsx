@@ -1,5 +1,10 @@
 import {useState} from 'react'
-import {StyleProp, TextStyle, TouchableOpacity, View} from 'react-native'
+import {
+  type StyleProp,
+  type TextStyle,
+  TouchableOpacity,
+  View,
+} from 'react-native'
 
 import {atoms as a, flatten} from '#/alf'
 import {Text} from '#/components/Typography'

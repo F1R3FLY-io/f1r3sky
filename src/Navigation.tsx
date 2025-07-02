@@ -102,7 +102,7 @@ import {
 import {Wizard} from '#/screens/StarterPack/Wizard'
 import TopicScreen from '#/screens/Topic'
 import {VideoFeed} from '#/screens/VideoFeed'
-import Wallet from '#/screens/Wallets/Wallet'
+import Component from '#/screens/Wallets/Wallet'
 import Wallets from '#/screens/Wallets/WalletsSelection'
 import {type Theme, useTheme} from '#/alf'
 import {
@@ -574,7 +574,7 @@ function commonScreens(Stack: typeof Flat, unreadCountLabel?: string) {
       />
       <Stack.Screen
         name="Wallet"
-        getComponent={() => Wallet}
+        getComponent={() => Component}
         options={{
           title: title(msg`Wallet`),
           requireAuth: true,

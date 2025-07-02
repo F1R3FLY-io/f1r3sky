@@ -6,9 +6,10 @@ import {usePalette} from '#/lib/hooks/usePalette'
 import {useWebMediaQueries} from '#/lib/hooks/useWebMediaQueries'
 import {type Modal as ModalIface} from '#/state/modals'
 import {useModalControls, useModals} from '#/state/modals'
+import * as AddExternalWallet from './AddExternalWallet'
+import * as AddWallet from './AddWallet'
 import * as ChangePasswordModal from './ChangePassword'
 import * as CreateOrEditListModal from './CreateOrEditList'
-import * as AddWallet from './AddWallet'
 import * as CreateWallet from './CreateWallet'
 import * as DeleteAccountModal from './DeleteAccount'
 import * as InviteCodesModal from './InviteCodes'
@@ -53,28 +54,42 @@ function Modal({modal}: {modal: ModalIface}) {
   }
 
   let element
-  if (modal.name === 'create-or-edit-list') {
-    element = <CreateOrEditListModal.Component {...modal} />
-  } else if (modal.name === 'user-add-remove-lists') {
-    element = <UserAddRemoveLists.Component {...modal} />
-  } else if (modal.name === 'delete-account') {
-    element = <DeleteAccountModal.Component />
-  } else if (modal.name === 'invite-codes') {
-    element = <InviteCodesModal.Component />
-  } else if (modal.name === 'content-languages-settings') {
-    element = <ContentLanguagesSettingsModal.Component />
-  } else if (modal.name === 'post-languages-settings') {
-    element = <PostLanguagesSettingsModal.Component />
-  } else if (modal.name === 'change-password') {
-    element = <ChangePasswordModal.Component />
-  } else if (modal.name === 'wallet-transfer') {
-    element = <WalletTransfer.Component {...modal} />
-  } else if (modal?.name === 'create-wallet') {
-    element = <CreateWallet.Component />
-  } else if (modal?.name === 'add-wallet') {
-    element = <AddWallet.Component />
-  } else {
-    return null
+  switch (modal?.name) {
+    case 'create-or-edit-list':
+      element = <CreateOrEditListModal.Component {...modal} />
+      break
+    case 'user-add-remove-lists':
+      element = <UserAddRemoveLists.Component {...modal} />
+      break
+    case 'delete-account':
+      element = <DeleteAccountModal.Component />
+      break
+    case 'invite-codes':
+      element = <InviteCodesModal.Component />
+      break
+    case 'content-languages-settings':
+      element = <ContentLanguagesSettingsModal.Component />
+      break
+    case 'post-languages-settings':
+      element = <PostLanguagesSettingsModal.Component />
+      break
+    case 'change-password':
+      element = <ChangePasswordModal.Component />
+      break
+    case 'wallet-transfer':
+      element = <WalletTransfer.Component {...modal} />
+      break
+    case 'add-wallet':
+      element = <AddWallet.Component />
+      break
+    case 'add-external-wallet':
+      element = <AddExternalWallet.Component />
+      break
+    case 'create-wallet':
+      element = <CreateWallet.Component />
+      break
+    default:
+      return null
   }
 
   return (

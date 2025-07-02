@@ -1,11 +1,11 @@
-import {useMutation, useQuery, useQueryClient} from '@tanstack/react-query'
+import {useMutation, useQueryClient} from '@tanstack/react-query'
 import {z} from 'zod'
 
-import {signPayload} from '#/lib/wallet'
+import {getPublicKeyFromPrivateKey, signPayload} from '#/lib/wallet'
 import {useAgent} from '#/state/session'
-import {Wallet} from '../wallets'
+import {type Wallet} from '../wallets'
 
-const FIREFLY_API_URL = process.env.FIREFLY_API_URL
+export const FIREFLY_API_URL = process.env.FIREFLY_API_URL
 
 const WalletRequestState = z.enum(['done', 'ongoing', 'cancelled'])
 export type WalletRequestState = z.infer<typeof WalletRequestState>
@@ -43,29 +43,13 @@ const WalletTransfer = z.object({
 })
 export type WalletTransfer = z.infer<typeof WalletTransfer>
 
-const WalletState = z.object({
+export const WalletState = z.object({
   balance: z.coerce.bigint(),
   requests: z.array(WalletRequest),
   boosts: z.array(WalletBoost),
   transfers: z.array(WalletTransfer),
 })
-export type WalletState = z.infer<typeof WalletState>
-
-export function useWalletState(address?: string) {
-  const agent = useAgent()
-  return useQuery({
-    queryKey: ['wallet-state', address],
-    queryFn: () =>
-      fetch(`${FIREFLY_API_URL}/api/wallets/${address}/state`, {
-        headers: new Headers({
-          Authorization: `Bearer ${agent.session?.accessJwt}`,
-        }),
-      })
-        .then(req => req.json())
-        .then(json => WalletState.parse(json)),
-    enabled: !!address,
-  })
-}
+export type WalletState = {wallet: Wallet} & z.infer<typeof WalletState>
 
 export type TransferProps = {
   amount: bigint
@@ -95,7 +79,7 @@ export function useTransferMutation(wallet: Wallet) {
             Authorization: `Bearer ${agent.session?.accessJwt}`,
           }),
           body: JSON.stringify({
-            from: wallet.address,
+            from: getPublicKeyFromPrivateKey(wallet.privateKey),
             to: toAddress,
             amount: amount.toString(),
             description,
@@ -104,11 +88,11 @@ export function useTransferMutation(wallet: Wallet) {
       )
 
       const body = await resp.json()
-      const {contract} = TransferContract.parse(body)
+      const {contract: payload} = TransferContract.parse(body)
 
       const {signature, sigAlgorithm, deployer} = signPayload(
-        contract,
-        wallet.key,
+        payload,
+        wallet.privateKey,
       )
 
       return await fetch(`${FIREFLY_API_URL}/api/wallets/transfer/send`, {
@@ -118,7 +102,7 @@ export function useTransferMutation(wallet: Wallet) {
           Authorization: `Bearer ${agent.session?.accessJwt}`,
         }),
         body: JSON.stringify({
-          contract: Array.from(contract),
+          contract: Array.from(payload),
           sig: Array.from(signature),
           sig_algorithm: sigAlgorithm,
           deployer: Array.from(deployer),
@@ -127,7 +111,10 @@ export function useTransferMutation(wallet: Wallet) {
     },
     onSuccess: async (_, props) => {
       await queryClient.invalidateQueries({
-        queryKey: ['wallet-state', wallet.address],
+        queryKey: [
+          'wallet-state',
+          getPublicKeyFromPrivateKey(wallet.privateKey),
+        ],
       })
       await queryClient.invalidateQueries({
         queryKey: ['wallet-state', props.toAddress],

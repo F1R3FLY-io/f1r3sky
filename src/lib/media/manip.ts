@@ -294,12 +294,12 @@ export async function saveBytesToDisk(
 
 export async function saveToDevice(
   filename: string,
-  encoded: string,
+  content: any,
   type: string,
 ) {
   try {
     if (isIOS) {
-      await withTempFile(filename, encoded, async tmpFileUrl => {
+      await withTempFile(filename, content, async tmpFileUrl => {
         await Sharing.shareAsync(tmpFileUrl, {UTI: type})
       })
       return true
@@ -317,7 +317,7 @@ export async function saveToDevice(
         type,
       )
 
-      await writeAsStringAsync(fileUrl, encoded, {
+      await writeAsStringAsync(fileUrl, content, {
         encoding: EncodingType.Base64,
       })
       return true

@@ -39,9 +39,9 @@ module.exports = function (_config) {
     expo: {
       version: VERSION,
       name: 'Bluesky',
-      slug: 'bluesky',
+      slug: 'test',
       scheme: 'bluesky',
-      owner: 'blueskysocial',
+      owner: 'denysbushuliak',
       runtimeVersion: {
         policy: 'appVersion',
       },
@@ -391,7 +391,7 @@ module.exports = function (_config) {
               },
             },
           },
-          projectId: '55bd077a-d905-4184-9c7f-94789ba0f302',
+          projectId: '62c7e4ca-ef17-46f3-b4ec-260dee1e4881',
         },
       },
     },

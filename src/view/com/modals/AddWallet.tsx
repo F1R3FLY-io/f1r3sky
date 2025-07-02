@@ -4,13 +4,13 @@ import * as DocumentPicker from 'expo-document-picker'
 import {msg, Trans} from '@lingui/macro'
 import {useLingui} from '@lingui/react'
 import {useNavigation} from '@react-navigation/native'
+import {base64} from '@scure/base'
 
 import {usePalette} from '#/lib/hooks/usePalette'
 import {downloadDocument} from '#/lib/media/manip'
-import {NavigationProp} from '#/lib/routes/types'
-import {parseWallet} from '#/lib/wallet'
+import {type NavigationProp} from '#/lib/routes/types'
 import {useModalControls} from '#/state/modals'
-import {useWallets} from '#/state/wallets'
+import {useWallets, type WalletPrivateKey} from '#/state/wallets'
 import * as Toast from '#/view/com/util/Toast'
 import {atoms as a, useTheme} from '#/alf'
 import {Text} from '#/components/Typography'
@@ -19,19 +19,17 @@ import {ScrollView} from './util'
 
 export const snapPoints = ['90%']
 
-export type Props = {}
-
-export function Component({}: Props) {
+export function Component() {
   const t = useTheme()
   const pal = usePalette('default')
   const {_} = useLingui()
   const {closeModal} = useModalControls()
-  const {wallets, addWallet} = useWallets()
+  const {addWallet} = useWallets()
 
   const navigation = useNavigation<NavigationProp>()
   const pickWalletKey = useCallback(async () => {
     const result = await DocumentPicker.getDocumentAsync({
-      type: 'application/json',
+      type: 'application/x-pem-file',
       copyToCacheDirectory: true,
       multiple: false,
     })
@@ -40,18 +38,29 @@ export function Component({}: Props) {
       return
     }
 
-    const content = await downloadDocument(result.assets[0])
-    const wallet = parseWallet(content)
+    const privateKey = await downloadDocument(result.assets[0])
+      .then(content =>
+        content
+          .replace('-----BEGIN EC PRIVATE KEY-----', '')
+          .replace('-----END EC PRIVATE KEY-----', '')
+          .trim(),
+      )
+      .then(encodedKey => {
+        return base64.decode(encodedKey) as WalletPrivateKey
+      })
 
-    if (wallet === undefined) {
-      Toast.show(_(msg`Failed to load file!`))
+    if (privateKey === undefined) {
+      Toast.show(_(msg`Failed to load file with wallet's private key!`))
       return
     }
 
-    addWallet(wallet)
+    let position = addWallet({
+      privateKey,
+      tag: 'F1R3CAP',
+    })
     Toast.show(_(msg`Walled added successfully!`))
-    navigation.navigate('Wallet', {position: wallets.length + 1})
-  }, [_, addWallet, navigation, wallets.length])
+    navigation.navigate('Wallet', {position})
+  }, [_, addWallet, navigation])
 
   return (
     <SafeAreaView style={[pal.view, a.flex_1]}>
