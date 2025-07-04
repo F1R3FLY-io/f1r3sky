@@ -7,7 +7,6 @@ import {usePalette} from '#/lib/hooks/usePalette'
 import {useModalControls, useModals} from '#/state/modals'
 import {FullWindowOverlay} from '#/components/FullWindowOverlay'
 import {createCustomBackdrop} from '../util/BottomSheetCustomBackdrop'
-import * as AddExternalWallet from './AddExternalWallet'
 import * as AddWallet from './AddWallet'
 import * as ChangePasswordModal from './ChangePassword'
 import * as CreateOrEditListModal from './CreateOrEditList'
@@ -93,11 +92,6 @@ export function ModalsContainer() {
     case 'add-wallet':
       snapPoints = AddWallet.snapPoints
       element = <AddWallet.Component />
-      break
-    case 'add-external-wallet':
-      console.log('add-external-wallet')
-      snapPoints = AddExternalWallet.snapPoints
-      element = <AddExternalWallet.Component />
       break
     default:
       return null

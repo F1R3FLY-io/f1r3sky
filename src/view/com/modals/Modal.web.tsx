@@ -6,7 +6,6 @@ import {usePalette} from '#/lib/hooks/usePalette'
 import {useWebMediaQueries} from '#/lib/hooks/useWebMediaQueries'
 import {type Modal as ModalIface} from '#/state/modals'
 import {useModalControls, useModals} from '#/state/modals'
-import * as AddExternalWallet from './AddExternalWallet'
 import * as AddWallet from './AddWallet'
 import * as ChangePasswordModal from './ChangePassword'
 import * as CreateOrEditListModal from './CreateOrEditList'
@@ -81,9 +80,6 @@ function Modal({modal}: {modal: ModalIface}) {
       break
     case 'add-wallet':
       element = <AddWallet.Component />
-      break
-    case 'add-external-wallet':
-      element = <AddExternalWallet.Component />
       break
     case 'create-wallet':
       element = <CreateWallet.Component />

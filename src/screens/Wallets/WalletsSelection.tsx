@@ -7,12 +7,10 @@ import {
   type NativeStackScreenProps,
 } from '#/lib/routes/types'
 import {type NavigationProp} from '#/lib/routes/types'
-import {generateAddressFromPrivateKey as getAddressFromPrivateKey} from '#/lib/wallet'
 import {useModalControls} from '#/state/modals'
 import {useWallets} from '#/state/wallets'
 import {PressableWithHover} from '#/view/com/util/PressableWithHover'
 import {atoms as a, useTheme} from '#/alf'
-import {Divider} from '#/components/Divider'
 import {AddWallet, Wallet} from '#/components/icons/Wallet'
 import * as Layout from '#/components/Layout'
 import {Text} from '#/components/Typography'
@@ -52,9 +50,7 @@ export default function WalletsSelection({}: NativeStackScreenProps<
               <Text style={[a.text_md]}>
                 <Trans>
                   Wallet #
-                  <WalletAddress
-                    value={getAddressFromPrivateKey(wallet.privateKey)}
-                  />
+                  <WalletAddress value={wallet.address} />
                 </Trans>
               </Text>
             </View>
@@ -77,17 +73,6 @@ export default function WalletsSelection({}: NativeStackScreenProps<
             <AddWallet />
             <Text style={[a.text_md]}>
               <Trans>Add wallet</Trans>
-            </Text>
-          </View>
-        </PressableWithHover>
-        <Divider />
-        <PressableWithHover
-          hoverStyle={t.atoms.bg_contrast_25}
-          onPress={() => openModal({name: 'add-external-wallet'})}>
-          <View style={[a.flex_row, a.align_center, a.p_2xl, a.gap_sm]}>
-            <AddWallet />
-            <Text style={[a.text_md]}>
-              <Trans>Add external wallet</Trans>
             </Text>
           </View>
         </PressableWithHover>

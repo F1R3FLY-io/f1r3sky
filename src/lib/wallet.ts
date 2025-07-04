@@ -5,15 +5,10 @@ import {blake2b, blake2bHex} from 'blakejs'
 import {keccak256} from 'js-sha3'
 import {sha256} from 'js-sha256'
 import {type Hex} from 'viem'
-import {privateKeyToAccount} from 'viem/accounts'
 import {z} from 'zod'
 
 import {FIREFLY_API_URL} from '#/state/queries/wallet'
-import {
-  type EtheriumWallet,
-  type F1r3SkyWallet,
-  type WalletPrivateKey,
-} from '#/state/wallets'
+import {type FireCAPWallet, type WalletKey, WalletType} from '#/state/wallets'
 import {saveToDevice} from './media/manip'
 
 export const WalletSerialized = z.object({
@@ -82,8 +77,8 @@ export function generateAddressFromPrivateKey(
 
 export function fetchF1r3SkyWalletState(
   agent: AtpAgent,
-  wallet: F1r3SkyWallet,
-  returnCallback: (state: F1r3SkyWallet) => void,
+  wallet: FireCAPWallet,
+  returnCallback: (state: FireCAPWallet) => void,
 ) {
   const address = getAddressFromPublicKey(
     getPublicKeyFromPrivateKey(wallet.privateKey),
@@ -98,31 +93,31 @@ export function fetchF1r3SkyWalletState(
     .then(returnCallback)
 }
 
-export function fetchEtheriumWalletState(
-  wallet: EtheriumWallet,
-  returnCallback: (state: EtheriumWallet) => void,
-) {
-  console.log(wallet)
-  let account = privateKeyToAccount(wallet.privateKey as Hex)
-
-  returnCallback({
-    ...wallet,
-    account,
-  })
-}
-
-export function generateKeyAndAddress(): WalletPrivateKey {
+export function generateKeyAndAddress(): WalletKey {
   return secp256k1.utils.randomPrivateKey()
 }
 
-export async function saveWalletToFS(key: WalletPrivateKey) {
-  const encodedKey = base64.encode(key as Uint8Array)
-  const content = `-----BEGIN EC PRIVATE KEY-----\n${encodedKey}\n-----END EC PRIVATE KEY-----`
+export async function saveWalletToFS(
+  key: WalletKey,
+  address: string,
+  type: WalletType,
+) {
+  switch (type) {
+    case WalletType.F1R3CAP:
+      const encodedKey = base64.encode(key as Uint8Array)
+      const content = `-----BEGIN EC PRIVATE KEY-----\n${encodedKey}\n-----END EC PRIVATE KEY-----`
 
-  return await saveToDevice('walletKey.pem', content, 'application/x-pem-file')
+      return await saveToDevice(
+        `${address}.pem`,
+        content,
+        'application/x-pem-file',
+      )
+    case WalletType.ETHERIUM:
+      return await saveToDevice(`${address}.key`, key, 'application/x-pem-file')
+  }
 }
 
-export function signPayload(payload: Uint8Array, key: WalletPrivateKey) {
+export function signPayload(payload: Uint8Array, key: WalletKey) {
   const signature = secp256k1
     .sign(blake2b(payload, undefined, 32), key)
     .toDERRawBytes()

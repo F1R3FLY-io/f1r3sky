@@ -1,43 +1,44 @@
 import React from 'react'
-import {type Account, type Hex} from 'viem'
+import {type Hex} from 'viem'
 
 export enum WalletType {
   F1R3CAP = 'F1R3CAP',
   ETHERIUM = 'etherium',
 }
 
-export type F1r3SkyWallet = {
-  privateKey: WalletPrivateKey
-  tag: WalletType.F1R3CAP
-}
+export type WalletKey = Uint8Array | Hex
 
-export type WalletPrivateKey = Uint8Array | Hex
+export type FireCAPWallet = {
+  privateKey: Uint8Array
+  publicKey: Uint8Array
+  address: string
+  walletType: WalletType.F1R3CAP
+}
 
 export type EtheriumWallet = {
-  privateKey: WalletPrivateKey
-  tag: WalletType.ETHERIUM
-  account?: Account
+  privateKey: Hex
+  publicKey: Hex
+  address: Hex
+  walletType: WalletType.ETHERIUM
 }
-
-export type Wallet = F1r3SkyWallet | EtheriumWallet
 
 export type WalletsStateContext = {
-  addWallet: (key: Wallet) => number
-  getByIndex: (index: number) => Wallet | undefined
-  getAll: () => Wallet[]
+  addWallet: (key: FireCAPWallet | EtheriumWallet) => number
+  getByIndex: (index: number) => FireCAPWallet | EtheriumWallet | undefined
+  getAll: () => (FireCAPWallet | EtheriumWallet)[]
 }
 
-const wallets: Wallet[] = []
+const wallets: (FireCAPWallet | EtheriumWallet)[] = []
 
-function getByIndex(index: number): Wallet | undefined {
+function getByIndex(index: number): FireCAPWallet | EtheriumWallet | undefined {
   return wallets.at(index)
 }
 
-function addWallet(key: Wallet): number {
+function addWallet(key: FireCAPWallet | EtheriumWallet): number {
   return wallets.push(key) - 1
 }
 
-function getAll(): Wallet[] {
+function getAll(): (FireCAPWallet | EtheriumWallet)[] {
   return [...wallets]
 }
 

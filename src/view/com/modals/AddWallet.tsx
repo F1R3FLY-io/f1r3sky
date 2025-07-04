@@ -5,12 +5,21 @@ import {msg, Trans} from '@lingui/macro'
 import {useLingui} from '@lingui/react'
 import {useNavigation} from '@react-navigation/native'
 import {base64} from '@scure/base'
+import {type Hex} from 'viem'
+import {privateKeyToAccount} from 'viem/accounts'
 
 import {usePalette} from '#/lib/hooks/usePalette'
 import {downloadDocument} from '#/lib/media/manip'
 import {type NavigationProp} from '#/lib/routes/types'
+import {getAddressFromPublicKey, getPublicKeyFromPrivateKey} from '#/lib/wallet'
 import {useModalControls} from '#/state/modals'
-import {useWallets, type WalletPrivateKey} from '#/state/wallets'
+import {
+  type EtheriumWallet,
+  type FireCAPWallet,
+  useWallets,
+  type WalletKey,
+  WalletType,
+} from '#/state/wallets'
 import * as Toast from '#/view/com/util/Toast'
 import {atoms as a, useTheme} from '#/alf'
 import {Text} from '#/components/Typography'
@@ -38,28 +47,47 @@ export function Component() {
       return
     }
 
-    const privateKey = await downloadDocument(result.assets[0])
-      .then(content =>
-        content
-          .replace('-----BEGIN EC PRIVATE KEY-----', '')
-          .replace('-----END EC PRIVATE KEY-----', '')
-          .trim(),
-      )
-      .then(encodedKey => {
-        return base64.decode(encodedKey) as WalletPrivateKey
+    await downloadDocument(result.assets[0])
+      .then(content => {
+        const isFireCAPKey = content.includes('BEGIN EC PRIVATE KEY')
+        if (isFireCAPKey) {
+          const encodedKey = content
+            .replace('-----BEGIN EC PRIVATE KEY-----', '')
+            .replace('-----END EC PRIVATE KEY-----', '')
+            .trim()
+
+          const privateKey = base64.decode(encodedKey) as Uint8Array
+          const publicKey = getPublicKeyFromPrivateKey(privateKey)
+          const address = getAddressFromPublicKey(publicKey)
+
+          return {
+            privateKey,
+            publicKey,
+            address,
+            walletType: WalletType.F1R3CAP,
+          } as FireCAPWallet
+        } else {
+          const prvKey = content as Hex
+          const client = privateKeyToAccount(prvKey)
+
+          return {
+            privateKey: content as WalletKey,
+            publicKey: client.publicKey,
+            address: client.address,
+            walletType: WalletType.ETHERIUM,
+          } as EtheriumWallet
+        }
       })
-
-    if (privateKey === undefined) {
-      Toast.show(_(msg`Failed to load file with wallet's private key!`))
-      return
-    }
-
-    let position = addWallet({
-      privateKey,
-      tag: 'F1R3CAP',
-    })
-    Toast.show(_(msg`Walled added successfully!`))
-    navigation.navigate('Wallet', {position})
+      .then(wallet => {
+        let position = addWallet(wallet)
+        console.log(position)
+        Toast.show(_(msg`Walled added successfully!`))
+        navigation.navigate('Wallet', {position})
+      })
+      .catch(() => {
+        Toast.show(_(msg`Failed to load file with wallet's private key!`))
+        return
+      })
   }, [_, addWallet, navigation])
 
   return (

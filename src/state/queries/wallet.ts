@@ -3,7 +3,7 @@ import {z} from 'zod'
 
 import {getPublicKeyFromPrivateKey, signPayload} from '#/lib/wallet'
 import {useAgent} from '#/state/session'
-import {type Wallet} from '../wallets'
+import {type EtheriumWallet, type FireCAPWallet} from '../wallets'
 
 export const FIREFLY_API_URL = process.env.FIREFLY_API_URL
 
@@ -49,7 +49,9 @@ export const WalletState = z.object({
   boosts: z.array(WalletBoost),
   transfers: z.array(WalletTransfer),
 })
-export type WalletState = {wallet: Wallet} & z.infer<typeof WalletState>
+export type WalletState = {wallet: FireCAPWallet | EtheriumWallet} & z.infer<
+  typeof WalletState
+>
 
 export type TransferProps = {
   amount: bigint
@@ -65,7 +67,7 @@ const TransferContract = z.object({
 })
 export type TransferContract = z.infer<typeof TransferContract>
 
-export function useTransferMutation(wallet: Wallet) {
+export function useTransferMutation(wallet: FireCAPWallet | EtheriumWallet) {
   const queryClient = useQueryClient()
   const agent = useAgent()
   return useMutation({

@@ -5,7 +5,7 @@ import {useLingui} from '@lingui/react'
 import {type RouteProp} from '@react-navigation/native'
 import {useRoute} from '@react-navigation/native'
 import {useNavigation} from '@react-navigation/native'
-import {createPublicClient, type Hex, http} from 'viem'
+import {createPublicClient, http} from 'viem'
 import {privateKeyToAccount} from 'viem/accounts'
 import {mainnet} from 'viem/chains'
 
@@ -15,13 +15,7 @@ import {
 } from '#/lib/routes/types'
 import {type NavigationProp} from '#/lib/routes/types'
 import {shareUrl} from '#/lib/sharing'
-import {
-  fetchEtheriumWalletState,
-  fetchF1r3SkyWalletState,
-  getAddressFromPublicKey,
-  getPublicKeyFromPrivateKey,
-  saveWalletToFS,
-} from '#/lib/wallet'
+import {fetchF1r3SkyWalletState, saveWalletToFS} from '#/lib/wallet'
 import {useModalControls} from '#/state/modals'
 import {WalletState} from '#/state/queries/wallet'
 import {useAgent} from '#/state/session'
@@ -64,8 +58,8 @@ export default function Component({}: NativeStackScreenProps<
   useEffect(() => {
     const wallet = getByIndex(+params.position - 1)
 
-    if (wallet) {
-      switch (wallet?.tag) {
+    if (undefined !== wallet) {
+      switch (wallet?.walletType) {
         case WalletType.F1R3CAP:
           fetchF1r3SkyWalletState(agent, wallet, data => {
             const state = WalletState.parse(data)
@@ -74,43 +68,34 @@ export default function Component({}: NativeStackScreenProps<
           changeScreenState(SCREEN_STATE.LOADED)
           break
         case WalletType.ETHERIUM:
-          fetchEtheriumWalletState(wallet, async etherWallet => {
-            const account = privateKeyToAccount(etherWallet.privateKey as Hex)
+          const account = privateKeyToAccount(wallet.privateKey)
 
-            const publicClient = createPublicClient({
-              chain: mainnet,
-              transport: http(),
-            })
+          const publicClient = createPublicClient({
+            chain: mainnet,
+            transport: http(),
+          })
 
-            const balance = await publicClient.getBalance({
+          publicClient
+            .getBalance({
               address: account.address,
             })
+            .then(balance => {
+              setWalletState({
+                wallet,
+                balance,
+                requests: [],
+                boosts: [],
+                transfers: [],
+              } as WalletState)
+              changeScreenState(SCREEN_STATE.LOADED)
+            })
 
-            console.log(balance)
-
-            setWalletState({
-              wallet,
-              account,
-              balance,
-              requests: [],
-              boosts: [],
-              transfers: [],
-            } as WalletState)
-          })
-          changeScreenState(SCREEN_STATE.LOADED)
           break
         default:
           changeScreenState(SCREEN_STATE.ABSENT)
       }
     }
-  }, [
-    params.position,
-    walletState,
-    agent,
-    getByIndex,
-    navigation,
-    changeScreenState,
-  ])
+  }, [agent, getByIndex, params.position])
 
   useEffect(() => {
     if (screenState === SCREEN_STATE.ABSENT) {
@@ -126,12 +111,8 @@ export default function Component({}: NativeStackScreenProps<
         </Text>
       </View>
     )
-  } else if (walletState) {
+  } else if (undefined !== walletState) {
     let content
-
-    let walletAddress = getAddressFromPublicKey(
-      getPublicKeyFromPrivateKey(walletState.wallet.privateKey),
-    )
 
     content = (
       <>
@@ -164,12 +145,12 @@ export default function Component({}: NativeStackScreenProps<
                 horizontal={true}
                 showsHorizontalScrollIndicator={false}>
                 <Text ellipsizeMode="middle" numberOfLines={1}>
-                  {walletAddress}
+                  {walletState.wallet.address}
                 </Text>
               </ScrollView>
               <View>
                 <TouchableOpacity
-                  onPress={() => shareUrl(walletAddress)}
+                  onPress={() => shareUrl(walletState.wallet.address)}
                   accessibilityRole="button">
                   <Copy />
                 </TouchableOpacity>
@@ -188,7 +169,13 @@ export default function Component({}: NativeStackScreenProps<
               </View>
               <View>
                 <TouchableOpacity
-                  onPress={() => saveWalletToFS(walletState.wallet.privateKey)}
+                  onPress={() =>
+                    saveWalletToFS(
+                      walletState.wallet.privateKey,
+                      walletState.wallet.address,
+                      walletState.wallet.walletType,
+                    )
+                  }
                   accessibilityRole="button">
                   <DownloadIcon />
                 </TouchableOpacity>
@@ -206,7 +193,7 @@ export default function Component({}: NativeStackScreenProps<
                 </Text>
               </View>
               <View>
-                <Text>{walletState.wallet.tag}</Text>
+                <Text>{walletState.wallet.walletType}</Text>
               </View>
             </View>
           </View>
@@ -283,7 +270,7 @@ export default function Component({}: NativeStackScreenProps<
               <Layout.Header.Content align="left">
                 <Layout.Header.TitleText>
                   <Trans>
-                    Wallet #<WalletAddress value={walletAddress} />
+                    Wallet #<WalletAddress value={walletState.wallet.address} />
                   </Trans>
                 </Layout.Header.TitleText>
               </Layout.Header.Content>
