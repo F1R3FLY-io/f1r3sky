@@ -22,23 +22,25 @@ export type EtheriumWallet = {
   walletType: WalletType.ETHERIUM
 }
 
+export type UniWallet = FireCAPWallet | EtheriumWallet
+
 export type WalletsStateContext = {
-  addWallet: (key: FireCAPWallet | EtheriumWallet) => number
-  getByIndex: (index: number) => FireCAPWallet | EtheriumWallet | undefined
-  getAll: () => (FireCAPWallet | EtheriumWallet)[]
+  addWallet: (key: UniWallet) => number
+  getByIndex: (index: number) => UniWallet | undefined
+  getAll: () => UniWallet[]
 }
 
-const wallets: (FireCAPWallet | EtheriumWallet)[] = []
+const wallets: UniWallet[] = []
 
-function getByIndex(index: number): FireCAPWallet | EtheriumWallet | undefined {
+function getByIndex(index: number): UniWallet | undefined {
   return wallets.at(index)
 }
 
-function addWallet(key: FireCAPWallet | EtheriumWallet): number {
+function addWallet(key: UniWallet): number {
   return wallets.push(key) - 1
 }
 
-function getAll(): (FireCAPWallet | EtheriumWallet)[] {
+function getAll(): UniWallet[] {
   return [...wallets]
 }
 

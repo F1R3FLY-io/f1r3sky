@@ -1,13 +1,14 @@
 import {useReducer} from 'react'
 import {SafeAreaView, View} from 'react-native'
 import {msg, Trans} from '@lingui/macro'
-import {I18nContext, useLingui} from '@lingui/react'
+import {type I18nContext, useLingui} from '@lingui/react'
+import {isAddress} from 'viem'
 
 import {usePalette} from '#/lib/hooks/usePalette'
 import {verifyRevAddr} from '#/lib/wallet'
 import {useModalControls} from '#/state/modals'
 import {useTransferMutation} from '#/state/queries/wallet'
-import {Wallet} from '#/state/wallets'
+import {type UniWallet, WalletType} from '#/state/wallets'
 import * as Toast from '#/view/com/util/Toast'
 import {atoms as a, useTheme} from '#/alf'
 import {FormError} from '#/components/forms/FormError'
@@ -20,7 +21,7 @@ export const snapPoints = ['90%']
 
 export type Props = {
   currentBalance: bigint
-  wallet: Wallet
+  wallet: UniWallet
 }
 
 export function Component({currentBalance, wallet}: Props) {
@@ -29,7 +30,7 @@ export function Component({currentBalance, wallet}: Props) {
   const {_} = useLingui()
   const {closeModal} = useModalControls()
 
-  const [state, dispatch] = useReducer(handleTransferAction, {
+  const [state, dispatch] = useReducer(handleTransferAction(wallet), {
     amount: {},
     address: {},
     description: {},
@@ -38,6 +39,9 @@ export function Component({currentBalance, wallet}: Props) {
   const error = formatErrorMsg(_, state)
 
   const {mutateAsync: submit, isPending} = useTransferMutation(wallet)
+
+  const currencySymbol =
+    wallet.walletType === WalletType.ETHERIUM ? 'WEI' : 'F1R3CAP'
 
   return (
     <SafeAreaView style={[pal.view, a.flex_1]}>
@@ -108,7 +112,7 @@ export function Component({currentBalance, wallet}: Props) {
               <Trans>Available Balance</Trans>
             </Text>
             <Text style={[a.text_sm, a.font_bold]}>
-              {currentBalance.toString()}
+              {currentBalance.toString()} {currencySymbol}
             </Text>
           </View>
           <View style={[a.gap_sm, a.self_start, a.align_start, a.self_stretch]}>
@@ -147,28 +151,7 @@ export function Component({currentBalance, wallet}: Props) {
           <View style={[a.gap_sm, a.self_stretch]}>
             <Button
               type="primary"
-              onPress={async () => {
-                if (
-                  state.amount.value !== undefined &&
-                  state.amount.error === undefined &&
-                  state.address.value !== undefined &&
-                  state.address.error === undefined
-                ) {
-                  await submit({
-                    amount: state.amount.value,
-                    toAddress: state.address.value,
-                    description: state.description.value,
-                  })
-                  closeModal()
-                  Toast.show(_(msg`Transfer submitted`), 'clipboard-check')
-                } else {
-                  dispatch({
-                    type: 'revalidateAll',
-                    currentBalance,
-                    userAddress: wallet.address,
-                  })
-                }
-              }}
+              onPress={onSubmitClick}
               withLoading
               accessibilityLabel={_(msg`Transfer tokens`)}
               accessibilityHint={_(msg`Click to transfer transfer`)}
@@ -193,6 +176,29 @@ export function Component({currentBalance, wallet}: Props) {
       </ScrollView>
     </SafeAreaView>
   )
+
+  async function onSubmitClick() {
+    if (
+      state.amount.value !== undefined &&
+      state.amount.error === undefined &&
+      state.address.value !== undefined &&
+      state.address.error === undefined
+    ) {
+      await submit({
+        amount: state.amount.value,
+        toAddress: state.address.value,
+        description: state.description.value,
+      })
+      closeModal()
+      Toast.show(_(msg`Transfer submitted`), 'clipboard-check')
+    } else {
+      dispatch({
+        type: 'revalidateAll',
+        currentBalance,
+        userAddress: wallet.address,
+      })
+    }
+  }
 }
 
 type ControlState = {
@@ -219,103 +225,106 @@ type TransferActrion =
   | {type: 'setDescription'; description?: string}
   | {type: 'revalidateAll'; currentBalance: bigint; userAddress: string}
 
-function handleTransferAction(
-  state: ControlState,
-  action: TransferActrion,
-): ControlState {
-  switch (action.type) {
-    case 'setAmount': {
-      const thisProp = 'amount'
+export const handleTransferAction =
+  (wallet: UniWallet) =>
+  (state: ControlState, action: TransferActrion): ControlState => {
+    switch (action.type) {
+      case 'setAmount': {
+        const thisProp = 'amount'
 
-      if (action.amount === undefined || action.amount <= 0) {
+        if (action.amount === undefined || action.amount <= 0) {
+          return {
+            ...state,
+            [thisProp]: {
+              value: action.amount,
+              error: 'invalid',
+            },
+          }
+        }
+
+        if (action.amount > action.currentBalance) {
+          return {
+            ...state,
+            [thisProp]: {
+              value: action.amount,
+              error: 'lowBalance',
+            },
+          }
+        }
+
         return {
           ...state,
           [thisProp]: {
             value: action.amount,
-            error: 'invalid',
           },
         }
       }
-
-      if (action.amount > action.currentBalance) {
-        return {
-          ...state,
-          [thisProp]: {
-            value: action.amount,
-            error: 'lowBalance',
-          },
+      case 'setAddress': {
+        const thisProp = 'address'
+        const validateAddress =
+          wallet.walletType === WalletType.F1R3CAP
+            ? verifyRevAddr
+            : (address: string) => isAddress(address, {strict: false})
+        if (
+          action.address === undefined ||
+          action.address === '' ||
+          !validateAddress(action.address)
+        ) {
+          return {
+            ...state,
+            [thisProp]: {
+              value: action.address,
+              error: 'invalid',
+            },
+          }
         }
-      }
 
-      return {
-        ...state,
-        [thisProp]: {
-          value: action.amount,
-        },
-      }
-    }
-    case 'setAddress': {
-      const thisProp = 'address'
-      if (
-        action.address === undefined ||
-        action.address === '' ||
-        !verifyRevAddr(action.address)
-      ) {
-        return {
-          ...state,
-          [thisProp]: {
-            value: action.address,
-            error: 'invalid',
-          },
+        if (action.address === action.userAddress) {
+          return {
+            ...state,
+            [thisProp]: {
+              value: action.address,
+              error: 'sameAddress',
+            },
+          }
         }
-      }
 
-      if (action.address === action.userAddress) {
         return {
           ...state,
           [thisProp]: {
             value: action.address,
-            error: 'sameAddress',
           },
         }
       }
-
-      return {
-        ...state,
-        [thisProp]: {
-          value: action.address,
-        },
+      case 'setDescription': {
+        const thisProp = 'description'
+        return {
+          ...state,
+          [thisProp]: {
+            value: action.description,
+          },
+        }
       }
-    }
-    case 'setDescription': {
-      const thisProp = 'description'
-      return {
-        ...state,
-        [thisProp]: {
-          value: action.description,
-        },
+      case 'revalidateAll': {
+        let newState = handleTransferAction(wallet)(state, {
+          type: 'setAmount',
+          amount: state.amount.value,
+          currentBalance: action.currentBalance,
+        })
+
+        newState = handleTransferAction(wallet)(newState, {
+          type: 'setAddress',
+          address: state.address.value,
+          userAddress: action.userAddress,
+        })
+
+        return handleTransferAction(wallet)(newState, {
+          type: 'setDescription',
+          description: state.description.value,
+        })
       }
-    }
-    case 'revalidateAll': {
-      let newState = handleTransferAction(state, {
-        type: 'setAmount',
-        amount: state.amount.value,
-        currentBalance: action.currentBalance,
-      })
-
-      newState = handleTransferAction(newState, {
-        type: 'setAddress',
-        address: state.address.value,
-        userAddress: action.userAddress,
-      })
-
-      return handleTransferAction(newState, {
-        type: 'setDescription',
-        description: state.description.value,
-      })
     }
   }
-}
 
 function formatErrorMsg(
   _: I18nContext['_'],

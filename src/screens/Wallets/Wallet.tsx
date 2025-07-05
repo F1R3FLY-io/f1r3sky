@@ -5,9 +5,15 @@ import {useLingui} from '@lingui/react'
 import {type RouteProp} from '@react-navigation/native'
 import {useRoute} from '@react-navigation/native'
 import {useNavigation} from '@react-navigation/native'
-import {createPublicClient, http} from 'viem'
+import {
+  createTestClient,
+  http,
+  isAddressEqual,
+  publicActions,
+  walletActions,
+} from 'viem'
 import {privateKeyToAccount} from 'viem/accounts'
-import {mainnet} from 'viem/chains'
+import {hardhat} from 'viem/chains'
 
 import {
   type CommonNavigatorParams,
@@ -70,22 +76,63 @@ export default function Component({}: NativeStackScreenProps<
         case WalletType.ETHERIUM:
           const account = privateKeyToAccount(wallet.privateKey)
 
-          const publicClient = createPublicClient({
-            chain: mainnet,
+          const publicClient = createTestClient({
+            account,
+            chain: hardhat,
+            mode: 'hardhat',
             transport: http(),
           })
+            .extend(publicActions)
+            .extend(walletActions)
 
           publicClient
             .getBalance({
               address: account.address,
             })
-            .then(balance => {
+            .then(async balance => {
+              const blockNumber = await publicClient.getBlockNumber()
+
+              const endBlock = blockNumber
+              const startBlock = endBlock - BigInt(1)
+              const transfers = []
+
+              for (let i = startBlock; i <= endBlock; i++) {
+                const block = await publicClient.getBlock({
+                  blockNumber: BigInt(i),
+                })
+
+                for (const hash of block.transactions) {
+                  const transaction = await publicClient.getTransaction({
+                    hash,
+                  })
+
+                  if (
+                    isAddressEqual(transaction.from, account.address) ||
+                    isAddressEqual(transaction.to!, account.address)
+                  ) {
+                    transfers.push({
+                      id: transaction.hash,
+                      direction: isAddressEqual(
+                        transaction.from,
+                        account.address,
+                      )
+                        ? 'outgoing'
+                        : 'incoming',
+                      to_address: transaction.to!,
+                      cost: transaction.gas,
+                      amount: transaction.value,
+                      date: new Date(1000 * Number(block.timestamp)),
+                    })
+                  }
+                }
+              }
+
               setWalletState({
                 wallet,
                 balance,
                 requests: [],
                 boosts: [],
-                transfers: [],
+                transfers,
               } as WalletState)
               changeScreenState(SCREEN_STATE.LOADED)
             })
@@ -113,6 +160,9 @@ export default function Component({}: NativeStackScreenProps<
     )
   } else if (undefined !== walletState) {
     let content
+
+    const coinName: string =
+      walletState.wallet.walletType === WalletType.ETHERIUM ? 'WEI' : 'F1R3CAP'
 
     content = (
       <>
@@ -212,7 +262,7 @@ export default function Component({}: NativeStackScreenProps<
                 <Layout.Header.TitleText>
                   {walletState?.balance.toString()}
                 </Layout.Header.TitleText>
-                <Text style={[a.text_xs, a.pb_xs]}>F1R3CAP</Text>
+                <Text style={[a.text_xs, a.pb_xs]}>{coinName}</Text>
               </View>
               <WalletBalanceGraph
                 balance={walletState?.balance ?? 0n}
