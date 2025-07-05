@@ -1,13 +1,13 @@
 import {Fragment, useMemo, useState} from 'react'
 import {TouchableOpacity, View} from 'react-native'
-import {To} from '@react-navigation/native/lib/typescript/src/useLinkTo'
+import {type To} from '@react-navigation/native/lib/typescript/src/useLinkTo'
 
-import {AllNavigatorParams} from '#/lib/routes/types'
+import {type AllNavigatorParams} from '#/lib/routes/types'
 import {sanitizeHandle} from '#/lib/strings/handles'
 import {
-  WalletBoost,
-  WalletRequest,
-  WalletTransfer,
+  type WalletBoost,
+  type WalletRequest,
+  type WalletTransfer,
 } from '#/state/queries/wallet'
 import {PagerWithHeader} from '#/view/com/pager/PagerWithHeader'
 import {atoms as a, useTheme} from '#/alf'
