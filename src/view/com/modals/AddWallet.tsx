@@ -79,7 +79,7 @@ export function Component() {
         }
       })
       .then(wallet => {
-        let position = addWallet(wallet)
+        let position = addWallet(wallet) || 0
         console.log(position)
         Toast.show(_(msg`Walled added successfully!`))
         navigation.navigate('Wallet', {position})

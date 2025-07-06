@@ -311,14 +311,10 @@ export default function Component({}: NativeStackScreenProps<
       </>
     )
 
-    const goToWalletsScreen = () => {
-      navigation.navigate('Wallets')
-    }
-
     return (
       <Layout.Screen>
         <Layout.Header.Outer>
-          <Layout.Header.BackButton onPress={goToWalletsScreen} />
+          <Layout.Header.BackButton />
           <Layout.Header.Content align="left">
             <Layout.Header.TitleText>
               <Trans>
