@@ -184,11 +184,15 @@ export function Component({currentBalance, wallet}: Props) {
       state.address.value !== undefined &&
       state.address.error === undefined
     ) {
-      await submit({
-        amount: state.amount.value,
-        toAddress: state.address.value,
-        description: state.description.value,
-      })
+      try {
+        await submit({
+          amount: state.amount.value,
+          toAddress: state.address.value,
+          description: state.description.value,
+        })
+      } catch {
+        Toast.show(_(msg`Transfer failed`), 'clipboard-check')
+      }
       closeModal()
       Toast.show(_(msg`Transfer submitted`), 'clipboard-check')
     } else {
@@ -261,10 +265,12 @@ export const handleTransferAction =
       }
       case 'setAddress': {
         const thisProp = 'address'
+
         const validateAddress =
           wallet.walletType === WalletType.F1R3CAP
             ? verifyRevAddr
             : (address: string) => isAddress(address, {strict: false})
+
         if (
           action.address === undefined ||
           action.address === '' ||

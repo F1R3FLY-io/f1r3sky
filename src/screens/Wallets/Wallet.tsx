@@ -311,23 +311,23 @@ export default function Component({}: NativeStackScreenProps<
       </>
     )
 
+    const goToWalletsScreen = () => {
+      navigation.navigate('Wallets')
+    }
+
     return (
       <Layout.Screen>
-        {
-          <>
-            <Layout.Header.Outer>
-              <Layout.Header.BackButton />
-              <Layout.Header.Content align="left">
-                <Layout.Header.TitleText>
-                  <Trans>
-                    Wallet #<WalletAddress value={walletState.wallet.address} />
-                  </Trans>
-                </Layout.Header.TitleText>
-              </Layout.Header.Content>
-            </Layout.Header.Outer>
-            <Layout.Content>{content}</Layout.Content>
-          </>
-        }
+        <Layout.Header.Outer>
+          <Layout.Header.BackButton onPress={goToWalletsScreen} />
+          <Layout.Header.Content align="left">
+            <Layout.Header.TitleText>
+              <Trans>
+                Wallet #<WalletAddress value={walletState.wallet.address} />
+              </Trans>
+            </Layout.Header.TitleText>
+          </Layout.Header.Content>
+        </Layout.Header.Outer>
+        <Layout.Content>{content}</Layout.Content>
       </Layout.Screen>
     )
   }

@@ -16,7 +16,7 @@ import * as Layout from '#/components/Layout'
 import {Text} from '#/components/Typography'
 import {WalletAddress} from '#/components/WalletAddress'
 
-export default function WalletsSelection({}: NativeStackScreenProps<
+export default function Wallets({}: NativeStackScreenProps<
   CommonNavigatorParams,
   'Wallets'
 >) {
@@ -32,7 +32,6 @@ export default function WalletsSelection({}: NativeStackScreenProps<
   return (
     <Layout.Screen>
       <Layout.Header.Outer>
-        <Layout.Header.BackButton />
         <Layout.Header.Content align="left">
           <Layout.Header.TitleText>
             <Trans>Wallets</Trans>
