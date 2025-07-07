@@ -7,7 +7,7 @@ import {useNavigation} from '@react-navigation/native'
 import {usePalette} from '#/lib/hooks/usePalette'
 import {type NavigationProp} from '#/lib/routes/types'
 import {
-  generateKeyAndAddress,
+  generatePrivateKey,
   getAddressFromPublicKey,
   getPublicKeyFromPrivateKey,
   saveWalletToFS,
@@ -33,7 +33,7 @@ export function Component({}: Props) {
 
   const navigation = useNavigation<NavigationProp>()
   const createWallet = useCallback(async () => {
-    const privateKey = generateKeyAndAddress() as Uint8Array
+    const privateKey = generatePrivateKey() as Uint8Array
     const publicKey = getPublicKeyFromPrivateKey(privateKey)
     const address = getAddressFromPublicKey(publicKey)
     const saveRes = await saveWalletToFS(

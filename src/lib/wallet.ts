@@ -93,7 +93,7 @@ export function fetchF1r3SkyWalletState(
     .then(returnCallback)
 }
 
-export function generateKeyAndAddress(): WalletKey {
+export function generatePrivateKey(): WalletKey {
   return secp256k1.utils.randomPrivateKey()
 }
 
