@@ -33,11 +33,11 @@ export type WalletsStateContext = {
 const wallets: UniWallet[] = []
 
 function getByIndex(index: number): UniWallet | undefined {
-  return wallets.at(index)
+  return wallets.at(index - 1)
 }
 
 function addWallet(key: UniWallet): number {
-  return wallets.push(key) - 1
+  return wallets.push(key)
 }
 
 function getAll(): UniWallet[] {

@@ -62,7 +62,7 @@ export default function Component({}: NativeStackScreenProps<
   )
 
   useEffect(() => {
-    const wallet = getByIndex(+params.position - 1)
+    const wallet = getByIndex(+params.position)
 
     if (undefined !== wallet) {
       switch (wallet?.walletType) {
@@ -93,7 +93,7 @@ export default function Component({}: NativeStackScreenProps<
               const blockNumber = await publicClient.getBlockNumber()
 
               const endBlock = blockNumber
-              const startBlock = endBlock - BigInt(1)
+              const startBlock = endBlock === 0n ? 0n : endBlock - BigInt(1)
               const transfers = []
 
               for (let i = startBlock; i <= endBlock; i++) {
