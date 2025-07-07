@@ -94,7 +94,7 @@ export function useTransferMutation(wallet: FireCAPWallet | EtheriumWallet) {
           Authorization: `Bearer ${agent.session?.accessJwt}`,
         }),
         body: JSON.stringify({
-          from: getPublicKeyFromPrivateKey(wallet.privateKey),
+          from: wallet.address,
           to: toAddress,
           amount: amount.toString(),
           description,
@@ -126,7 +126,7 @@ export function useTransferMutation(wallet: FireCAPWallet | EtheriumWallet) {
   }
 
   async function sendByEther({amount, toAddress}: TransferProps) {
-    const account = privateKeyToAccount(wallet.privateKey)
+    const account = privateKeyToAccount(wallet.privateKey as Hex)
 
     const publicClient = createTestClient({
       account,
