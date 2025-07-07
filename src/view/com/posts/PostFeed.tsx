@@ -393,6 +393,7 @@ let PostFeed = ({
           for (const page of data.pages) {
             for (const slice of page.slices) {
               const item = slice.items.find(
+                // eslint-disable-next-line @typescript-eslint/no-shadow
                 item => item.uri === slice.feedPostUri,
               )
               if (item && AppBskyEmbedVideo.isView(item.post.embed)) {

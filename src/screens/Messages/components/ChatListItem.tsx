@@ -135,10 +135,11 @@ function ChatListItemReady({
 
   const {lastMessage, lastMessageSentAt, latestReportableMessage} =
     useMemo(() => {
+      // eslint-disable-next-line @typescript-eslint/no-shadow
       let lastMessage = _(msg`No messages yet`)
-
+      // eslint-disable-next-line @typescript-eslint/no-shadow
       let lastMessageSentAt: string | null = null
-
+      // eslint-disable-next-line @typescript-eslint/no-shadow
       let latestReportableMessage: ChatBskyConvoDefs.MessageView | undefined
 
       if (ChatBskyConvoDefs.isMessageView(convo.lastMessage)) {

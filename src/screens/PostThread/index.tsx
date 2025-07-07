@@ -55,6 +55,7 @@ export function PostThread({uri}: {uri: string}) {
    */
   const thread = usePostThread({anchor: uri})
   const {anchor, hasParents} = useMemo(() => {
+    // eslint-disable-next-line @typescript-eslint/no-shadow
     let hasParents = false
     for (const item of thread.data.items) {
       if (item.type === 'threadPost' && item.depth === 0) {

@@ -1,8 +1,4 @@
-import {
-  type AtpSessionData,
-  type AtpSessionEvent,
-  BskyAgent,
-} from '@atproto/api'
+import {AtpSessionData, AtpSessionEvent, BskyAgent} from '@atproto/api'
 import {TID} from '@atproto/common-web'
 
 import {networkRetry} from '#/lib/async/retry'
@@ -23,7 +19,7 @@ import {
   configureModerationForAccount,
   configureModerationForGuest,
 } from './moderation'
-import {type SessionAccount} from './types'
+import {SessionAccount} from './types'
 import {isSessionExpired, isSignupQueued} from './util'
 
 export function createPublicAgent() {
