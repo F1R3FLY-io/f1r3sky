@@ -30,27 +30,29 @@ export type WalletsStateContext = {
   getAll: () => UniWallet[]
 }
 
-const wallets: UniWallet[] = []
-
-function getByIndex(index: number): UniWallet | undefined {
-  return wallets.at(index - 1)
-}
-
-function addWallet(key: UniWallet): number {
-  return wallets.push(key)
-}
-
-function getAll(): UniWallet[] {
-  return [...wallets]
-}
-
 const WalletsContext = React.createContext<WalletsStateContext>({
-  addWallet,
-  getByIndex,
-  getAll,
+  addWallet: (_key: UniWallet) => 0,
+  getByIndex: () => undefined,
+  getAll: () => [],
 })
 
 export function Provider({children}: React.PropsWithChildren<{}>) {
+  const [wallets, setWallets] = React.useState<UniWallet[]>([])
+
+  function getByIndex(index: number): UniWallet | undefined {
+    return wallets.at(index - 1)
+  }
+
+  function addWallet(key: UniWallet): number {
+    const newWallets = [...wallets, key]
+    setWallets(newWallets)
+    return newWallets.length - 1
+  }
+
+  function getAll(): UniWallet[] {
+    return wallets
+  }
+
   return (
     <WalletsContext.Provider
       value={{
