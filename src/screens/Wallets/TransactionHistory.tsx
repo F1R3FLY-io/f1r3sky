@@ -358,7 +358,7 @@ function useRequestTableDate(
   )
 }
 
-const TRANSFER_COLUMNS = ['ID', 'Date', 'Amount', 'Receiver'] as const
+const TRANSFER_COLUMNS = ['ID', 'Date', 'Amount', 'Address'] as const
 type TransferColumn = (typeof TRANSFER_COLUMNS)[number]
 
 function useTransferTableDate(
