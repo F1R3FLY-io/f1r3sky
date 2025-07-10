@@ -16,7 +16,7 @@ import * as Layout from '#/components/Layout'
 import {Text} from '#/components/Typography'
 import {WalletAddress} from '#/components/WalletAddress'
 
-export default function Wallets({}: NativeStackScreenProps<
+export function Wallets({}: NativeStackScreenProps<
   CommonNavigatorParams,
   'Wallets'
 >) {

@@ -30,7 +30,7 @@ type TransactionHistoryProps = {
   transfers: WalletTransfer[]
 }
 
-export default function TransactionHistory({
+export function TransactionHistory({
   requests,
   boosts,
   transfers,

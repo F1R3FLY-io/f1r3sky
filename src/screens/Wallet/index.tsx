@@ -32,10 +32,10 @@ import {Divider} from '#/components/Divider'
 import {Download_Stroke2_Corner0_Rounded as DownloadIcon} from '#/components/icons/Download'
 import {Copy, Transfer, WalletTranscation} from '#/components/icons/Wallet'
 import * as Layout from '#/components/Layout'
+import {TransactionHistory} from '#/components/TransactionHistory'
 import {Text} from '#/components/Typography'
 import {WalletAddress} from '#/components/WalletAddress'
-import TransactionHistory from './TransactionHistory'
-import WalletBalanceGraph from './WalletBalanceGraph'
+import WalletBalanceGraph from '../Wallets/WalletBalanceGraph'
 
 enum SCREEN_STATE {
   LOADING,
@@ -44,7 +44,7 @@ enum SCREEN_STATE {
   ERROR,
 }
 
-export default function Component({}: NativeStackScreenProps<
+export function Wallet({}: NativeStackScreenProps<
   CommonNavigatorParams,
   'Wallet'
 >) {
