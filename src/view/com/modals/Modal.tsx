@@ -49,52 +49,38 @@ export function ModalsContainer() {
 
   let snapPoints: (string | number)[] = DEFAULT_SNAPPOINTS
   let element
-
-  console.log(activeModal?.name)
-
-  switch (activeModal?.name) {
-    case 'create-or-edit-list':
-      snapPoints = CreateOrEditListModal.snapPoints
-      element = <CreateOrEditListModal.Component {...activeModal} />
-      break
-    case 'user-add-remove-lists':
-      snapPoints = UserAddRemoveListsModal.snapPoints
-      element = <UserAddRemoveListsModal.Component {...activeModal} />
-      break
-    case 'delete-account':
-      snapPoints = DeleteAccountModal.snapPoints
-      element = <DeleteAccountModal.Component />
-      break
-    case 'invite-codes':
-      snapPoints = InviteCodesModal.snapPoints
-      element = <InviteCodesModal.Component />
-      break
-    case 'content-languages-settings':
-      snapPoints = ContentLanguagesSettingsModal.snapPoints
-      element = <ContentLanguagesSettingsModal.Component />
-      break
-    case 'post-languages-settings':
-      snapPoints = PostLanguagesSettingsModal.snapPoints
-      element = <PostLanguagesSettingsModal.Component />
-      break
-    case 'change-password':
-      snapPoints = ChangePasswordModal.snapPoints
-      element = <ChangePasswordModal.Component />
-      break
-    case 'wallet-transfer':
-      snapPoints = WalletTransfer.snapPoints
-      element = <WalletTransfer.Component {...activeModal} />
-      break
-    case 'create-wallet':
-      snapPoints = CreateWallet.snapPoints
-      element = <CreateWallet.Component />
-      break
-    case 'add-wallet':
-      snapPoints = AddWallet.snapPoints
-      element = <AddWallet.Component />
-      break
-    default:
-      return null
+  if (activeModal?.name === 'create-or-edit-list') {
+    snapPoints = CreateOrEditListModal.snapPoints
+    element = <CreateOrEditListModal.Component {...activeModal} />
+  } else if (activeModal?.name === 'user-add-remove-lists') {
+    snapPoints = UserAddRemoveListsModal.snapPoints
+    element = <UserAddRemoveListsModal.Component {...activeModal} />
+  } else if (activeModal?.name === 'delete-account') {
+    snapPoints = DeleteAccountModal.snapPoints
+    element = <DeleteAccountModal.Component />
+  } else if (activeModal?.name === 'invite-codes') {
+    snapPoints = InviteCodesModal.snapPoints
+    element = <InviteCodesModal.Component />
+  } else if (activeModal?.name === 'content-languages-settings') {
+    snapPoints = ContentLanguagesSettingsModal.snapPoints
+    element = <ContentLanguagesSettingsModal.Component />
+  } else if (activeModal?.name === 'post-languages-settings') {
+    snapPoints = PostLanguagesSettingsModal.snapPoints
+    element = <PostLanguagesSettingsModal.Component />
+  } else if (activeModal?.name === 'change-password') {
+    snapPoints = ChangePasswordModal.snapPoints
+    element = <ChangePasswordModal.Component />
+  } else if (activeModal?.name === 'wallet-transfer') {
+    snapPoints = WalletTransfer.snapPoints
+    element = <WalletTransfer.Component {...activeModal} />
+  } else if (activeModal?.name === 'create-wallet') {
+    snapPoints = CreateWallet.snapPoints
+    element = <CreateWallet.Component />
+  } else if (activeModal?.name === 'add-wallet') {
+    snapPoints = AddWallet.snapPoints
+    element = <AddWallet.Component />
+  } else {
+    return null
   }
 
   if (snapPoints[0] === 'fullscreen') {

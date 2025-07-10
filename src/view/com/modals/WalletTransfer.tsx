@@ -30,11 +30,15 @@ export function Component({currentBalance, wallet}: Props) {
   const {_} = useLingui()
   const {closeModal} = useModalControls()
 
-  const [state, dispatch] = useReducer(handleTransferAction(wallet), {
-    amount: {},
-    address: {},
-    description: {},
-  })
+  const [state, dispatch] = useReducer(
+    (state: ControlState, action: TransferAction) =>
+      handleTransferAction(wallet, state, action),
+    {
+      amount: {},
+      address: {},
+      description: {},
+    },
+  )
 
   const error = formatErrorMsg(_, state)
 
@@ -190,11 +194,11 @@ export function Component({currentBalance, wallet}: Props) {
           toAddress: state.address.value,
           description: state.description.value,
         })
+        Toast.show(_(msg`Transfer submitted`), 'clipboard-check')
       } catch {
-        Toast.show(_(msg`Transfer failed`), 'clipboard-check')
+        Toast.show(_(msg`Transfer failed`), 'cloud-xmark')
       }
       closeModal()
-      Toast.show(_(msg`Transfer submitted`), 'clipboard-check')
     } else {
       dispatch({
         type: 'revalidateAll',
@@ -219,7 +223,7 @@ type ControlState = {
   }
 }
 
-type TransferActrion =
+type TransferAction =
   | {
       type: 'setAmount'
       amount?: bigint
@@ -229,108 +233,110 @@ type TransferActrion =
   | {type: 'setDescription'; description?: string}
   | {type: 'revalidateAll'; currentBalance: bigint; userAddress: string}
 
-export const handleTransferAction =
-  (wallet: UniWallet) =>
-  (state: ControlState, action: TransferActrion): ControlState => {
-    switch (action.type) {
-      case 'setAmount': {
-        const thisProp = 'amount'
+export const handleTransferAction = (
+  wallet: UniWallet,
+  state: ControlState,
+  action: TransferAction,
+): ControlState => {
+  switch (action.type) {
+    case 'setAmount': {
+      const thisProp = 'amount'
 
-        if (action.amount === undefined || action.amount <= 0) {
-          return {
-            ...state,
-            [thisProp]: {
-              value: action.amount,
-              error: 'invalid',
-            },
-          }
-        }
-
-        if (action.amount > action.currentBalance) {
-          return {
-            ...state,
-            [thisProp]: {
-              value: action.amount,
-              error: 'lowBalance',
-            },
-          }
-        }
-
+      if (action.amount === undefined || action.amount <= 0) {
         return {
           ...state,
           [thisProp]: {
             value: action.amount,
+            error: 'invalid',
           },
         }
       }
-      case 'setAddress': {
-        const thisProp = 'address'
 
-        const validateAddress =
-          wallet.walletType === WalletType.F1R3CAP
-            ? verifyRevAddr
-            : (address: string) => isAddress(address, {strict: false})
-
-        if (
-          action.address === undefined ||
-          action.address === '' ||
-          !validateAddress(action.address)
-        ) {
-          return {
-            ...state,
-            [thisProp]: {
-              value: action.address,
-              error: 'invalid',
-            },
-          }
+      if (action.amount > action.currentBalance) {
+        return {
+          ...state,
+          [thisProp]: {
+            value: action.amount,
+            error: 'lowBalance',
+          },
         }
+      }
 
-        if (action.address === action.userAddress) {
-          return {
-            ...state,
-            [thisProp]: {
-              value: action.address,
-              error: 'sameAddress',
-            },
-          }
-        }
+      return {
+        ...state,
+        [thisProp]: {
+          value: action.amount,
+        },
+      }
+    }
+    case 'setAddress': {
+      const thisProp = 'address'
 
+      const validateAddress =
+        wallet.walletType === WalletType.F1R3CAP
+          ? verifyRevAddr
+          : (address: string) => isAddress(address, {strict: false})
+
+      if (
+        action.address === undefined ||
+        action.address === '' ||
+        !validateAddress(action.address)
+      ) {
         return {
           ...state,
           [thisProp]: {
             value: action.address,
+            error: 'invalid',
           },
         }
       }
-      case 'setDescription': {
-        const thisProp = 'description'
+
+      if (action.address === action.userAddress) {
         return {
           ...state,
           [thisProp]: {
-            value: action.description,
+            value: action.address,
+            error: 'sameAddress',
           },
         }
       }
-      case 'revalidateAll': {
-        let newState = handleTransferAction(wallet)(state, {
-          type: 'setAmount',
-          amount: state.amount.value,
-          currentBalance: action.currentBalance,
-        })
 
-        newState = handleTransferAction(wallet)(newState, {
-          type: 'setAddress',
-          address: state.address.value,
-          userAddress: action.userAddress,
-        })
-
-        return handleTransferAction(wallet)(newState, {
-          type: 'setDescription',
-          description: state.description.value,
-        })
+      return {
+        ...state,
+        [thisProp]: {
+          value: action.address,
+        },
       }
     }
+    case 'setDescription': {
+      const thisProp = 'description'
+      return {
+        ...state,
+        [thisProp]: {
+          value: action.description,
+        },
+      }
+    }
+    case 'revalidateAll': {
+      let newState = handleTransferAction(wallet, state, {
+        type: 'setAmount',
+        amount: state.amount.value,
+        currentBalance: action.currentBalance,
+      })
+
+      newState = handleTransferAction(wallet, newState, {
+        type: 'setAddress',
+        address: state.address.value,
+        userAddress: action.userAddress,
+      })
+
+      return handleTransferAction(wallet, newState, {
+        type: 'setDescription',
+        description: state.description.value,
+      })
+    }
   }
+}
 
 function formatErrorMsg(
   _: I18nContext['_'],

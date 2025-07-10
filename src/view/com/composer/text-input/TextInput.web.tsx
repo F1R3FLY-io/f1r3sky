@@ -45,14 +45,12 @@ interface TextInputProps {
   webForceMinHeight: boolean
   hasRightPadding: boolean
   isActive: boolean
-  value: string
   setRichText: (v: RichText | ((v: RichText) => RichText)) => void
   onPhotoPasted: (uri: string) => void
   onPressPublish: (richtext: RichText) => void
   onNewLink: (uri: string) => void
   onError: (err: string) => void
   onFocus: () => void
-  onChangeText: (text: string) => void
 }
 
 export const TextInput = React.forwardRef(function TextInputImpl(

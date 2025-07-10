@@ -3,20 +3,11 @@ import {secp256k1} from '@noble/curves/secp256k1'
 import {base16, base58, base64} from '@scure/base'
 import {blake2b, blake2bHex} from 'blakejs'
 import {keccak256} from 'js-sha3'
-import {sha256} from 'js-sha256'
 import {type Hex} from 'viem'
-import {z} from 'zod'
 
 import {FIREFLY_API_URL} from '#/state/queries/wallet'
 import {type FireCAPWallet, type WalletKey, WalletType} from '#/state/wallets'
 import {saveToDevice} from './media/manip'
-
-export const WalletSerialized = z.object({
-  revAddress: z.string(),
-  privateKey: z.string(),
-})
-
-export type WalletSerialized = z.infer<typeof WalletSerialized>
 
 export const TOKENS = {
   firecap: {
@@ -38,12 +29,6 @@ export function verifyRevAddr(revAddr: string): boolean {
   } catch {
     return false
   }
-}
-
-export function hashAddress(address: string): number {
-  const hash = sha256(address).slice(0, 12)
-  const number = parseInt(hash, 16)
-  return (number % 1000000) + 1
 }
 
 export function getAddressFromPublicKey(publicKey: Uint8Array): string {
@@ -84,11 +69,7 @@ export function fetchF1r3SkyWalletState(
     getPublicKeyFromPrivateKey(wallet.privateKey),
   )
 
-  fetch(`${FIREFLY_API_URL}/api/wallets/${address}/state`, {
-    headers: new Headers({
-      Authorization: `Bearer ${agent.session?.accessJwt}`,
-    }),
-  })
+  fetch(`${FIREFLY_API_URL}/api/wallets/${address}/state`)
     .then(req => req.json())
     .then(returnCallback)
 }

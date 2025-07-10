@@ -10,8 +10,7 @@ import {privateKeyToAccount} from 'viem/accounts'
 import {hardhat} from 'viem/chains'
 import {z} from 'zod'
 
-import {getPublicKeyFromPrivateKey, signPayload} from '#/lib/wallet'
-import {useAgent} from '#/state/session'
+import {signPayload} from '#/lib/wallet'
 import {type EtheriumWallet, type FireCAPWallet, WalletType} from '../wallets'
 
 export const FIREFLY_API_URL = process.env.FIREFLY_API_URL
@@ -78,7 +77,6 @@ export type TransferContract = z.infer<typeof TransferContract>
 
 export function useTransferMutation(wallet: FireCAPWallet | EtheriumWallet) {
   const queryClient = useQueryClient()
-  const agent = useAgent()
 
   async function sendByF1r3Cap({
     amount,
@@ -91,7 +89,6 @@ export function useTransferMutation(wallet: FireCAPWallet | EtheriumWallet) {
         method: 'POST',
         headers: new Headers({
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${agent.session?.accessJwt}`,
         }),
         body: JSON.stringify({
           from: wallet.address,
@@ -114,7 +111,6 @@ export function useTransferMutation(wallet: FireCAPWallet | EtheriumWallet) {
       method: 'POST',
       headers: new Headers({
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${agent.session?.accessJwt}`,
       }),
       body: JSON.stringify({
         contract: Array.from(payload),
@@ -137,12 +133,10 @@ export function useTransferMutation(wallet: FireCAPWallet | EtheriumWallet) {
       .extend(publicActions)
       .extend(walletActions)
 
-    let hash = await publicClient.sendTransaction({
+    await publicClient.sendTransaction({
       to: toAddress as Hex,
       value: amount,
     })
-
-    console.log(hash)
   }
 
   return useMutation({
@@ -156,10 +150,7 @@ export function useTransferMutation(wallet: FireCAPWallet | EtheriumWallet) {
     },
     onSuccess: async (_, props) => {
       await queryClient.invalidateQueries({
-        queryKey: [
-          'wallet-state',
-          getPublicKeyFromPrivateKey(wallet.privateKey),
-        ],
+        queryKey: ['wallet-state', wallet.address],
       })
       await queryClient.invalidateQueries({
         queryKey: ['wallet-state', props.toAddress],
