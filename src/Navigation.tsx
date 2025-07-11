@@ -102,8 +102,8 @@ import {
 import {Wizard} from '#/screens/StarterPack/Wizard'
 import TopicScreen from '#/screens/Topic'
 import {VideoFeed} from '#/screens/VideoFeed'
-import Wallet from '#/screens/Wallets/Wallet'
-import Wallets from '#/screens/Wallets/WalletsSelection'
+import {Wallet} from '#/screens/Wallet'
+import {Wallets} from '#/screens/Wallets'
 import {type Theme, useTheme} from '#/alf'
 import {
   EmailDialogScreenID,

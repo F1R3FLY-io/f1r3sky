@@ -1,13 +1,13 @@
 import {Fragment, useMemo, useState} from 'react'
 import {TouchableOpacity, View} from 'react-native'
-import {To} from '@react-navigation/native/lib/typescript/src/useLinkTo'
+import {type To} from '@react-navigation/native/lib/typescript/src/useLinkTo'
 
-import {AllNavigatorParams} from '#/lib/routes/types'
+import {type AllNavigatorParams} from '#/lib/routes/types'
 import {sanitizeHandle} from '#/lib/strings/handles'
 import {
-  WalletBoost,
-  WalletRequest,
-  WalletTransfer,
+  type WalletBoost,
+  type WalletRequest,
+  type WalletTransfer,
 } from '#/state/queries/wallet'
 import {PagerWithHeader} from '#/view/com/pager/PagerWithHeader'
 import {atoms as a, useTheme} from '#/alf'
@@ -30,7 +30,7 @@ type TransactionHistoryProps = {
   transfers: WalletTransfer[]
 }
 
-export default function TransactionHistory({
+export function TransactionHistory({
   requests,
   boosts,
   transfers,
@@ -358,7 +358,7 @@ function useRequestTableDate(
   )
 }
 
-const TRANSFER_COLUMNS = ['ID', 'Date', 'Amount', 'Receiver'] as const
+const TRANSFER_COLUMNS = ['ID', 'Date', 'Amount', 'Address'] as const
 type TransferColumn = (typeof TRANSFER_COLUMNS)[number]
 
 function useTransferTableDate(

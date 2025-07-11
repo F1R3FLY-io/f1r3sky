@@ -2,7 +2,7 @@ import React from 'react'
 import {type AppBskyGraphDefs} from '@atproto/api'
 
 import {useNonReactiveCallback} from '#/lib/hooks/useNonReactiveCallback'
-import {type Wallet} from '../wallets'
+import {type UniWallet} from '../wallets'
 
 export interface CreateOrEditListModal {
   name: 'create-or-edit-list'
@@ -47,7 +47,7 @@ export interface ChangePasswordModal {
 export interface WalletTransfer {
   name: 'wallet-transfer'
   currentBalance: bigint
-  wallet: Wallet
+  wallet: UniWallet
 }
 
 export interface CreateWallet {

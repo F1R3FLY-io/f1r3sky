@@ -4,13 +4,22 @@ import * as DocumentPicker from 'expo-document-picker'
 import {msg, Trans} from '@lingui/macro'
 import {useLingui} from '@lingui/react'
 import {useNavigation} from '@react-navigation/native'
+import {base64} from '@scure/base'
+import {type Hex} from 'viem'
+import {privateKeyToAccount} from 'viem/accounts'
 
 import {usePalette} from '#/lib/hooks/usePalette'
 import {downloadDocument} from '#/lib/media/manip'
-import {NavigationProp} from '#/lib/routes/types'
-import {parseWallet} from '#/lib/wallet'
+import {type NavigationProp} from '#/lib/routes/types'
+import {getAddressFromPublicKey, getPublicKeyFromPrivateKey} from '#/lib/wallet'
 import {useModalControls} from '#/state/modals'
-import {useWallets} from '#/state/wallets'
+import {
+  type EtheriumWallet,
+  type FireCAPWallet,
+  useWallets,
+  type WalletKey,
+  WalletType,
+} from '#/state/wallets'
 import * as Toast from '#/view/com/util/Toast'
 import {atoms as a, useTheme} from '#/alf'
 import {Text} from '#/components/Typography'
@@ -19,19 +28,17 @@ import {ScrollView} from './util'
 
 export const snapPoints = ['90%']
 
-export type Props = {}
-
-export function Component({}: Props) {
+export function Component() {
   const t = useTheme()
   const pal = usePalette('default')
   const {_} = useLingui()
   const {closeModal} = useModalControls()
-  const {wallets, addWallet} = useWallets()
+  const {addWallet} = useWallets()
 
   const navigation = useNavigation<NavigationProp>()
   const pickWalletKey = useCallback(async () => {
     const result = await DocumentPicker.getDocumentAsync({
-      type: 'application/json',
+      type: 'application/x-pem-file',
       copyToCacheDirectory: true,
       multiple: false,
     })
@@ -40,18 +47,47 @@ export function Component({}: Props) {
       return
     }
 
-    const content = await downloadDocument(result.assets[0])
-    const wallet = parseWallet(content)
+    await downloadDocument(result.assets[0])
+      .then(content => {
+        const isFireCAPKey = content.includes('BEGIN EC PRIVATE KEY')
+        if (isFireCAPKey) {
+          const encodedKey = content
+            .replace('-----BEGIN EC PRIVATE KEY-----', '')
+            .replace('-----END EC PRIVATE KEY-----', '')
+            .trim()
 
-    if (wallet === undefined) {
-      Toast.show(_(msg`Failed to load file!`))
-      return
-    }
+          const privateKey = base64.decode(encodedKey) as Uint8Array
+          const publicKey = getPublicKeyFromPrivateKey(privateKey)
+          const address = getAddressFromPublicKey(publicKey)
 
-    addWallet(wallet)
-    Toast.show(_(msg`Walled added successfully!`))
-    navigation.navigate('Wallet', {position: wallets.length + 1})
-  }, [_, addWallet, navigation, wallets.length])
+          return {
+            privateKey,
+            publicKey,
+            address,
+            walletType: WalletType.F1R3CAP,
+          } as FireCAPWallet
+        } else {
+          const prvKey = content as Hex
+          const client = privateKeyToAccount(prvKey)
+
+          return {
+            privateKey: content as WalletKey,
+            publicKey: client.publicKey,
+            address: client.address,
+            walletType: WalletType.ETHERIUM,
+          } as EtheriumWallet
+        }
+      })
+      .then(wallet => {
+        let position = addWallet(wallet)
+        Toast.show(_(msg`Walled added successfully!`))
+        navigation.navigate('Wallet', {position})
+      })
+      .catch(() => {
+        Toast.show(_(msg`Failed to load file with wallet's private key!`))
+        return
+      })
+  }, [_, addWallet, navigation])
 
   return (
     <SafeAreaView style={[pal.view, a.flex_1]}>

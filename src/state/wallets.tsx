@@ -1,29 +1,65 @@
 import React from 'react'
+import {type Hex} from 'viem'
 
-export type Wallet = {
-  key: Uint8Array
-  address: string
-  hash: number
+export enum WalletType {
+  F1R3CAP = 'F1R3CAP',
+  ETHERIUM = 'etherium',
 }
 
+export type WalletKey = Uint8Array | Hex
+
+export type FireCAPWallet = {
+  privateKey: Uint8Array
+  publicKey: Uint8Array
+  address: string
+  walletType: WalletType.F1R3CAP
+}
+
+export type EtheriumWallet = {
+  privateKey: Hex
+  publicKey: Hex
+  address: Hex
+  walletType: WalletType.ETHERIUM
+}
+
+export type UniWallet = FireCAPWallet | EtheriumWallet
+
 export type WalletsStateContext = {
-  wallets: Wallet[]
-  addWallet: (key: Wallet) => void
+  addWallet: (key: UniWallet) => number
+  getByIndex: (index: number) => UniWallet | undefined
+  getAll: () => UniWallet[]
 }
 
 const WalletsContext = React.createContext<WalletsStateContext>({
-  wallets: [],
-  addWallet: () => {},
+  addWallet: (_key: UniWallet) => 0,
+  getByIndex: () => undefined,
+  getAll: () => [],
 })
 
 export function Provider({children}: React.PropsWithChildren<{}>) {
-  const [state, dispatch] = React.useReducer(
-    (state: Wallet[], newWallet: Wallet) => [...state, newWallet],
-    [],
-  )
+  const [wallets, setWallets] = React.useState<UniWallet[]>([])
+
+  function getByIndex(index: number): UniWallet | undefined {
+    return wallets.at(index - 1)
+  }
+
+  function addWallet(key: UniWallet): number {
+    const newWallets = [...wallets, key]
+    setWallets(newWallets)
+    return newWallets.length - 1
+  }
+
+  function getAll(): UniWallet[] {
+    return wallets
+  }
 
   return (
-    <WalletsContext.Provider value={{wallets: state, addWallet: dispatch}}>
+    <WalletsContext.Provider
+      value={{
+        addWallet,
+        getByIndex,
+        getAll,
+      }}>
       {children}
     </WalletsContext.Provider>
   )

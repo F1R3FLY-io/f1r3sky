@@ -5,10 +5,15 @@ import {useLingui} from '@lingui/react'
 import {useNavigation} from '@react-navigation/native'
 
 import {usePalette} from '#/lib/hooks/usePalette'
-import {NavigationProp} from '#/lib/routes/types'
-import {generateKeyAndAddress, saveWalletToFS} from '#/lib/wallet'
+import {type NavigationProp} from '#/lib/routes/types'
+import {
+  generatePrivateKey,
+  getAddressFromPublicKey,
+  getPublicKeyFromPrivateKey,
+  saveWalletToFS,
+} from '#/lib/wallet'
 import {useModalControls} from '#/state/modals'
-import {useWallets} from '#/state/wallets'
+import {useWallets, WalletType} from '#/state/wallets'
 import * as Toast from '#/view/com/util/Toast'
 import {atoms as a, useTheme} from '#/alf'
 import {Text} from '#/components/Typography'
@@ -24,12 +29,18 @@ export function Component({}: Props) {
   const pal = usePalette('default')
   const {_} = useLingui()
   const {closeModal} = useModalControls()
-  const {wallets, addWallet} = useWallets()
+  const {addWallet} = useWallets()
 
   const navigation = useNavigation<NavigationProp>()
   const createWallet = useCallback(async () => {
-    const wallet = generateKeyAndAddress()
-    const saveRes = await saveWalletToFS(wallet)
+    const privateKey = generatePrivateKey() as Uint8Array
+    const publicKey = getPublicKeyFromPrivateKey(privateKey)
+    const address = getAddressFromPublicKey(publicKey)
+    const saveRes = await saveWalletToFS(
+      privateKey,
+      address,
+      WalletType.F1R3CAP,
+    )
 
     if (!saveRes) {
       Toast.show(_(msg`File saved successfully!`))
@@ -37,9 +48,14 @@ export function Component({}: Props) {
       Toast.show(_(msg`Failed to save file!`))
     }
 
-    addWallet(wallet)
-    navigation.navigate('Wallet', {position: wallets.length + 1})
-  }, [_, addWallet, navigation, wallets.length])
+    const position = addWallet({
+      privateKey,
+      address,
+      publicKey,
+      walletType: WalletType.F1R3CAP,
+    })
+    navigation.navigate('Wallet', {position})
+  }, [_, addWallet, navigation])
 
   return (
     <SafeAreaView style={[pal.view, a.flex_1]}>

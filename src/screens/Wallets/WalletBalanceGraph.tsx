@@ -6,9 +6,9 @@ import {msg, Trans} from '@lingui/macro'
 import {useLingui} from '@lingui/react'
 
 import {
-  WalletBoost,
-  WalletRequest,
-  WalletTransfer,
+  type WalletBoost,
+  type WalletRequest,
+  type WalletTransfer,
 } from '#/state/queries/wallet'
 import {atoms as a, useTheme} from '#/alf'
 import * as Toggle from '#/components/forms/Toggle'
