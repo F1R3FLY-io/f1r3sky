@@ -1,11 +1,10 @@
-import type AtpAgent from '@atproto/api'
 import {secp256k1} from '@noble/curves/secp256k1'
 import {base16, base58, base64} from '@scure/base'
 import {blake2b, blake2bHex} from 'blakejs'
 import {keccak256} from 'js-sha3'
 import {type Hex} from 'viem'
 
-import {FIREFLY_API_URL} from '#/state/queries/wallet'
+import {FIREFLY_API_URL, WalletState} from '#/state/queries/wallet'
 import {type FireCAPWallet, type WalletKey, WalletType} from '#/state/wallets'
 import {saveToDevice} from './media/manip'
 
@@ -60,18 +59,15 @@ export function generateAddressFromPrivateKey(
   return getAddressFromPublicKey(publicKey)
 }
 
-export function fetchF1r3SkyWalletState(
-  agent: AtpAgent,
-  wallet: FireCAPWallet,
-  returnCallback: (state: FireCAPWallet) => void,
-) {
+export async function fetchF1r3SkyWalletState(wallet: FireCAPWallet) {
   const address = getAddressFromPublicKey(
     getPublicKeyFromPrivateKey(wallet.privateKey),
   )
 
-  fetch(`${FIREFLY_API_URL}/api/wallets/${address}/state`)
-    .then(req => req.json())
-    .then(returnCallback)
+  const req = await fetch(`${FIREFLY_API_URL}/api/wallets/${address}/state`)
+  const body = await req.json()
+
+  return WalletState.parse(body)
 }
 
 export function generatePrivateKey(): WalletKey {

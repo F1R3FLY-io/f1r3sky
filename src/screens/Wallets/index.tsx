@@ -32,6 +32,7 @@ export function Wallets({}: NativeStackScreenProps<
   return (
     <Layout.Screen>
       <Layout.Header.Outer>
+        <Layout.Header.BackButton />
         <Layout.Header.Content align="left">
           <Layout.Header.TitleText>
             <Trans>Wallets</Trans>
@@ -47,10 +48,8 @@ export function Wallets({}: NativeStackScreenProps<
             <View style={[a.flex_row, a.align_center, a.p_2xl, a.gap_sm]}>
               <Wallet />
               <Text style={[a.text_md]}>
-                <Trans>
-                  Wallet #
-                  <WalletAddress value={wallet.address} />
-                </Trans>
+                <Trans>Wallet</Trans> #
+                <WalletAddress value={wallet.address} />
               </Text>
             </View>
           </PressableWithHover>
