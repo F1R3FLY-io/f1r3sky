@@ -89,7 +89,7 @@ export async function saveWalletToFS(
         content,
         'application/x-pem-file',
       )
-    case WalletType.ETHERIUM:
+    case WalletType.ETHEREUM:
       return await saveToDevice(`${address}.key`, key, 'application/x-pem-file')
   }
 }

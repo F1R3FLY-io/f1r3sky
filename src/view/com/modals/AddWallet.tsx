@@ -74,7 +74,7 @@ export function Component() {
             privateKey: content as WalletKey,
             publicKey: client.publicKey,
             address: client.address,
-            walletType: WalletType.ETHERIUM,
+            walletType: WalletType.ETHEREUM,
           } as EtheriumWallet
         }
       })

@@ -142,7 +142,7 @@ export function useTransferMutation(wallet: FireCAPWallet | EtheriumWallet) {
   return useMutation({
     mutationFn: async (props: TransferProps) => {
       switch (wallet.walletType) {
-        case WalletType.ETHERIUM:
+        case WalletType.ETHEREUM:
           return sendByEther(props)
         case WalletType.F1R3CAP:
           return sendByF1r3Cap(props)

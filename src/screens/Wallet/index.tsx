@@ -76,7 +76,7 @@ export function Wallet({}: NativeStackScreenProps<
           changeScreenState(SCREEN_STATE.LOADED)
         })
         break
-      case WalletType.ETHERIUM:
+      case WalletType.ETHEREUM:
         const account = privateKeyToAccount(wallet.privateKey)
 
         const publicClient = createTestClient({
@@ -213,7 +213,7 @@ export function Wallet({}: NativeStackScreenProps<
     )
   } else if (undefined !== walletState) {
     const coinName: string =
-      walletState.wallet.walletType === WalletType.ETHERIUM ? 'WEI' : 'F1R3CAP'
+      walletState.wallet.walletType === WalletType.ETHEREUM ? 'WEI' : 'F1R3CAP'
 
     return (
       <Layout.Screen>

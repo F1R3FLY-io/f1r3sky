@@ -45,7 +45,7 @@ export function Component({currentBalance, wallet}: Props) {
   const {mutateAsync: submit, isPending} = useTransferMutation(wallet)
 
   const currencySymbol =
-    wallet.walletType === WalletType.ETHERIUM ? 'WEI' : 'F1R3CAP'
+    wallet.walletType === WalletType.ETHEREUM ? 'WEI' : 'F1R3CAP'
 
   return (
     <SafeAreaView style={[pal.view, a.flex_1]}>
