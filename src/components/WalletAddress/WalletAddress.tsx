@@ -5,7 +5,7 @@ export type WalletAddressProps = {
 }
 
 export function WalletAddress(props: WalletAddressProps) {
-  const address = props.value.slice(0, 5) + '...' + props.value.slice(-5)
+  const address = props.value.slice(0, 10) + '...' + props.value.slice(-5)
 
   return <Text>{address}</Text>
 }

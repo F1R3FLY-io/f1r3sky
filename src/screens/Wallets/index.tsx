@@ -11,6 +11,7 @@ import {useModalControls} from '#/state/modals'
 import {useWallets} from '#/state/wallets'
 import {PressableWithHover} from '#/view/com/util/PressableWithHover'
 import {atoms as a, useTheme} from '#/alf'
+import {Divider} from '#/components/Divider'
 import {AddWallet, Wallet} from '#/components/icons/Wallet'
 import * as Layout from '#/components/Layout'
 import {Text} from '#/components/Typography'
@@ -54,6 +55,7 @@ export function Wallets({}: NativeStackScreenProps<
             </View>
           </PressableWithHover>
         ))}
+        <Divider />
         <PressableWithHover
           hoverStyle={t.atoms.bg_contrast_25}
           onPress={() => openModal({name: 'create-wallet'})}>

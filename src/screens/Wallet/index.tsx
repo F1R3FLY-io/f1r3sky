@@ -151,11 +151,65 @@ export function Wallet({}: NativeStackScreenProps<
 
   if (screenState === SCREEN_STATE.LOADING) {
     return (
-      <View>
-        <Text>
-          <Trans>LOADING...</Trans>
-        </Text>
-      </View>
+      <Layout.Screen>
+        <Layout.Header.Outer>
+          <Layout.Header.BackButton />
+          <Layout.Header.Content align="left">
+            <Layout.Header.TitleText>
+              <Trans>Wallet</Trans>
+            </Layout.Header.TitleText>
+          </Layout.Header.Content>
+        </Layout.Header.Outer>
+        <Layout.Content>
+          <View style={[a.p_3xl, a.gap_lg]}>
+            <Text style={[a.text_md, a.font_bold]}>
+              <Trans>Account</Trans>
+            </Text>
+            <View
+              style={[
+                a.p_2xl,
+                a.flex_col,
+                a.gap_2xl,
+                a.rounded_md,
+                t.atoms.bg_contrast_25,
+              ]}
+            />
+            <Divider />
+          </View>
+          <View style={[a.p_3xl, a.gap_lg]}>
+            <View style={[a.flex_row, a.align_center, a.gap_sm]}>
+              <WalletTranscation />
+              <Layout.Header.TitleText>
+                <Trans>Balance</Trans>
+              </Layout.Header.TitleText>
+            </View>
+            <View style={[a.rounded_md, t.atoms.bg_contrast_25]}>
+              <View style={[a.p_2xl]}>
+                <View style={[a.flex_row, a.align_end, a.gap_sm]} />
+                <View style={[a.self_start, a.pt_xl]} />
+              </View>
+            </View>
+          </View>
+          <Divider />
+          <View style={[a.p_3xl, a.gap_lg]}>
+            <View style={[a.flex_row, a.align_center, a.gap_sm]}>
+              <WalletTranscation />
+              <Layout.Header.TitleText>
+                <Trans>Transactions history</Trans>
+              </Layout.Header.TitleText>
+            </View>
+            <View
+              style={[
+                a.p_2xl,
+                a.flex_col,
+                a.gap_2xl,
+                a.rounded_md,
+                t.atoms.bg_contrast_25,
+              ]}
+            />
+          </View>
+        </Layout.Content>
+      </Layout.Screen>
     )
   } else if (undefined !== walletState) {
     const coinName: string =
@@ -167,9 +221,8 @@ export function Wallet({}: NativeStackScreenProps<
           <Layout.Header.BackButton />
           <Layout.Header.Content align="left">
             <Layout.Header.TitleText>
-              <Trans>
-                Wallet #<WalletAddress value={walletState.wallet.address} />
-              </Trans>
+              <Trans>Wallet</Trans>#
+              <WalletAddress value={walletState.wallet.address} />
             </Layout.Header.TitleText>
           </Layout.Header.Content>
         </Layout.Header.Outer>
