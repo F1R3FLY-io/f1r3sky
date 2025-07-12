@@ -538,7 +538,8 @@ msgstr ""
 #: src/screens/Settings/AccountSettings.tsx:48
 #: src/screens/Settings/Settings.tsx:166
 #: src/screens/Settings/Settings.tsx:169
-#: src/screens/Wallets/Wallet.tsx:60
+#: src/screens/Wallet/index.tsx:166
+#: src/screens/Wallet/index.tsx:232
 msgid "Account"
 msgstr ""
 
@@ -733,12 +734,12 @@ msgstr ""
 msgid "Add user to list"
 msgstr ""
 
-#: src/screens/Wallets/WalletsSelection.tsx:69
-#: src/view/com/modals/AddWallet.tsx:61
+#: src/screens/Wallets/index.tsx:75
+#: src/view/com/modals/AddWallet.tsx:97
 msgid "Add wallet"
 msgstr ""
 
-#: src/view/com/modals/WalletTransfer.tsx:120
+#: src/view/com/modals/WalletTransfer.tsx:128
 msgid "Add wallet address"
 msgstr ""
 
@@ -865,7 +866,7 @@ msgstr ""
 msgid "Alt text will be truncated. {MAX_ALT_TEXT, plural, other {Limit: {0} characters.}}"
 msgstr ""
 
-#: src/view/com/modals/WalletTransfer.tsx:71
+#: src/view/com/modals/WalletTransfer.tsx:79
 msgid "Amount"
 msgstr ""
 
@@ -1161,7 +1162,7 @@ msgstr ""
 msgid "Autoplay videos and GIFs"
 msgstr ""
 
-#: src/view/com/modals/WalletTransfer.tsx:108
+#: src/view/com/modals/WalletTransfer.tsx:116
 msgid "Available Balance"
 msgstr ""
 
@@ -1188,7 +1189,8 @@ msgstr ""
 msgid "Back to Chats"
 msgstr ""
 
-#: src/screens/Wallets/Wallet.tsx:123
+#: src/screens/Wallet/index.tsx:183
+#: src/screens/Wallet/index.tsx:317
 msgid "Balance"
 msgstr ""
 
@@ -1493,16 +1495,16 @@ msgstr ""
 #: src/view/com/composer/Composer.tsx:971
 #: src/view/com/composer/photos/EditImageDialog.web.tsx:43
 #: src/view/com/composer/photos/EditImageDialog.web.tsx:52
-#: src/view/com/modals/AddWallet.tsx:85
-#: src/view/com/modals/AddWallet.tsx:87
+#: src/view/com/modals/AddWallet.tsx:121
+#: src/view/com/modals/AddWallet.tsx:123
 #: src/view/com/modals/ChangePassword.tsx:279
 #: src/view/com/modals/ChangePassword.tsx:282
 #: src/view/com/modals/CreateOrEditList.tsx:333
-#: src/view/com/modals/CreateWallet.tsx:84
-#: src/view/com/modals/CreateWallet.tsx:86
+#: src/view/com/modals/CreateWallet.tsx:100
+#: src/view/com/modals/CreateWallet.tsx:102
 #: src/view/com/modals/CropImage.web.tsx:97
-#: src/view/com/modals/WalletTransfer.tsx:185
-#: src/view/com/modals/WalletTransfer.tsx:187
+#: src/view/com/modals/WalletTransfer.tsx:172
+#: src/view/com/modals/WalletTransfer.tsx:174
 #: src/view/shell/desktop/LeftNav.tsx:214
 msgid "Cancel"
 msgstr ""
@@ -1737,12 +1739,12 @@ msgstr ""
 msgid "Click here to update your email"
 msgstr ""
 
-#: src/view/com/modals/AddWallet.tsx:86
-#: src/view/com/modals/CreateWallet.tsx:85
+#: src/view/com/modals/AddWallet.tsx:122
+#: src/view/com/modals/CreateWallet.tsx:101
 msgid "Click to cancel"
 msgstr ""
 
-#: src/view/com/modals/WalletTransfer.tsx:186
+#: src/view/com/modals/WalletTransfer.tsx:173
 msgid "Click to cancel transfer"
 msgstr ""
 
@@ -1750,7 +1752,7 @@ msgstr ""
 msgid "Click to disable quote posts of this post."
 msgstr ""
 
-#: src/view/com/modals/CreateWallet.tsx:74
+#: src/view/com/modals/CreateWallet.tsx:90
 msgid "Click to download key and open wallet"
 msgstr ""
 
@@ -1758,7 +1760,7 @@ msgstr ""
 msgid "Click to enable quote posts of this post."
 msgstr ""
 
-#: src/view/com/modals/AddWallet.tsx:75
+#: src/view/com/modals/AddWallet.tsx:111
 msgid "Click to open file selection screen"
 msgstr ""
 
@@ -1770,7 +1772,7 @@ msgstr ""
 msgid "Click to retry failed message"
 msgstr ""
 
-#: src/view/com/modals/WalletTransfer.tsx:174
+#: src/view/com/modals/WalletTransfer.tsx:161
 msgid "Click to transfer transfer"
 msgstr ""
 
@@ -2263,7 +2265,7 @@ msgstr ""
 msgid "Create new account"
 msgstr ""
 
-#: src/screens/Wallets/WalletsSelection.tsx:59
+#: src/screens/Wallets/index.tsx:65
 msgid "Create new wallet"
 msgstr ""
 
@@ -2272,7 +2274,7 @@ msgstr ""
 msgid "Create report for {0}"
 msgstr ""
 
-#: src/view/com/modals/CreateWallet.tsx:49
+#: src/view/com/modals/CreateWallet.tsx:65
 msgid "Create wallet"
 msgstr ""
 
@@ -2352,7 +2354,7 @@ msgstr ""
 msgid "Default icons"
 msgstr ""
 
-#: src/screens/Wallets/Wallet.tsx:86
+#: src/screens/Wallet/index.tsx:303
 msgid "Default token"
 msgstr ""
 
@@ -2479,7 +2481,7 @@ msgstr ""
 msgid "Descriptive alt text"
 msgstr ""
 
-#: src/view/com/modals/WalletTransfer.tsx:337
+#: src/view/com/modals/WalletTransfer.tsx:358
 msgid "Destination address and source address are the same"
 msgstr ""
 
@@ -2704,11 +2706,11 @@ msgstr ""
 msgid "Download CAR file"
 msgstr ""
 
-#: src/view/com/modals/CreateWallet.tsx:75
+#: src/view/com/modals/CreateWallet.tsx:91
 msgid "Download key & Open wallet"
 msgstr ""
 
-#: src/view/com/modals/CreateWallet.tsx:73
+#: src/view/com/modals/CreateWallet.tsx:89
 msgid "Download key and open wallet"
 msgstr ""
 
@@ -3211,10 +3213,6 @@ msgstr ""
 msgid "External Media Preferences"
 msgstr ""
 
-#: src/screens/Wallets/Wallet.tsx:113
-msgid "F1R3CAP"
-msgstr ""
-
 #: src/screens/Messages/components/RequestButtons.tsx:220
 msgctxt "toast"
 msgid "Failed to accept chat"
@@ -3276,8 +3274,8 @@ msgstr ""
 msgid "Failed to load feeds preferences"
 msgstr ""
 
-#: src/view/com/modals/AddWallet.tsx:47
-msgid "Failed to load file!"
+#: src/view/com/modals/AddWallet.tsx:87
+msgid "Failed to load file with wallet's private key!"
 msgstr ""
 
 #: src/components/dialogs/GifSelect.tsx:225
@@ -3330,7 +3328,7 @@ msgstr ""
 msgid "Failed to remove verification"
 msgstr ""
 
-#: src/view/com/modals/CreateWallet.tsx:37
+#: src/view/com/modals/CreateWallet.tsx:48
 msgid "Failed to save file!"
 msgstr ""
 
@@ -3456,7 +3454,7 @@ msgid "Fetch update"
 msgstr ""
 
 #: src/screens/Settings/components/ExportCarDialog.tsx:43
-#: src/view/com/modals/CreateWallet.tsx:35
+#: src/view/com/modals/CreateWallet.tsx:46
 msgid "File saved successfully!"
 msgstr ""
 
@@ -4246,11 +4244,11 @@ msgstr ""
 msgid "Invalid 2FA confirmation code."
 msgstr ""
 
-#: src/view/com/modals/WalletTransfer.tsx:335
+#: src/view/com/modals/WalletTransfer.tsx:356
 msgid "Invalid address"
 msgstr ""
 
-#: src/view/com/modals/WalletTransfer.tsx:326
+#: src/view/com/modals/WalletTransfer.tsx:347
 msgid "Invalid amount"
 msgstr ""
 
@@ -4684,7 +4682,6 @@ msgstr ""
 msgid "Load new posts"
 msgstr ""
 
-#: src/screens/Wallets/Wallet.tsx:131
 #: src/view/com/composer/text-input/mobile/Autocomplete.tsx:61
 msgid "Loading..."
 msgstr ""
@@ -5379,7 +5376,7 @@ msgstr ""
 msgid "Non-sexual Nudity"
 msgstr ""
 
-#: src/view/com/modals/WalletTransfer.tsx:328
+#: src/view/com/modals/WalletTransfer.tsx:349
 msgid "Not enough funds for transfer"
 msgstr ""
 
@@ -5392,8 +5389,8 @@ msgstr ""
 msgid "Not Found"
 msgstr ""
 
-#: src/view/com/modals/WalletTransfer.tsx:133
-#: src/view/com/modals/WalletTransfer.tsx:137
+#: src/view/com/modals/WalletTransfer.tsx:141
+#: src/view/com/modals/WalletTransfer.tsx:145
 msgid "Note"
 msgstr ""
 
@@ -5592,7 +5589,7 @@ msgstr ""
 msgid "Open feed options menu"
 msgstr ""
 
-#: src/view/com/modals/AddWallet.tsx:74
+#: src/view/com/modals/AddWallet.tsx:110
 msgid "Open file selection screen"
 msgstr ""
 
@@ -5915,7 +5912,7 @@ msgstr ""
 msgid "Pinned to your feeds"
 msgstr ""
 
-#: src/view/com/modals/WalletTransfer.tsx:138
+#: src/view/com/modals/WalletTransfer.tsx:146
 msgid "Placeholder"
 msgstr ""
 
@@ -6244,7 +6241,7 @@ msgstr ""
 msgid "Privacy Policy"
 msgstr ""
 
-#: src/screens/Wallets/Wallet.tsx:82
+#: src/screens/Wallet/index.tsx:278
 msgid "Private key"
 msgstr ""
 
@@ -6452,7 +6449,7 @@ msgstr ""
 msgid "Receive push notifications"
 msgstr ""
 
-#: src/view/com/modals/WalletTransfer.tsx:116
+#: src/view/com/modals/WalletTransfer.tsx:124
 msgid "Receiver Wallet address"
 msgstr ""
 
@@ -7241,7 +7238,7 @@ msgstr ""
 msgid "Select how long to mute this word for."
 msgstr ""
 
-#: src/view/com/modals/AddWallet.tsx:76
+#: src/view/com/modals/AddWallet.tsx:112
 msgid "Select key"
 msgstr ""
 
@@ -7265,7 +7262,7 @@ msgstr ""
 msgid "Select primary language"
 msgstr ""
 
-#: src/view/com/modals/AddWallet.tsx:65
+#: src/view/com/modals/AddWallet.tsx:101
 msgid "Select private key from your device."
 msgstr ""
 
@@ -7400,7 +7397,7 @@ msgstr ""
 msgid "Set new password"
 msgstr ""
 
-#: src/view/com/modals/WalletTransfer.tsx:51
+#: src/view/com/modals/WalletTransfer.tsx:59
 msgid "Set the amount, choose the receiver, add message and generate your request instantly."
 msgstr ""
 
@@ -8491,7 +8488,7 @@ msgstr ""
 msgid "This is not a valid link"
 msgstr ""
 
-#: src/view/com/modals/CreateWallet.tsx:60
+#: src/view/com/modals/CreateWallet.tsx:76
 msgid "This key will give you full access to your wallet — make sure to save it securely."
 msgstr ""
 
@@ -8653,7 +8650,7 @@ msgstr ""
 msgid "Time remaining: {0, plural, one {# second} other {# seconds}}"
 msgstr ""
 
-#: src/view/com/modals/CreateWallet.tsx:54
+#: src/view/com/modals/CreateWallet.tsx:70
 msgid "To create your wallet, we need to generate a private key."
 msgstr ""
 
@@ -8707,26 +8704,31 @@ msgstr ""
 msgid "Topic"
 msgstr ""
 
-#: src/screens/Wallets/Wallet.tsx:177
+#: src/screens/Wallet/index.tsx:198
+#: src/screens/Wallet/index.tsx:363
 msgid "Transactions history"
 msgstr ""
 
-#: src/screens/Wallets/Wallet.tsx:159
-#: src/screens/Wallets/Wallet.tsx:164
+#: src/screens/Wallet/index.tsx:345
+#: src/screens/Wallet/index.tsx:350
 msgid "Transfer"
 msgstr ""
 
-#: src/view/com/modals/WalletTransfer.tsx:163
+#: src/view/com/modals/WalletTransfer.tsx:199
+msgid "Transfer failed"
+msgstr ""
+
+#: src/view/com/modals/WalletTransfer.tsx:197
 msgid "Transfer submitted"
 msgstr ""
 
-#: src/view/com/modals/WalletTransfer.tsx:47
-#: src/view/com/modals/WalletTransfer.tsx:173
-#: src/view/com/modals/WalletTransfer.tsx:175
+#: src/view/com/modals/WalletTransfer.tsx:55
+#: src/view/com/modals/WalletTransfer.tsx:160
+#: src/view/com/modals/WalletTransfer.tsx:162
 msgid "Transfer tokens"
 msgstr ""
 
-#: src/view/com/modals/WalletTransfer.tsx:76
+#: src/view/com/modals/WalletTransfer.tsx:84
 msgid "Transfet amount"
 msgstr ""
 
@@ -9433,25 +9435,23 @@ msgstr ""
 msgid "Volume"
 msgstr ""
 
-#: src/view/com/modals/AddWallet.tsx:52
+#: src/view/com/modals/AddWallet.tsx:83
 msgid "Walled added successfully!"
 msgstr ""
 
 #: src/Navigation.tsx:579
-#: src/screens/Wallets/WalletsSelection.tsx:48
+#: src/screens/Wallet/index.tsx:159
+#: src/screens/Wallet/index.tsx:224
+#: src/screens/Wallets/index.tsx:52
 msgid "Wallet"
 msgstr ""
 
-#: src/screens/Wallets/Wallet.tsx:53
-msgid "Wallet #{0}"
-msgstr ""
-
-#: src/screens/Wallets/Wallet.tsx:73
+#: src/screens/Wallet/index.tsx:252
 msgid "Wallet address"
 msgstr ""
 
 #: src/Navigation.tsx:571
-#: src/screens/Wallets/WalletsSelection.tsx:35
+#: src/screens/Wallets/index.tsx:39
 #: src/view/shell/desktop/LeftNav.tsx:716
 msgid "Wallets"
 msgstr ""
