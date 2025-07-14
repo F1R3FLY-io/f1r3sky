@@ -1,5 +1,5 @@
 import React from 'react'
-import {Pressable, View, ViewStyle} from 'react-native'
+import {Pressable, View, type ViewStyle} from 'react-native'
 import Animated, {LinearTransition} from 'react-native-reanimated'
 
 import {HITSLOP_10} from '#/lib/constants'
@@ -8,9 +8,9 @@ import {
   atoms as a,
   flatten,
   native,
-  TextStyleProp,
+  type TextStyleProp,
   useTheme,
-  ViewStyleProp,
+  type ViewStyleProp,
 } from '#/alf'
 import {useInteractionState} from '#/components/hooks/useInteractionState'
 import {CheckThick_Stroke2_Corner0_Rounded as Checkmark} from '#/components/icons/Check'
@@ -50,7 +50,7 @@ const GroupContext = React.createContext<{
   setFieldValue: () => {},
 })
 
-export type GroupProps<T extends string> = React.PropsWithChildren<{
+export type GroupProps<T extends string = string> = React.PropsWithChildren<{
   type?: 'radio' | 'checkbox'
   values: T[]
   maxSelections?: number

@@ -1,6 +1,6 @@
 import {Fragment, useMemo, useState} from 'react'
 import {TouchableOpacity, View} from 'react-native'
-import {type To} from '@react-navigation/native/lib/typescript/src/useLinkTo'
+import {type LinkProps} from '@react-navigation/native'
 
 import {type AllNavigatorParams} from '#/lib/routes/types'
 import {sanitizeHandle} from '#/lib/strings/handles'
@@ -75,14 +75,14 @@ type TextRow<T> = {
   type: 'text'
   maxLineNumber: number
   field: KeyOfType<T, string>
-  navigate?: (data: T) => To<AllNavigatorParams>
+  navigate?: (data: T) => LinkProps<AllNavigatorParams>
 }
 
 type CustomRow<T> = {
   type: 'custom'
   maxLineNumber: number
   formatCel: (data: T) => string
-  navigate?: (data: T) => To<AllNavigatorParams>
+  navigate?: (data: T) => LinkProps<AllNavigatorParams>
 }
 
 type JSXRow<T> = {
