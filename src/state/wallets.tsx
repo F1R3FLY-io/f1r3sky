@@ -46,7 +46,7 @@ export function Provider({children}: React.PropsWithChildren<{}>) {
   function addWallet(key: UniWallet): number {
     const newWallets = [...wallets, key]
     setWallets(newWallets)
-    return newWallets.length - 1
+    return newWallets.length
   }
 
   function getAll(): UniWallet[] {
