@@ -1,11 +1,17 @@
-import {StyleProp, StyleSheet, TextStyle, View, ViewStyle} from 'react-native'
+import {
+  type StyleProp,
+  StyleSheet,
+  type TextStyle,
+  View,
+  type ViewStyle,
+} from 'react-native'
 
 import {choose} from '#/lib/functions'
 import {colors} from '#/lib/styles'
 import {useTheme} from '#/lib/ThemeContext'
-import {TypographyVariant} from '#/lib/ThemeContext'
+import {type TypographyVariant} from '#/lib/ThemeContext'
 import {Text} from '../text/Text'
-import {Button, ButtonType} from './Button'
+import {Button, type ButtonType} from './Button'
 
 export function ToggleButton({
   testID,
@@ -40,6 +46,9 @@ export function ToggleButton({
     },
     'secondary-outline': {
       borderColor: theme.palette.secondary.border,
+    },
+    'transparent-outline': {
+      backgroundColor: theme.palette.primary.text,
     },
     'primary-light': {
       borderColor: theme.palette.primary.border,
@@ -76,6 +85,10 @@ export function ToggleButton({
       'secondary-outline': {
         backgroundColor: theme.palette.secondary.background,
         opacity: isSelected ? 1 : 0.5,
+      },
+      'transparent-outline': {
+        backgroundColor: theme.palette.primary.text,
+        opacity: isSelected ? 1 : 0.33,
       },
       'primary-light': {
         backgroundColor: theme.palette.primary.background,
@@ -117,6 +130,10 @@ export function ToggleButton({
     'secondary-outline': {
       color: theme.palette.secondary.textInverted,
       fontWeight: theme.palette.secondary.isLowContrast ? '600' : undefined,
+    },
+    'transparent-outline': {
+      color: theme.palette.primary.text,
+      fontWeight: theme.palette.primary.isLowContrast ? '600' : undefined,
     },
     'primary-light': {
       color: theme.palette.primary.textInverted,
