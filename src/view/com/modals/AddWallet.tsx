@@ -13,13 +13,7 @@ import {downloadDocument} from '#/lib/media/manip'
 import {type NavigationProp} from '#/lib/routes/types'
 import {getAddressFromPublicKey, getPublicKeyFromPrivateKey} from '#/lib/wallet'
 import {useModalControls} from '#/state/modals'
-import {
-  type EtheriumWallet,
-  type FireCAPWallet,
-  useWallets,
-  type WalletKey,
-  WalletType,
-} from '#/state/wallets'
+import {useWallets, WalletType} from '#/state/wallets'
 import * as Toast from '#/view/com/util/Toast'
 import {atoms as a, useTheme} from '#/alf'
 import {Text} from '#/components/Typography'
@@ -56,7 +50,7 @@ export function Component() {
             .replace('-----END EC PRIVATE KEY-----', '')
             .trim()
 
-          const privateKey = base64.decode(encodedKey) as Uint8Array
+          const privateKey = base64.decode(encodedKey)
           const publicKey = getPublicKeyFromPrivateKey(privateKey)
           const address = getAddressFromPublicKey(publicKey)
 
@@ -64,18 +58,18 @@ export function Component() {
             privateKey,
             publicKey,
             address,
-            walletType: WalletType.F1R3CAP,
-          } as FireCAPWallet
+            walletType: WalletType.F1R3CAP as const,
+          }
         } else {
           const prvKey = content as Hex
           const client = privateKeyToAccount(prvKey)
 
           return {
-            privateKey: content as WalletKey,
+            privateKey: prvKey,
             publicKey: client.publicKey,
             address: client.address,
-            walletType: WalletType.ETHEREUM,
-          } as EtheriumWallet
+            walletType: WalletType.ETHEREUM as const,
+          }
         }
       })
       .then(wallet => {

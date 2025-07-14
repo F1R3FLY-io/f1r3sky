@@ -15,25 +15,25 @@ export type FireCAPWallet = {
   walletType: WalletType.F1R3CAP
 }
 
-export type EtheriumWallet = {
+export type EthereumWallet = {
   privateKey: Hex
   publicKey: Hex
   address: Hex
   walletType: WalletType.ETHEREUM
 }
 
-export type UniWallet = FireCAPWallet | EtheriumWallet
+export type UniWallet = FireCAPWallet | EthereumWallet
 
 export type WalletsStateContext = {
   addWallet: (key: UniWallet) => number
   getByIndex: (index: number) => UniWallet | undefined
-  getAll: () => UniWallet[]
+  readonly wallets: UniWallet[]
 }
 
 const WalletsContext = React.createContext<WalletsStateContext>({
-  addWallet: (_key: UniWallet) => 0,
+  addWallet: (_: UniWallet) => 0,
   getByIndex: () => undefined,
-  getAll: () => [],
+  wallets: [],
 })
 
 export function Provider({children}: React.PropsWithChildren<{}>) {
@@ -43,14 +43,10 @@ export function Provider({children}: React.PropsWithChildren<{}>) {
     return wallets.at(index - 1)
   }
 
-  function addWallet(key: UniWallet): number {
-    const newWallets = [...wallets, key]
+  function addWallet(wallet: UniWallet): number {
+    const newWallets = [...wallets, wallet]
     setWallets(newWallets)
     return newWallets.length
-  }
-
-  function getAll(): UniWallet[] {
-    return wallets
   }
 
   return (
@@ -58,7 +54,7 @@ export function Provider({children}: React.PropsWithChildren<{}>) {
       value={{
         addWallet,
         getByIndex,
-        getAll,
+        wallets,
       }}>
       {children}
     </WalletsContext.Provider>

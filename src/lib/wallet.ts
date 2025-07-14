@@ -5,7 +5,12 @@ import {keccak256} from 'js-sha3'
 import {type Hex} from 'viem'
 
 import {FIREFLY_API_URL, WalletState} from '#/state/queries/wallet'
-import {type FireCAPWallet, type WalletKey, WalletType} from '#/state/wallets'
+import {
+  type FireCAPWallet,
+  type UniWallet,
+  type WalletKey,
+  WalletType,
+} from '#/state/wallets'
 import {saveToDevice} from './media/manip'
 
 export const TOKENS = {
@@ -70,27 +75,27 @@ export async function fetchF1r3SkyWalletState(wallet: FireCAPWallet) {
   return WalletState.parse(body)
 }
 
-export function generatePrivateKey(): WalletKey {
+export function generatePrivateKey(): Uint8Array {
   return secp256k1.utils.randomPrivateKey()
 }
 
-export async function saveWalletToFS(
-  key: WalletKey,
-  address: string,
-  type: WalletType,
-) {
-  switch (type) {
+export async function saveWalletToFS(wallet: UniWallet) {
+  switch (wallet.walletType) {
     case WalletType.F1R3CAP:
-      const encodedKey = base64.encode(key as Uint8Array)
+      const encodedKey = base64.encode(wallet.privateKey)
       const content = `-----BEGIN EC PRIVATE KEY-----\n${encodedKey}\n-----END EC PRIVATE KEY-----`
 
       return await saveToDevice(
-        `${address}.pem`,
+        `${wallet.address}.pem`,
         content,
         'application/x-pem-file',
       )
     case WalletType.ETHEREUM:
-      return await saveToDevice(`${address}.key`, key, 'application/x-pem-file')
+      return await saveToDevice(
+        `${wallet.address}.key`,
+        wallet.privateKey,
+        'application/x-pem-file',
+      )
   }
 }
 

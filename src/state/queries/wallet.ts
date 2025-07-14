@@ -11,7 +11,7 @@ import {hardhat} from 'viem/chains'
 import {z} from 'zod'
 
 import {signPayload} from '#/lib/wallet'
-import {type EtheriumWallet, type FireCAPWallet, WalletType} from '../wallets'
+import {type EthereumWallet, type FireCAPWallet, WalletType} from '../wallets'
 
 export const FIREFLY_API_URL = process.env.FIREFLY_API_URL
 
@@ -57,9 +57,7 @@ export const WalletState = z.object({
   boosts: z.array(WalletBoost),
   transfers: z.array(WalletTransfer),
 })
-export type WalletState = {wallet: FireCAPWallet | EtheriumWallet} & z.infer<
-  typeof WalletState
->
+export type WalletState = z.infer<typeof WalletState>
 
 export type TransferProps = {
   amount: bigint
@@ -75,14 +73,13 @@ const TransferContract = z.object({
 })
 export type TransferContract = z.infer<typeof TransferContract>
 
-export function useTransferMutation(wallet: FireCAPWallet | EtheriumWallet) {
+export function useTransferMutation(wallet: FireCAPWallet | EthereumWallet) {
   const queryClient = useQueryClient()
 
-  async function sendByF1r3Cap({
-    amount,
-    toAddress,
-    description,
-  }: TransferProps) {
+  async function sendByF1r3Cap(
+    wallet: FireCAPWallet,
+    {amount, toAddress, description}: TransferProps,
+  ) {
     const resp = await fetch(
       `${FIREFLY_API_URL}/api/wallets/transfer/prepare`,
       {
@@ -121,8 +118,11 @@ export function useTransferMutation(wallet: FireCAPWallet | EtheriumWallet) {
     })
   }
 
-  async function sendByEther({amount, toAddress}: TransferProps) {
-    const account = privateKeyToAccount(wallet.privateKey as Hex)
+  async function sendByEther(
+    wallet: EthereumWallet,
+    {amount, toAddress}: TransferProps,
+  ) {
+    const account = privateKeyToAccount(wallet.privateKey)
 
     const publicClient = createTestClient({
       account,
@@ -143,9 +143,9 @@ export function useTransferMutation(wallet: FireCAPWallet | EtheriumWallet) {
     mutationFn: async (props: TransferProps) => {
       switch (wallet.walletType) {
         case WalletType.ETHEREUM:
-          return sendByEther(props)
+          return sendByEther(wallet, props)
         case WalletType.F1R3CAP:
-          return sendByF1r3Cap(props)
+          return sendByF1r3Cap(wallet, props)
       }
     },
     onSuccess: async (_, props) => {

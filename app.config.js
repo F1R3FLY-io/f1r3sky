@@ -39,9 +39,9 @@ module.exports = function (_config) {
     expo: {
       version: VERSION,
       name: 'Bluesky',
-      slug: 'blueskyweb-app',
+      slug: 'bluesky',
       scheme: 'bluesky',
-      owner: 'blueskyweb',
+      owner: 'blueskysocial',
       runtimeVersion: {
         policy: 'appVersion',
       },
@@ -216,9 +216,9 @@ module.exports = function (_config) {
               newArchEnabled: false,
             },
             android: {
-              compileSdkVersion: 34,
-              targetSdkVersion: 34,
-              buildToolsVersion: '34.0.0',
+              compileSdkVersion: 35,
+              targetSdkVersion: 35,
+              buildToolsVersion: '35.0.0',
               newArchEnabled: true,
             },
           },

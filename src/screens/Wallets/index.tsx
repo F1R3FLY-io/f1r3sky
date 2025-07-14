@@ -28,7 +28,7 @@ export function Wallets({}: NativeStackScreenProps<
   const onPressItem = (position: number) =>
     navigation.push('Wallet', {position: position + 1})
 
-  const {getAll} = useWallets()
+  const {wallets} = useWallets()
 
   return (
     <Layout.Screen>
@@ -41,7 +41,7 @@ export function Wallets({}: NativeStackScreenProps<
         </Layout.Header.Content>
       </Layout.Header.Outer>
       <Layout.Content>
-        {getAll().map((wallet, i) => (
+        {wallets.map((wallet, i) => (
           <PressableWithHover
             key={i}
             hoverStyle={t.atoms.bg_contrast_25}
