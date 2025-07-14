@@ -3,7 +3,7 @@ import {type Hex} from 'viem'
 
 export enum WalletType {
   F1R3CAP = 'F1R3CAP',
-  ETHERIUM = 'etherium',
+  ETHEREUM = 'ethereum',
 }
 
 export type WalletKey = Uint8Array | Hex
@@ -19,7 +19,7 @@ export type EtheriumWallet = {
   privateKey: Hex
   publicKey: Hex
   address: Hex
-  walletType: WalletType.ETHERIUM
+  walletType: WalletType.ETHEREUM
 }
 
 export type UniWallet = FireCAPWallet | EtheriumWallet
@@ -46,7 +46,7 @@ export function Provider({children}: React.PropsWithChildren<{}>) {
   function addWallet(key: UniWallet): number {
     const newWallets = [...wallets, key]
     setWallets(newWallets)
-    return newWallets.length - 1
+    return newWallets.length
   }
 
   function getAll(): UniWallet[] {
