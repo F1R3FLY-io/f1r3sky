@@ -61,7 +61,7 @@ export function Component() {
             walletType: WalletType.F1R3CAP as const,
           }
         } else {
-          const prvKey = content as Hex
+          const prvKey = content.trim() as Hex
           const client = privateKeyToAccount(prvKey)
 
           return {
