@@ -50,7 +50,7 @@ const GroupContext = React.createContext<{
   setFieldValue: () => {},
 })
 
-export type GroupProps<T extends string> = React.PropsWithChildren<{
+export type GroupProps<T extends string = string> = React.PropsWithChildren<{
   type?: 'radio' | 'checkbox'
   values: T[]
   maxSelections?: number

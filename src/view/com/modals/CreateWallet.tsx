@@ -33,14 +33,17 @@ export function Component({}: Props) {
 
   const navigation = useNavigation<NavigationProp>()
   const createWallet = useCallback(async () => {
-    const privateKey = generatePrivateKey() as Uint8Array
+    const privateKey = generatePrivateKey()
     const publicKey = getPublicKeyFromPrivateKey(privateKey)
     const address = getAddressFromPublicKey(publicKey)
-    const saveRes = await saveWalletToFS(
+    const wallet = {
       privateKey,
       address,
-      WalletType.F1R3CAP,
-    )
+      publicKey,
+      walletType: WalletType.F1R3CAP as const,
+    }
+
+    const saveRes = await saveWalletToFS(wallet)
 
     if (!saveRes) {
       Toast.show(_(msg`File saved successfully!`))
@@ -48,12 +51,7 @@ export function Component({}: Props) {
       Toast.show(_(msg`Failed to save file!`))
     }
 
-    const position = addWallet({
-      privateKey,
-      address,
-      publicKey,
-      walletType: WalletType.F1R3CAP,
-    })
+    const position = addWallet(wallet)
     navigation.navigate('Wallet', {position})
   }, [_, addWallet, navigation])
 
