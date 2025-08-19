@@ -1,3 +1,4 @@
+import {base64} from '@scure/base'
 import {useMutation, useQueryClient} from '@tanstack/react-query'
 import {
   createTestClient,
@@ -65,11 +66,8 @@ export type TransferProps = {
   description?: string
 }
 
-const byte = z.number().int().min(0).max(255)
-const byteArray = z.array(byte).transform(array => new Uint8Array(array))
-
 const TransferContract = z.object({
-  contract: byteArray,
+  contract: z.string(),
 })
 export type TransferContract = z.infer<typeof TransferContract>
 
@@ -97,10 +95,11 @@ export function useTransferMutation(wallet: FireCAPWallet | EthereumWallet) {
     )
 
     const body = await resp.json()
-    const {contract: payload} = TransferContract.parse(body)
+    const {contract} = TransferContract.parse(body)
+    const contractBytes = base64.decode(contract)
 
     const {signature, sigAlgorithm, deployer} = signPayload(
-      payload,
+      contractBytes,
       wallet.privateKey,
     )
 
@@ -110,10 +109,10 @@ export function useTransferMutation(wallet: FireCAPWallet | EthereumWallet) {
         'Content-Type': 'application/json',
       }),
       body: JSON.stringify({
-        contract: Array.from(payload),
-        sig: Array.from(signature),
+        contract,
+        sig: base64.encode(signature),
         sig_algorithm: sigAlgorithm,
-        deployer: Array.from(deployer),
+        deployer: base64.encode(deployer),
       }),
     })
   }
