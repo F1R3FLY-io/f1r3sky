@@ -6,6 +6,9 @@ concurrency:
   group: '${{ github.workflow }}-${{ github.head_ref || github.ref }}'
   cancel-in-progress: true
 
+env:
+  NPM_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
 jobs:
   verify-yarn-lock:
     name: No manual yarn.lock edits
