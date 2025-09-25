@@ -4252,6 +4252,23 @@
     find-up "^5.0.0"
     js-yaml "^4.1.0"
 
+"@f1r3fly-io/embers-client-sdk@^0.0.50":
+  version "0.0.50"
+  resolved "https://npm.pkg.github.com/download/@f1r3fly-io/embers-client-sdk/0.0.50/610650376d162a40fe0a52884d765eff53dd0293#610650376d162a40fe0a52884d765eff53dd0293"
+  integrity sha512-3nCcJko3hDTenTG+v6dksw30aZIrPCuAH3exTI49e2dI+zfEnakAUu+Xnta89b8bMLT6VG+V5JYWou8vSsXiJQ==
+  dependencies:
+    "@f1r3fly-io/graphl-parser" "^0.0.12"
+    "@noble/curves" "^2.0.0"
+    "@scure/base" "^2.0.0"
+    blakejs "^1.2.1"
+    js-sha3 "^0.9.3"
+    zod "^4.1.8"
+
+"@f1r3fly-io/graphl-parser@^0.0.12":
+  version "0.0.12"
+  resolved "https://npm.pkg.github.com/download/@f1r3fly-io/graphl-parser/0.0.12/dde7095461949f598d8694d8534b3b27c7d07199#dde7095461949f598d8694d8534b3b27c7d07199"
+  integrity sha512-rAerzvyCiY4D1KsXuVHYbcljT+SdDW+hZeAihgxupB/1pIKALPrFnwi9CP3e/s66hfHE3UygpRS4u5qaLMsOPw==
+
 "@fastify/busboy@^2.0.0":
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/@fastify/busboy/-/busboy-2.1.0.tgz#0709e9f4cb252351c609c6e6d8d6779a8d25edff"
@@ -5207,6 +5224,13 @@
   dependencies:
     "@noble/hashes" "1.7.1"
 
+"@noble/curves@^2.0.0":
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/@noble/curves/-/curves-2.0.1.tgz#64ba8bd5e8564a02942655602515646df1cdb3ad"
+  integrity sha512-vs1Az2OOTBiP4q0pwjW5aF0xp9n4MxVrmkFBxc6EKZc6ddYx5gaZiAsZoq0uRRXWbi3AT/sBqn05eRPtn1JCPw==
+  dependencies:
+    "@noble/hashes" "2.0.1"
+
 "@noble/hashes@1.7.1", "@noble/hashes@^1.6.1":
   version "1.7.1"
   resolved "https://registry.yarnpkg.com/@noble/hashes/-/hashes-1.7.1.tgz#5738f6d765710921e7a751e00c20ae091ed8db0f"
@@ -5216,6 +5240,11 @@
   version "1.8.0"
   resolved "https://registry.yarnpkg.com/@noble/hashes/-/hashes-1.8.0.tgz#cee43d801fcef9644b11b8194857695acd5f815a"
   integrity sha512-jCs9ldd7NwzpgXDIf6P3+NrHh9/sD6CQdxHyjQI+h/6rDNo88ypBxxz45UDuZHz9r3tNz7N/VInSVoVdtXEI4A==
+
+"@noble/hashes@2.0.1":
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/@noble/hashes/-/hashes-2.0.1.tgz#fc1a928061d1232b0a52bb754393c37a5216c89e"
+  integrity sha512-XlOlEbQcE9fmuXxrVTXCTlG2nlRXa9Rj3rr5Ue/+tX+nmkgbX720YHh0VR3hBF9xDvwnb8D2shVGOwNx+ulArw==
 
 "@noble/secp256k1@^1.7.0":
   version "1.7.1"
@@ -6524,6 +6553,11 @@
   version "1.2.6"
   resolved "https://registry.yarnpkg.com/@scure/base/-/base-1.2.6.tgz#ca917184b8231394dd8847509c67a0be522e59f6"
   integrity sha512-g/nm5FgUa//MCj1gV09zTJTaM6KBAHqLN907YVQqf7zC49+DcO4B1so4ZX07Ef10Twr6nuqYEH9GEggFXA4Fmg==
+
+"@scure/base@^2.0.0":
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/@scure/base/-/base-2.0.0.tgz#ba6371fddf92c2727e88ad6ab485db6e624f9a98"
+  integrity sha512-3E1kpuZginKkek01ovG8krQ0Z44E3DHPjc5S2rjJw9lZn3KSQOs8S7wqikF/AH7iRanHypj85uGyxk0XAyC37w==
 
 "@scure/bip32@1.7.0", "@scure/bip32@^1.7.0":
   version "1.7.0"
@@ -20782,7 +20816,7 @@ zod-validation-error@^3.0.3:
   resolved "https://registry.yarnpkg.com/zod-validation-error/-/zod-validation-error-3.3.0.tgz#2cfe81b62d044e0453d1aa3ae7c32a2f36dde9af"
   integrity sha512-Syib9oumw1NTqEv4LT0e6U83Td9aVRk9iTXPUQr1otyV1PuXQKOvOwhMNqZIq5hluzHP2pMgnOmHEo7kPdI2mw==
 
-zod@3.23.8, zod@^3.14.2, zod@^3.20.2, zod@^3.22.4, zod@^3.23.8:
+zod@3.23.8, zod@^3.14.2, zod@^3.20.2, zod@^3.22.4, zod@^3.23.8, zod@^4.1.8:
   version "3.23.8"
   resolved "https://registry.yarnpkg.com/zod/-/zod-3.23.8.tgz#e37b957b5d52079769fb8097099b592f0ef4067d"
   integrity sha512-XBx9AXhXktjUqnepgTiE5flcKIYWi/rme0Eaj+5Y0lftuGBq+jyRu/md4WnuxqgP1ubdpNCsYEYPxrzVHD8d6g==

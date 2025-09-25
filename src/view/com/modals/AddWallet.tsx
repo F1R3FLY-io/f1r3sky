@@ -1,17 +1,14 @@
 import {useCallback} from 'react'
 import {SafeAreaView, View} from 'react-native'
 import * as DocumentPicker from 'expo-document-picker'
+import {Address, deserializeKey} from '@f1r3fly-io/embers-client-sdk'
 import {msg, Trans} from '@lingui/macro'
 import {useLingui} from '@lingui/react'
 import {useNavigation} from '@react-navigation/native'
-import {base64} from '@scure/base'
-import {type Hex} from 'viem'
-import {privateKeyToAccount} from 'viem/accounts'
 
 import {usePalette} from '#/lib/hooks/usePalette'
 import {downloadDocument} from '#/lib/media/manip'
 import {type NavigationProp} from '#/lib/routes/types'
-import {getAddressFromPublicKey, getPublicKeyFromPrivateKey} from '#/lib/wallet'
 import {useModalControls} from '#/state/modals'
 import {useWallets, WalletType} from '#/state/wallets'
 import * as Toast from '#/view/com/util/Toast'
@@ -43,33 +40,15 @@ export function Component() {
 
     await downloadDocument(result.assets[0])
       .then(content => {
-        const isFireCAPKey = content.includes('BEGIN EC PRIVATE KEY')
-        if (isFireCAPKey) {
-          const encodedKey = content
-            .replace('-----BEGIN EC PRIVATE KEY-----', '')
-            .replace('-----END EC PRIVATE KEY-----', '')
-            .trim()
+        const privateKey = deserializeKey(content)
+        const publicKey = privateKey.getPublicKey()
+        const address = Address.fromPublicKey(publicKey)
 
-          const privateKey = base64.decode(encodedKey)
-          const publicKey = getPublicKeyFromPrivateKey(privateKey)
-          const address = getAddressFromPublicKey(publicKey)
-
-          return {
-            privateKey,
-            publicKey,
-            address,
-            walletType: WalletType.F1R3CAP as const,
-          }
-        } else {
-          const prvKey = content.trim() as Hex
-          const client = privateKeyToAccount(prvKey)
-
-          return {
-            privateKey: prvKey,
-            publicKey: client.publicKey,
-            address: client.address,
-            walletType: WalletType.ETHEREUM as const,
-          }
+        return {
+          privateKey,
+          publicKey,
+          address,
+          walletType: WalletType.F1R3CAP as const,
         }
       })
       .then(wallet => {

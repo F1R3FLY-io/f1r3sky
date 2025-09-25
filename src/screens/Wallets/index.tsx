@@ -50,7 +50,7 @@ export function Wallets({}: NativeStackScreenProps<
               <Wallet />
               <Text style={[a.text_md]}>
                 <Trans>Wallet</Trans> #
-                <WalletAddress value={wallet.address} />
+                <WalletAddress value={wallet.address.value} />
               </Text>
             </View>
           </PressableWithHover>

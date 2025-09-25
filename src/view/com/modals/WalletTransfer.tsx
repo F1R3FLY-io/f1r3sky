@@ -1,14 +1,13 @@
 import {useReducer} from 'react'
 import {SafeAreaView, View} from 'react-native'
+import {Address, Amount, Description} from '@f1r3fly-io/embers-client-sdk'
 import {msg, Trans} from '@lingui/macro'
 import {type I18nContext, useLingui} from '@lingui/react'
-import {isAddress} from 'viem'
 
 import {usePalette} from '#/lib/hooks/usePalette'
-import {verifyRevAddr} from '#/lib/wallet'
 import {useModalControls} from '#/state/modals'
 import {useTransferMutation} from '#/state/queries/wallet'
-import {type UniWallet, WalletType} from '#/state/wallets'
+import {type UniWallet} from '#/state/wallets'
 import * as Toast from '#/view/com/util/Toast'
 import {atoms as a, useTheme} from '#/alf'
 import {FormError} from '#/components/forms/FormError'
@@ -44,8 +43,7 @@ export function Component({currentBalance, wallet}: Props) {
 
   const {mutateAsync: submit, isPending} = useTransferMutation(wallet)
 
-  const currencySymbol =
-    wallet.walletType === WalletType.ETHEREUM ? 'WEI' : 'F1R3CAP'
+  const currencySymbol = 'F1R3CAP'
 
   return (
     <SafeAreaView style={[pal.view, a.flex_1]}>
@@ -85,18 +83,15 @@ export function Component({currentBalance, wallet}: Props) {
                 placeholder="0.0"
                 keyboardType="numeric"
                 onChangeText={amount => {
-                  let number
                   try {
-                    number = BigInt(amount)
-                  } catch {
-                    number = undefined
+                    dispatch({
+                      type: 'setAmount',
+                      amount: Amount.tryFrom(BigInt(amount ?? 0)),
+                      currentBalance,
+                    })
+                  } catch (e) {
+                    console.error(e)
                   }
-
-                  dispatch({
-                    type: 'setAmount',
-                    amount: number,
-                    currentBalance,
-                  })
                 }}
                 isInvalid={!!state.amount.error}
                 style={[
@@ -129,8 +124,8 @@ export function Component({currentBalance, wallet}: Props) {
                 onChangeText={address =>
                   dispatch({
                     type: 'setAddress',
-                    address,
-                    userAddress: wallet.address,
+                    address: Address.tryFrom(address),
+                    userAddress: wallet.address.value,
                   })
                 }
               />
@@ -145,7 +140,10 @@ export function Component({currentBalance, wallet}: Props) {
                 label={_(msg`Note`)}
                 placeholder={_(msg`Placeholder`)}
                 onChangeText={description =>
-                  dispatch({type: 'setDescription', description})
+                  dispatch({
+                    type: 'setDescription',
+                    description: Description.tryFrom(description),
+                  })
                 }
                 multiline
               />
@@ -203,7 +201,7 @@ export function Component({currentBalance, wallet}: Props) {
       dispatch({
         type: 'revalidateAll',
         currentBalance,
-        userAddress: wallet.address,
+        userAddress: wallet.address.value,
       })
     }
   }
@@ -211,26 +209,26 @@ export function Component({currentBalance, wallet}: Props) {
 
 type ControlState = {
   amount: {
-    value?: bigint
+    value?: Amount
     error?: 'invalid' | 'lowBalance'
   }
   address: {
-    value?: string
+    value?: Address
     error?: 'invalid' | 'sameAddress'
   }
   description: {
-    value?: string
+    value?: Description
   }
 }
 
 type TransferAction =
   | {
       type: 'setAmount'
-      amount?: bigint
+      amount?: Amount
       currentBalance: bigint
     }
-  | {type: 'setAddress'; address?: string; userAddress: string}
-  | {type: 'setDescription'; description?: string}
+  | {type: 'setAddress'; address?: Address; userAddress: string}
+  | {type: 'setDescription'; description?: Description}
   | {type: 'revalidateAll'; currentBalance: bigint; userAddress: string}
 
 export const handleTransferAction = (
@@ -242,7 +240,7 @@ export const handleTransferAction = (
     case 'setAmount': {
       const thisProp = 'amount'
 
-      if (action.amount === undefined || action.amount <= 0) {
+      if (action.amount === undefined || action.amount.value <= 0) {
         return {
           ...state,
           [thisProp]: {
@@ -252,7 +250,7 @@ export const handleTransferAction = (
         }
       }
 
-      if (action.amount > action.currentBalance) {
+      if (action.amount.value > action.currentBalance) {
         return {
           ...state,
           [thisProp]: {
@@ -272,15 +270,10 @@ export const handleTransferAction = (
     case 'setAddress': {
       const thisProp = 'address'
 
-      const validateAddress =
-        wallet.walletType === WalletType.F1R3CAP
-          ? verifyRevAddr
-          : (address: string) => isAddress(address, {strict: false})
-
       if (
         action.address === undefined ||
-        action.address === '' ||
-        !validateAddress(action.address)
+        action.address.value === '' ||
+        !Address.tryFrom(action.address.value)
       ) {
         return {
           ...state,
@@ -291,7 +284,7 @@ export const handleTransferAction = (
         }
       }
 
-      if (action.address === action.userAddress) {
+      if (action.address.value === action.userAddress) {
         return {
           ...state,
           [thisProp]: {
