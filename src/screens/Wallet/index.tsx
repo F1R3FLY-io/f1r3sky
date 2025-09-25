@@ -1,19 +1,11 @@
 import {useEffect, useState} from 'react'
 import {TouchableOpacity, View} from 'react-native'
+import {type WalletStateAndHistory} from '@f1r3fly-io/embers-client-sdk'
 import {msg, Trans} from '@lingui/macro'
 import {useLingui} from '@lingui/react'
 import {type RouteProp} from '@react-navigation/native'
 import {useRoute} from '@react-navigation/native'
 import {useNavigation} from '@react-navigation/native'
-import {
-  createTestClient,
-  http,
-  isAddressEqual,
-  publicActions,
-  walletActions,
-} from 'viem'
-import {privateKeyToAccount} from 'viem/accounts'
-import {hardhat} from 'viem/chains'
 
 import {
   type CommonNavigatorParams,
@@ -21,9 +13,8 @@ import {
 } from '#/lib/routes/types'
 import {type NavigationProp} from '#/lib/routes/types'
 import {shareUrl} from '#/lib/sharing'
-import {fetchF1r3SkyWalletState, saveWalletToFS} from '#/lib/wallet'
+import {saveWalletToFS} from '#/lib/wallet'
 import {useModalControls} from '#/state/modals'
-import {type WalletState} from '#/state/queries/wallet'
 import {useWallets, WalletType} from '#/state/wallets'
 import {Button} from '#/view/com/util/forms/Button'
 import {atoms as a, useTheme} from '#/alf'
@@ -56,7 +47,7 @@ export function Wallet({}: NativeStackScreenProps<
   const {params} = useRoute<RouteProp<CommonNavigatorParams, 'Wallet'>>()
 
   const wallet = getByIndex(+params.position)
-  const [walletState, setWalletState] = useState<WalletState>()
+  const [walletState, setWalletState] = useState<WalletStateAndHistory>()
   const [screenState, changeScreenState] = useState(SCREEN_STATE.LOADING)
 
   useEffect(() => {
@@ -67,72 +58,73 @@ export function Wallet({}: NativeStackScreenProps<
 
     switch (wallet.walletType) {
       case WalletType.F1R3CAP:
-        fetchF1r3SkyWalletState(wallet).then(state => {
+        wallet.embers?.wallets.getWalletState().then(state => {
           setWalletState(state)
           changeScreenState(SCREEN_STATE.LOADED)
         })
         break
-      case WalletType.ETHEREUM:
-        const account = privateKeyToAccount(wallet.privateKey)
-
-        const publicClient = createTestClient({
-          account,
-          chain: hardhat,
-          mode: 'hardhat',
-          transport: http(),
-        })
-          .extend(publicActions)
-          .extend(walletActions)
-
-        publicClient
-          .getBalance({
-            address: account.address,
-          })
-          .then(async balance => {
-            const blockNumber = await publicClient.getBlockNumber()
-
-            const endBlock = blockNumber
-            const startBlock = endBlock === 0n ? 0n : endBlock - BigInt(1)
-            const transfers = []
-
-            for (let i = startBlock; i <= endBlock; i++) {
-              const block = await publicClient.getBlock({
-                blockNumber: BigInt(i),
-              })
-
-              for (const hash of block.transactions) {
-                const transaction = await publicClient.getTransaction({
-                  hash,
-                })
-
-                if (
-                  isAddressEqual(transaction.from, account.address) ||
-                  isAddressEqual(transaction.to!, account.address)
-                ) {
-                  transfers.push({
-                    id: transaction.hash,
-                    direction: isAddressEqual(transaction.from, account.address)
-                      ? ('outgoing' as const)
-                      : ('incoming' as const),
-                    to_address: transaction.to!,
-                    cost: transaction.gas,
-                    amount: transaction.value,
-                    date: new Date(1000 * Number(block.timestamp)),
-                  })
-                }
-              }
-            }
-
-            setWalletState({
-              balance,
-              requests: [],
-              boosts: [],
-              transfers,
-            })
-            changeScreenState(SCREEN_STATE.LOADED)
-          })
-
-        break
+      // todo dropped ethereum support for now
+      // case WalletType.ETHEREUM:
+      //   const account = privateKeyToAccount(wallet.privateKey)
+      //
+      //   const publicClient = createTestClient({
+      //     account,
+      //     chain: hardhat,
+      //     mode: 'hardhat',
+      //     transport: http(),
+      //   })
+      //     .extend(publicActions)
+      //     .extend(walletActions)
+      //
+      //   publicClient
+      //     .getBalance({
+      //       address: account.address,
+      //     })
+      //     .then(async balance => {
+      //       const blockNumber = await publicClient.getBlockNumber()
+      //
+      //       const endBlock = blockNumber
+      //       const startBlock = endBlock === 0n ? 0n : endBlock - BigInt(1)
+      //       const transfers = []
+      //
+      //       for (let i = startBlock; i <= endBlock; i++) {
+      //         const block = await publicClient.getBlock({
+      //           blockNumber: BigInt(i),
+      //         })
+      //
+      //         for (const hash of block.transactions) {
+      //           const transaction = await publicClient.getTransaction({
+      //             hash,
+      //           })
+      //
+      //           if (
+      //             isAddressEqual(transaction.from, account.address) ||
+      //             isAddressEqual(transaction.to!, account.address)
+      //           ) {
+      //             transfers.push({
+      //               id: transaction.hash,
+      //               direction: isAddressEqual(transaction.from, account.address)
+      //                 ? ('outgoing' as const)
+      //                 : ('incoming' as const),
+      //               to_address: transaction.to!,
+      //               cost: transaction.gas,
+      //               amount: transaction.value,
+      //               date: new Date(1000 * Number(block.timestamp)),
+      //             })
+      //           }
+      //         }
+      //       }
+      //
+      //       setWalletState({
+      //         balance,
+      //         requests: [],
+      //         boosts: [],
+      //         transfers,
+      //       })
+      //       changeScreenState(SCREEN_STATE.LOADED)
+      //     })
+      //
+      //   break
       default:
         changeScreenState(SCREEN_STATE.ABSENT)
     }
@@ -152,7 +144,7 @@ export function Wallet({}: NativeStackScreenProps<
           <Layout.Header.TitleText>
             <Trans>Wallet</Trans> #
             <Loaded loaded={!!wallet} context={wallet}>
-              {wallet => <WalletAddress value={wallet.address} />}
+              {wallet => <WalletAddress value={wallet.address.value} />}
             </Loaded>
           </Layout.Header.TitleText>
         </Layout.Header.Content>
@@ -188,10 +180,10 @@ export function Wallet({}: NativeStackScreenProps<
                       </Text>
                     </View>
                     <Text style={[a.text_sm]} numberOfLines={1}>
-                      {wallet.address}
+                      {wallet.address.value}
                     </Text>
                     <TouchableOpacity
-                      onPress={() => shareUrl(wallet.address)}
+                      onPress={() => shareUrl(wallet.address.value)}
                       accessibilityRole="button">
                       <Copy />
                     </TouchableOpacity>
@@ -250,11 +242,7 @@ export function Wallet({}: NativeStackScreenProps<
                       <Layout.Header.TitleText>
                         {walletState?.balance.toString()}
                       </Layout.Header.TitleText>
-                      <Text style={[a.text_xs, a.pb_xs]}>
-                        {wallet!.walletType === WalletType.ETHEREUM
-                          ? 'WEI'
-                          : 'F1R3CAP'}
-                      </Text>
+                      <Text style={[a.text_xs, a.pb_xs]}>F1R3CAP</Text>
                     </>
                   )}
                 </Loaded>
@@ -263,12 +251,7 @@ export function Wallet({}: NativeStackScreenProps<
                 loaded={screenState === SCREEN_STATE.LOADED}
                 context={walletState}>
                 {walletState => (
-                  <WalletBalanceGraph
-                    balance={walletState.balance}
-                    requests={walletState.requests}
-                    boosts={walletState.boosts}
-                    transfers={walletState.transfers}
-                  />
+                  <WalletBalanceGraph walletState={walletState} />
                 )}
               </Loaded>
               <View style={[a.self_start, a.pt_xl]}>
@@ -311,13 +294,7 @@ export function Wallet({}: NativeStackScreenProps<
         <Loaded
           loaded={screenState === SCREEN_STATE.LOADED}
           context={walletState}>
-          {walletState => (
-            <TransactionHistory
-              requests={walletState.requests}
-              boosts={walletState.boosts}
-              transfers={walletState.transfers}
-            />
-          )}
+          {walletState => <TransactionHistory {...walletState} />}
         </Loaded>
       </Layout.Content>
     </Layout.Screen>

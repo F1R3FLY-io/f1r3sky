@@ -1,5 +1,5 @@
 import {useEffect, useState} from 'react'
-import {View} from 'react-native'
+import {Linking, View} from 'react-native'
 import {msg, Trans} from '@lingui/macro'
 import {useLingui} from '@lingui/react'
 import {useNavigation} from '@react-navigation/core'
@@ -18,11 +18,15 @@ import {
   web,
 } from '#/alf'
 import {AppLanguageDropdown} from '#/components/AppLanguageDropdown'
+import {Button} from '#/components/Button.tsx'
 import {Divider} from '#/components/Divider'
+import {ChainLink_Stroke2_Corner0_Rounded} from '#/components/icons/ChainLink.tsx'
 import {CENTER_COLUMN_OFFSET} from '#/components/Layout'
 import {InlineLinkText} from '#/components/Link'
 import {ProgressGuideList} from '#/components/ProgressGuide/List'
 import {Text} from '#/components/Typography'
+
+const fireskyUrl = process.env.EXPO_PUBLIC_EMBERS_URL
 
 function useWebQueryParams() {
   const navigation = useNavigation()
@@ -48,6 +52,7 @@ export function DesktopRightNav({routeName}: {routeName: string}) {
   const kawaii = useKawaiiMode()
   const gutters = useGutters(['base', 0, 'base', 'wide'])
   const isSearchScreen = routeName === 'Search'
+  const isWalletScreen = routeName === 'Wallet' || routeName === 'Wallets'
   const webqueryParams = useWebQueryParams()
   const searchQuery = webqueryParams?.q
   const showTrending = !isSearchScreen || (isSearchScreen && !!searchQuery)
@@ -90,6 +95,19 @@ export function DesktopRightNav({routeName}: {routeName: string}) {
       )}
 
       {showTrending && <SidebarTrendingTopics />}
+
+      {isWalletScreen && (
+        <Button
+          label={_(msg`Open Embers`)}
+          size="large"
+          variant="solid"
+          color="secondary"
+          shape="default"
+          onPress={() => Linking.openURL(fireskyUrl)}>
+          <ChainLink_Stroke2_Corner0_Rounded />
+          <Text>{_(msg`Open Embers`)}</Text>
+        </Button>
+      )}
 
       <Text style={[a.leading_snug, t.atoms.text_contrast_low]}>
         {hasSession && (

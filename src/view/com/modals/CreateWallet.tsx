@@ -1,17 +1,13 @@
 import {useCallback} from 'react'
 import {SafeAreaView, View} from 'react-native'
+import {Address, PrivateKey} from '@f1r3fly-io/embers-client-sdk'
 import {msg, Trans} from '@lingui/macro'
 import {useLingui} from '@lingui/react'
 import {useNavigation} from '@react-navigation/native'
 
 import {usePalette} from '#/lib/hooks/usePalette'
 import {type NavigationProp} from '#/lib/routes/types'
-import {
-  generatePrivateKey,
-  getAddressFromPublicKey,
-  getPublicKeyFromPrivateKey,
-  saveWalletToFS,
-} from '#/lib/wallet'
+import {saveWalletToFS} from '#/lib/wallet'
 import {useModalControls} from '#/state/modals'
 import {useWallets, WalletType} from '#/state/wallets'
 import * as Toast from '#/view/com/util/Toast'
@@ -33,9 +29,9 @@ export function Component({}: Props) {
 
   const navigation = useNavigation<NavigationProp>()
   const createWallet = useCallback(async () => {
-    const privateKey = generatePrivateKey()
-    const publicKey = getPublicKeyFromPrivateKey(privateKey)
-    const address = getAddressFromPublicKey(publicKey)
+    const privateKey = PrivateKey.new()
+    const publicKey = privateKey.getPublicKey()
+    const address = Address.fromPublicKey(publicKey)
     const wallet = {
       privateKey,
       address,

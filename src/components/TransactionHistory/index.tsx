@@ -1,14 +1,14 @@
 import {Fragment, useMemo, useState} from 'react'
 import {TouchableOpacity, View} from 'react-native'
+import {type Request, type Transfer} from '@f1r3fly-io/embers-client-sdk'
+import {
+  type Boost,
+  type WalletStateAndHistory,
+} from '@f1r3fly-io/embers-client-sdk'
 import {type LinkProps} from '@react-navigation/native'
 
 import {type AllNavigatorParams} from '#/lib/routes/types'
 import {sanitizeHandle} from '#/lib/strings/handles'
-import {
-  type WalletBoost,
-  type WalletRequest,
-  type WalletTransfer,
-} from '#/state/queries/wallet'
 import {PagerWithHeader} from '#/view/com/pager/PagerWithHeader'
 import {atoms as a, useTheme} from '#/alf'
 import {Divider} from '#/components/Divider'
@@ -24,17 +24,8 @@ import {Text} from '#/components/Typography'
 
 const TABLE_VIEWS = ['Requests', 'Exchanges', 'Transfers', 'Boosts']
 
-type TransactionHistoryProps = {
-  requests: WalletRequest[]
-  boosts: WalletBoost[]
-  transfers: WalletTransfer[]
-}
-
-export function TransactionHistory({
-  requests,
-  boosts,
-  transfers,
-}: TransactionHistoryProps) {
+export function TransactionHistory(walletState: WalletStateAndHistory) {
+  const {requests, boosts, transfers} = walletState
   const requestsData = useRequestTableDate(requests)
   const transfersData = useTransferTableDate(transfers)
   const boostsData = useBoostTableData(boosts)
@@ -312,9 +303,9 @@ const REQUEST_COLUMNS = ['ID', 'Date', 'Amount'] as const
 type RequestColumn = (typeof REQUEST_COLUMNS)[number]
 
 function useRequestTableDate(
-  requests: WalletRequest[],
-): TableProps<RequestColumn, WalletRequest> {
-  const [requestsOrder, setRequestsOrder] = useState<Sort<WalletRequest>>({
+  requests: Array<Request>,
+): TableProps<RequestColumn, Request> {
+  const [requestsOrder, setRequestsOrder] = useState<Sort<Request>>({
     desc: true,
     col: 'date',
   })
@@ -362,9 +353,9 @@ const TRANSFER_COLUMNS = ['ID', 'Date', 'Amount', 'Address'] as const
 type TransferColumn = (typeof TRANSFER_COLUMNS)[number]
 
 function useTransferTableDate(
-  transfers: WalletTransfer[],
-): TableProps<TransferColumn, WalletTransfer> {
-  const [transfersOrder, setTransfersOrder] = useState<Sort<WalletTransfer>>({
+  transfers: Array<Transfer>,
+): TableProps<TransferColumn, Transfer> {
+  const [transfersOrder, setTransfersOrder] = useState<Sort<Transfer>>({
     desc: true,
     col: 'date',
   })
@@ -400,7 +391,7 @@ function useTransferTableDate(
           flex: 3,
           type: 'text',
           maxLineNumber: 1,
-          field: 'to_address',
+          field: 'toAddress',
         },
       ],
       data: sortBySortOrder(transfers, transfersOrder),
@@ -419,9 +410,9 @@ const BOOST_COLUMNS = ['Date', 'Type', 'Amount', 'Username', 'Post'] as const
 type BoostColumn = (typeof BOOST_COLUMNS)[number]
 
 function useBoostTableData(
-  boosts: WalletBoost[],
-): TableProps<BoostColumn, WalletBoost> {
-  const [boostOrder, setBoostOrder] = useState<Sort<WalletBoost>>({
+  boosts: Array<Boost>,
+): TableProps<BoostColumn, Boost> {
+  const [boostOrder, setBoostOrder] = useState<Sort<Boost>>({
     desc: true,
     col: 'date',
   })

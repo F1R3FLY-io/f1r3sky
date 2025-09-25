@@ -2,14 +2,10 @@ import {useMemo, useState} from 'react'
 import {View} from 'react-native'
 import {Defs, LinearGradient, Path, Stop} from 'react-native-svg'
 import {AreaChart, XAxis} from 'react-native-svg-charts'
+import {type WalletStateAndHistory} from '@f1r3fly-io/embers-client-sdk'
 import {msg, Trans} from '@lingui/macro'
 import {useLingui} from '@lingui/react'
 
-import {
-  type WalletBoost,
-  type WalletRequest,
-  type WalletTransfer,
-} from '#/state/queries/wallet'
 import {atoms as a, useTheme} from '#/alf'
 import * as Toggle from '#/components/forms/Toggle'
 
@@ -22,10 +18,7 @@ type GraphEntry = {
 }
 
 export type WalletBalanceGraphProps = {
-  balance: bigint
-  requests: WalletRequest[]
-  boosts: WalletBoost[]
-  transfers: WalletTransfer[]
+  walletState: WalletStateAndHistory
 }
 
 const generateDatesByOffset = (
@@ -49,13 +42,11 @@ const generateDatesByOffset = (
 }
 
 export default function WalletBalanceGraph({
-  balance,
-  requests,
-  boosts,
-  transfers,
+  walletState,
 }: WalletBalanceGraphProps) {
   const t = useTheme()
   const {_} = useLingui()
+  const {balance, boosts, requests, transfers} = walletState
 
   const [activeScale, setActiveScale] = useState<BalanceGraphScale>('1M')
 
