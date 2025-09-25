@@ -357,7 +357,8 @@
     "path": "yarn.lock",
     "allowedHosts": [
       "npm",
-      "yarn"
+      "yarn",
+      "npm.pkg.github.com"
     ],
     "allowedSchemes": [
       "https:"
