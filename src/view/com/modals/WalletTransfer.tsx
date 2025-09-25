@@ -33,9 +33,15 @@ export function Component({currentBalance, wallet}: Props) {
     (state: ControlState, action: TransferAction) =>
       handleTransferAction(wallet, state, action),
     {
-      amount: {},
-      address: {},
-      description: {},
+      amount: {
+        state: 'empty',
+      },
+      address: {
+        state: 'empty',
+      },
+      description: {
+        state: 'valid',
+      },
     },
   )
 
@@ -83,17 +89,20 @@ export function Component({currentBalance, wallet}: Props) {
                 placeholder="0.0"
                 keyboardType="numeric"
                 onChangeText={amount => {
+                  let number
                   try {
-                    dispatch({
-                      type: 'setAmount',
-                      amount: Amount.tryFrom(BigInt(amount ?? 0)),
-                      currentBalance,
-                    })
+                    number = BigInt(amount)
                   } catch (e) {
-                    console.error(e)
+                    number = undefined
                   }
+
+                  dispatch({
+                    type: 'setAmount',
+                    amount: number,
+                    currentBalance,
+                  })
                 }}
-                isInvalid={!!state.amount.error}
+                isInvalid={state.amount.state === 'invalid'}
                 style={[
                   a.text_5xl,
                   a.font_bold,
@@ -118,14 +127,14 @@ export function Component({currentBalance, wallet}: Props) {
             <TextField.LabelText>
               <Trans>Receiver Wallet address</Trans>
             </TextField.LabelText>
-            <TextField.Root isInvalid={!!state.address.error}>
+            <TextField.Root isInvalid={state.address.state === 'invalid'}>
               <TextField.Input
                 label={_(msg`Add wallet address`)}
                 onChangeText={address =>
                   dispatch({
                     type: 'setAddress',
-                    address: Address.tryFrom(address),
-                    userAddress: wallet.address.value,
+                    address,
+                    userAddress: wallet.address,
                   })
                 }
               />
@@ -135,14 +144,14 @@ export function Component({currentBalance, wallet}: Props) {
             <TextField.LabelText>
               <Trans>Note</Trans>
             </TextField.LabelText>
-            <TextField.Root>
+            <TextField.Root isInvalid={state.description.state === 'invalid'}>
               <TextField.Input
                 label={_(msg`Note`)}
                 placeholder={_(msg`Placeholder`)}
                 onChangeText={description =>
                   dispatch({
                     type: 'setDescription',
-                    description: Description.tryFrom(description),
+                    description,
                   })
                 }
                 multiline
@@ -181,10 +190,9 @@ export function Component({currentBalance, wallet}: Props) {
 
   async function onSubmitClick() {
     if (
-      state.amount.value !== undefined &&
-      state.amount.error === undefined &&
-      state.address.value !== undefined &&
-      state.address.error === undefined
+      state.amount.state === 'valid' &&
+      state.address.state === 'valid' &&
+      state.description.state === 'valid'
     ) {
       try {
         await submit({
@@ -201,35 +209,60 @@ export function Component({currentBalance, wallet}: Props) {
       dispatch({
         type: 'revalidateAll',
         currentBalance,
-        userAddress: wallet.address.value,
+        userAddress: wallet.address,
       })
     }
   }
 }
 
 type ControlState = {
-  amount: {
-    value?: Amount
-    error?: 'invalid' | 'lowBalance'
-  }
-  address: {
-    value?: Address
-    error?: 'invalid' | 'sameAddress'
-  }
-  description: {
-    value?: Description
-  }
+  amount:
+    | {
+        state: 'valid'
+        value: Amount
+      }
+    | {
+        state: 'invalid'
+        value?: bigint
+        error: 'invalid' | 'lowBalance'
+      }
+    | {
+        state: 'empty'
+      }
+  address:
+    | {
+        state: 'valid'
+        value: Address
+      }
+    | {
+        state: 'invalid'
+        value?: string
+        error: 'invalid' | 'sameAddress'
+      }
+    | {
+        state: 'empty'
+      }
+  description:
+    | {
+        state: 'valid'
+        value?: Description
+      }
+    | {
+        state: 'invalid'
+        value?: string
+        error: 'invalid'
+      }
 }
 
 type TransferAction =
   | {
       type: 'setAmount'
-      amount?: Amount
+      amount?: bigint
       currentBalance: bigint
     }
-  | {type: 'setAddress'; address?: Address; userAddress: string}
-  | {type: 'setDescription'; description?: Description}
-  | {type: 'revalidateAll'; currentBalance: bigint; userAddress: string}
+  | {type: 'setAddress'; address?: string; userAddress: Address}
+  | {type: 'setDescription'; description?: string}
+  | {type: 'revalidateAll'; currentBalance: bigint; userAddress: Address}
 
 export const handleTransferAction = (
   wallet: UniWallet,
@@ -239,93 +272,157 @@ export const handleTransferAction = (
   switch (action.type) {
     case 'setAmount': {
       const thisProp = 'amount'
-
-      if (action.amount === undefined || action.amount.value <= 0) {
+      if (action.amount === undefined) {
         return {
           ...state,
           [thisProp]: {
+            state: 'invalid',
             value: action.amount,
             error: 'invalid',
           },
         }
       }
 
-      if (action.amount.value > action.currentBalance) {
+      try {
+        let amount = Amount.tryFrom(action.amount)
+
+        if (amount.value > action.currentBalance) {
+          return {
+            ...state,
+            [thisProp]: {
+              state: 'invalid',
+              value: amount.value,
+              error: 'lowBalance',
+            },
+          }
+        }
+
         return {
           ...state,
           [thisProp]: {
-            value: action.amount,
-            error: 'lowBalance',
+            state: 'valid',
+            value: amount,
           },
         }
-      }
-
-      return {
-        ...state,
-        [thisProp]: {
-          value: action.amount,
-        },
+      } catch (e) {
+        return {
+          ...state,
+          [thisProp]: {
+            state: 'invalid',
+            value: action.amount,
+            error: 'invalid',
+          },
+        }
       }
     }
     case 'setAddress': {
       const thisProp = 'address'
 
-      if (
-        action.address === undefined ||
-        action.address.value === '' ||
-        !Address.tryFrom(action.address.value)
-      ) {
+      if (action.address === undefined) {
         return {
           ...state,
           [thisProp]: {
+            state: 'invalid',
             value: action.address,
             error: 'invalid',
           },
         }
       }
 
-      if (action.address.value === action.userAddress) {
+      try {
+        let address = Address.tryFrom(action.address)
+
+        if (address.value === action.userAddress.value) {
+          return {
+            ...state,
+            [thisProp]: {
+              state: 'invalid',
+              value: address.value,
+              error: 'sameAddress',
+            },
+          }
+        }
+
         return {
           ...state,
           [thisProp]: {
-            value: action.address,
-            error: 'sameAddress',
+            state: 'valid',
+            value: address,
           },
         }
-      }
-
-      return {
-        ...state,
-        [thisProp]: {
-          value: action.address,
-        },
+      } catch (e) {
+        return {
+          ...state,
+          [thisProp]: {
+            state: 'invalid',
+            value: action.address,
+            error: 'invalid',
+          },
+        }
       }
     }
     case 'setDescription': {
       const thisProp = 'description'
-      return {
-        ...state,
-        [thisProp]: {
-          value: action.description,
-        },
+      if (action.description === undefined) {
+        return {
+          ...state,
+          [thisProp]: {
+            state: 'valid',
+            value: action.description,
+          },
+        }
+      }
+
+      try {
+        let description = Description.tryFrom(action.description)
+
+        return {
+          ...state,
+          [thisProp]: {
+            state: 'valid',
+            value: description,
+          },
+        }
+      } catch (e) {
+        return {
+          ...state,
+          [thisProp]: {
+            state: 'invalid',
+            value: action.description,
+            error: 'invalid',
+          },
+        }
       }
     }
     case 'revalidateAll': {
       let newState = handleTransferAction(wallet, state, {
         type: 'setAmount',
-        amount: state.amount.value,
+        amount:
+          state.amount.state === 'empty'
+            ? undefined
+            : state.amount.state === 'invalid'
+            ? state.amount.value
+            : state.amount.value.value,
         currentBalance: action.currentBalance,
       })
 
       newState = handleTransferAction(wallet, newState, {
         type: 'setAddress',
-        address: state.address.value,
+        address:
+          state.address.state === 'empty'
+            ? undefined
+            : state.address.state === 'invalid'
+            ? state.address.value
+            : state.address.value.value,
         userAddress: action.userAddress,
       })
 
       return handleTransferAction(wallet, newState, {
         type: 'setDescription',
-        description: state.description.value,
+        description:
+          state.description.state === 'invalid'
+            ? state.description.value
+            : state.description.value?.value,
       })
     }
   }
@@ -335,21 +432,28 @@ function formatErrorMsg(
   _: I18nContext['_'],
   state: ControlState,
 ): string | undefined {
-  switch (state.amount.error) {
-    case 'invalid':
-      return _(msg`Invalid amount`)
-    case 'lowBalance':
-      return _(msg`Not enough funds for transfer`)
-    case undefined:
-      break
+  if (state.amount.state === 'invalid') {
+    switch (state.amount.error) {
+      case 'invalid':
+        return _(msg`Invalid amount`)
+      case 'lowBalance':
+        return _(msg`Not enough funds for transfer`)
+    }
   }
 
-  switch (state.address.error) {
-    case 'invalid':
-      return _(msg`Invalid address`)
-    case 'sameAddress':
-      return _(msg`Destination address and source address are the same`)
-    case undefined:
-      break
+  if (state.address.state === 'invalid') {
+    switch (state.address.error) {
+      case 'invalid':
+        return _(msg`Invalid address`)
+      case 'sameAddress':
+        return _(msg`Destination address and source address are the same`)
+    }
+  }
+
+  if (state.description.state === 'invalid') {
+    switch (state.description.error) {
+      case 'invalid':
+        return _(msg`Description is too long`)
+    }
   }
 }
