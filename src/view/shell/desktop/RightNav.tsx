@@ -98,14 +98,14 @@ export function DesktopRightNav({routeName}: {routeName: string}) {
 
       {isWalletScreen && (
         <Button
-          label={_(msg`Hide trending topics`)}
+          label={_(msg`Open Embers`)}
           size="large"
           variant="solid"
           color="secondary"
           shape="default"
           onPress={() => Linking.openURL(fireskyUrl)}>
           <ChainLink_Stroke2_Corner0_Rounded />
-          <Text>{_(msg`Open Embers`)} </Text>
+          <Text>{_(msg`Open Embers`)}</Text>
         </Button>
       )}
 

@@ -242,7 +242,7 @@ export function Wallet({}: NativeStackScreenProps<
                       <Layout.Header.TitleText>
                         {walletState?.balance.toString()}
                       </Layout.Header.TitleText>
-                      <Text style={[a.text_xs, a.pb_xs]}>{'F1R3CAP'}</Text>
+                      <Text style={[a.text_xs, a.pb_xs]}>F1R3CAP</Text>
                     </>
                   )}
                 </Loaded>
