@@ -128,6 +128,7 @@
     "base64-js": "^1.5.1",
     "bcp-47": "^2.1.0",
     "bcp-47-match": "^2.0.3",
+    "better-sqlite3": "^12.4.1",
     "blakejs": "^1.2.1",
     "date-fns": "^2.30.0",
     "deprecated-react-native-prop-types": "^5.0.0",
@@ -289,10 +290,11 @@
     "@react-native/babel-preset": "0.79.3",
     "@react-native/normalize-colors": "0.79.3",
     "@types/react": "^18",
+    "**/better-sqlite3": "^12.4.1",
     "**/expo-constants": "17.0.3",
     "**/expo-device": "7.1.4",
-    "**/zod": "3.23.8",
-    "**/multiformats": "9.9.0"
+    "**/multiformats": "9.9.0",
+    "**/zod": "3.23.8"
   },
   "jest": {
     "preset": "jest-expo/ios",
