@@ -15,6 +15,7 @@ import * as DeleteAccountModal from './DeleteAccount'
 import * as InviteCodesModal from './InviteCodes'
 import * as ContentLanguagesSettingsModal from './lang-settings/ContentLanguagesSettings'
 import * as PostLanguagesSettingsModal from './lang-settings/PostLanguagesSettings'
+import * as SelectWallet from './SelectWallet'
 import * as UserAddRemoveListsModal from './UserAddRemoveLists'
 import * as WalletTransfer from './WalletTransfer'
 
@@ -75,10 +76,13 @@ export function ModalsContainer() {
     element = <WalletTransfer.Component {...activeModal} />
   } else if (activeModal?.name === 'create-wallet') {
     snapPoints = CreateWallet.snapPoints
-    element = <CreateWallet.Component />
+    element = <CreateWallet.Component {...activeModal} />
   } else if (activeModal?.name === 'add-wallet') {
     snapPoints = AddWallet.snapPoints
-    element = <AddWallet.Component />
+    element = <AddWallet.Component {...activeModal} />
+  } else if (activeModal?.name === 'select-wallet') {
+    snapPoints = SelectWallet.snapPoints
+    element = <SelectWallet.Component {...activeModal} />
   } else {
     return null
   }

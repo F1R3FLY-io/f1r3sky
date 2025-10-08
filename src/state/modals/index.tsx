@@ -52,10 +52,20 @@ export interface WalletTransfer {
 
 export interface CreateWallet {
   name: 'create-wallet'
+  skipNavigation?: boolean
+  onWalletCreated?: () => void
 }
 
 export interface AddWallet {
   name: 'add-wallet'
+  skipNavigation?: boolean
+  onWalletAdded?: () => void
+}
+
+export interface SelectWallet {
+  name: 'select-wallet'
+  onSelectWallet: (walletIndex: number) => void
+  onSelectWalletByAddress?: (walletAddress: string) => void
 }
 
 export type Modal =
@@ -79,6 +89,7 @@ export type Modal =
   | WalletTransfer
   | CreateWallet
   | AddWallet
+  | SelectWallet
 
 const ModalContext = React.createContext<{
   isModalActive: boolean

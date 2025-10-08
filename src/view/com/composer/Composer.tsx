@@ -91,6 +91,7 @@ import {type Gif} from '#/state/queries/tenor'
 import {useAgent, useSession} from '#/state/session'
 import {useComposerControls} from '#/state/shell/composer'
 import {type ComposerOpts, type OnPostSuccessData} from '#/state/shell/composer'
+import {useWallets} from '#/state/wallets'
 import {CharProgress} from '#/view/com/composer/char-progress/CharProgress'
 import {ComposerReplyTo} from '#/view/com/composer/ComposerReplyTo'
 import {
@@ -125,6 +126,7 @@ import {Button, ButtonIcon, ButtonText} from '#/components/Button'
 import {CircleInfo_Stroke2_Corner0_Rounded as CircleInfo} from '#/components/icons/CircleInfo'
 import {EmojiArc_Stroke2_Corner0_Rounded as EmojiSmile} from '#/components/icons/Emoji'
 import {TimesLarge_Stroke2_Corner0_Rounded as X} from '#/components/icons/Times'
+import {WalletComposer} from '#/components/icons/WalletComposer'
 import {LazyQuoteEmbed} from '#/components/Post/Embed/LazyQuoteEmbed'
 import * as Prompt from '#/components/Prompt'
 import {Text as NewText} from '#/components/Typography'
@@ -1182,6 +1184,7 @@ function ComposerPills({
   dispatch: (action: ComposerAction) => void
   bottomBarAnimatedStyle: StyleProp<ViewStyle>
 }) {
+  const {_} = useLingui()
   const t = useTheme()
   const media = post.embed.media
   const hasMedia = media?.type === 'images' || media?.type === 'video'
@@ -1216,6 +1219,33 @@ function ComposerPills({
             }}
             style={bottomBarAnimatedStyle}
           />
+        )}
+        {post.tipWalletAddress && (
+          <Button
+            variant="solid"
+            color="secondary"
+            size="small"
+            label={_(msg`Linked wallet`)}
+            onPress={() => {
+              dispatch({
+                type: 'update_post',
+                postId: post.id,
+                postAction: {
+                  type: 'set_tip_wallet',
+                  address: undefined,
+                },
+              })
+            }}
+            accessibilityHint={_(msg`Remove linked wallet`)}
+            style={[
+              native({
+                paddingHorizontal: 8,
+                paddingVertical: 6,
+              }),
+            ]}>
+            <ButtonIcon icon={WalletComposer} />
+            <ButtonText numberOfLines={1}>{_(msg`Linked wallet`)}</ButtonText>
+          </Button>
         )}
         {hasMedia || hasLink ? (
           <LabelsBtn
@@ -1257,6 +1287,8 @@ function ComposerFooter({
   const t = useTheme()
   const {_} = useLingui()
   const {isMobile} = useWebMediaQueries()
+  const {openModal} = useModalControls()
+  const {wallets} = useWallets()
 
   const media = post.embed.media
   const images = media?.type === 'images' ? media.images : []
@@ -1325,6 +1357,35 @@ function ComposerFooter({
                   <EmojiSmile size="lg" />
                 </Button>
               ) : null}
+              <Button
+                onPress={() =>
+                  openModal({
+                    name: 'select-wallet',
+                    onSelectWallet: (walletIndex: number) => {
+                      const wallet = wallets[walletIndex]
+                      if (wallet) {
+                        dispatch({
+                          type: 'set_tip_wallet',
+                          address: wallet.address.value,
+                        })
+                      }
+                    },
+                    onSelectWalletByAddress: (walletAddress: string) => {
+                      dispatch({
+                        type: 'set_tip_wallet',
+                        address: walletAddress,
+                      })
+                    },
+                  })
+                }
+                style={a.p_sm}
+                label={_(msg`Select wallet`)}
+                accessibilityHint={_(msg`Opens wallet selection`)}
+                variant="ghost"
+                shape="round"
+                color="primary">
+                <WalletComposer size="lg" />
+              </Button>
             </ToolbarWrapper>
           )}
         </LayoutAnimationConfig>

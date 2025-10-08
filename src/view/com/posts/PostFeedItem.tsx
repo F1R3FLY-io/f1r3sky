@@ -61,6 +61,7 @@ import {ProfileHoverCard} from '#/components/ProfileHoverCard'
 import {RichText} from '#/components/RichText'
 import {SubtleWebHover} from '#/components/SubtleWebHover'
 import * as bsky from '#/types/bsky'
+import {PostTip} from './PostTip'
 
 interface FeedItemProps {
   record: AppBskyFeedPost.Record
@@ -464,6 +465,9 @@ let FeedItemInner = ({
             post={post}
             threadgateRecord={threadgateRecord}
           />
+          {(record as any).tipWalletAddress && (
+            <PostTip walletAddress={(record as any).tipWalletAddress} />
+          )}
           <PostControls
             post={post}
             record={record}

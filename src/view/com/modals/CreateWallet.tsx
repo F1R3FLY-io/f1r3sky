@@ -18,9 +18,12 @@ import {ScrollView} from './util'
 
 export const snapPoints = ['90%']
 
-export type Props = {}
+export type Props = {
+  skipNavigation?: boolean
+  onWalletCreated?: () => void
+}
 
-export function Component({}: Props) {
+export function Component({skipNavigation = false, onWalletCreated}: Props) {
   const t = useTheme()
   const pal = usePalette('default')
   const {_} = useLingui()
@@ -48,8 +51,18 @@ export function Component({}: Props) {
     }
 
     const position = addWallet(wallet)
-    navigation.navigate('Wallet', {position})
-  }, [_, addWallet, navigation])
+
+    if (!skipNavigation) {
+      navigation.navigate('Wallet', {position})
+    }
+
+    closeModal()
+
+    // Call the callback to return to wallet selector
+    if (onWalletCreated) {
+      onWalletCreated()
+    }
+  }, [_, addWallet, navigation, skipNavigation, onWalletCreated, closeModal])
 
   return (
     <SafeAreaView style={[pal.view, a.flex_1]}>
