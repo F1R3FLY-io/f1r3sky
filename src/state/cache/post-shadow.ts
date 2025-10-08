@@ -24,6 +24,9 @@ export interface PostShadow {
   isDeleted: boolean
   embed: AppBskyEmbedRecord.View | AppBskyEmbedRecordWithMedia.View | undefined
   pinned: boolean
+  tipCount: number | undefined
+  totalTipsAmount: string | undefined
+  hasTipped: boolean | undefined
 }
 
 export const POST_TOMBSTONE = Symbol('PostTombstone')
@@ -107,8 +110,29 @@ function mergeShadow(
     }
   }
 
+  // Handle tip count
+  let tipCount = (post as any).tipCount ?? 0
+  if ('tipCount' in shadow) {
+    tipCount = shadow.tipCount ?? 0
+  }
+
+  // Handle total tips amount
+  let totalTipsAmount = (post as any).totalTipsAmount ?? '0'
+  if ('totalTipsAmount' in shadow) {
+    totalTipsAmount = shadow.totalTipsAmount ?? '0'
+  }
+
+  // Handle hasTipped
+  let hasTipped = (post as any).hasTipped ?? false
+  if ('hasTipped' in shadow) {
+    hasTipped = shadow.hasTipped ?? false
+  }
+
   return castAsShadow({
     ...post,
+    tipCount,
+    totalTipsAmount,
+    hasTipped,
     embed: embed || post.embed,
     likeCount: likeCount,
     repostCount: repostCount,

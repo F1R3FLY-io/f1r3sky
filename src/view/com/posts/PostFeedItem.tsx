@@ -470,6 +470,7 @@ let FeedItemInner = ({
             </View>
             {(record as any).tipWalletAddress && (
               <PostTip
+                post={post}
                 walletAddress={(record as any).tipWalletAddress}
                 postAuthor={post.author}
               />

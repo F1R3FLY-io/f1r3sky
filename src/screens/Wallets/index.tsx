@@ -1,8 +1,8 @@
-import {useEffect, useState} from 'react'
+import {useCallback, useState} from 'react'
 import {ActivityIndicator, View} from 'react-native'
 import {msg, Trans} from '@lingui/macro'
 import {useLingui} from '@lingui/react'
-import {useNavigation} from '@react-navigation/native'
+import {useFocusEffect, useNavigation} from '@react-navigation/native'
 
 import {formatLargeNumber} from '#/lib/numbers'
 import {
@@ -39,18 +39,29 @@ export function Wallets({}: NativeStackScreenProps<
   const [balances, setBalances] = useState<Map<number, bigint>>(new Map())
   const [loadingBalances, setLoadingBalances] = useState<Set<number>>(new Set())
 
-  // Fetch balances for all wallets
-  useEffect(() => {
+  // Function to fetch balances for all wallets
+  const fetchBalances = useCallback(() => {
     wallets.forEach((wallet, index) => {
       if (wallet.walletType === WalletType.F1R3CAP && wallet.embers) {
         setLoadingBalances(prev => new Set(prev).add(index))
         wallet.embers.wallets
           .getWalletState()
           .then(state => {
-            setBalances(prev => new Map(prev).set(index, state.balance))
+            console.log(
+              `[Wallets] Fetched balance for wallet ${index}:`,
+              state.balance.toString(),
+            )
+            setBalances(prev => {
+              const newMap = new Map(prev)
+              newMap.set(index, state.balance)
+              return newMap
+            })
           })
-          .catch(() => {
-            // Ignore errors, just don't show balance
+          .catch(error => {
+            console.error(
+              `[Wallets] Failed to fetch balance for wallet ${index}:`,
+              error,
+            )
           })
           .finally(() => {
             setLoadingBalances(prev => {
@@ -62,6 +73,13 @@ export function Wallets({}: NativeStackScreenProps<
       }
     })
   }, [wallets])
+
+  // Refetch balances whenever the screen is focused (includes initial mount)
+  useFocusEffect(
+    useCallback(() => {
+      fetchBalances()
+    }, [fetchBalances]),
+  )
 
   // Calculate total balance for proportions
   const totalBalance = Array.from(balances.values()).reduce(
@@ -102,11 +120,13 @@ export function Wallets({}: NativeStackScreenProps<
         </Layout.Header.Content>
       </Layout.Header.Outer>
       <Layout.Content>
-        <View style={[a.px_2xl, a.pt_2xl, a.pb_md]}>
-          <Text style={[a.text_lg, a.font_bold]}>
-            <Trans>Your Wallets</Trans>
-          </Text>
-        </View>
+        {wallets.length > 0 && (
+          <View style={[a.px_2xl, a.pt_2xl, a.pb_md]}>
+            <Text style={[a.text_lg, a.font_bold]}>
+              <Trans>Your Wallets</Trans>
+            </Text>
+          </View>
+        )}
         {wallets.map((wallet, i) => {
           const balance = balances.get(i)
           const isLoadingBalance = loadingBalances.has(i)
@@ -178,12 +198,11 @@ export function Wallets({}: NativeStackScreenProps<
             </PressableWithHover>
           )
         })}
-        <View style={[a.pt_xl]} />
         <PressableWithHover
           hoverStyle={t.atoms.bg_contrast_25}
           onPress={() => openModal({name: 'create-wallet'})}>
           <View
-            style={[a.flex_row, a.align_center, a.px_2xl, a.py_lg, a.gap_sm]}>
+            style={[a.flex_row, a.align_center, a.px_2xl, a.py_xl, a.gap_sm]}>
             <AddWallet />
             <Text style={[a.text_md]}>
               <Trans>Create new wallet</Trans>
@@ -194,17 +213,17 @@ export function Wallets({}: NativeStackScreenProps<
           hoverStyle={t.atoms.bg_contrast_25}
           onPress={() => openModal({name: 'add-wallet'})}>
           <View
-            style={[a.flex_row, a.align_center, a.px_2xl, a.py_lg, a.gap_sm]}>
+            style={[a.flex_row, a.align_center, a.px_2xl, a.py_xl, a.gap_sm]}>
             <AddWallet />
             <Text style={[a.text_md]}>
               <Trans>Add wallet</Trans>
             </Text>
           </View>
         </PressableWithHover>
+        <Divider />
         {wallets.length > 0 && (
           <>
-            <Divider />
-            <View style={[a.px_2xl, a.pt_2xl, a.pb_md]}>
+            <View style={[a.px_2xl, a.py_2xl]}>
               <Text style={[a.text_lg, a.font_bold]}>
                 <Trans>Tipping Preferences</Trans>
               </Text>
