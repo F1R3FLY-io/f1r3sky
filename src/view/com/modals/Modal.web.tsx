@@ -11,7 +11,7 @@ import * as ChangePasswordModal from './ChangePassword'
 import * as CreateOrEditListModal from './CreateOrEditList'
 import * as CreateWallet from './CreateWallet'
 import * as DeleteAccountModal from './DeleteAccount'
-import * as LinkedWallet from './DeleteLinkedWallet'
+import * as DeleteLinkedWallet from './DeleteLinkedWallet'
 import * as InviteCodesModal from './InviteCodes'
 import * as ContentLanguagesSettingsModal from './lang-settings/ContentLanguagesSettings'
 import * as PostLanguagesSettingsModal from './lang-settings/PostLanguagesSettings'
@@ -78,7 +78,7 @@ function Modal({modal}: {modal: ModalIface}) {
   } else if (modal?.name === 'select-wallet') {
     element = <SelectWallet.Component {...modal} />
   } else if (modal?.name === 'linked-wallet') {
-    element = <LinkedWallet.Component {...modal} />
+    element = <DeleteLinkedWallet.Component {...modal} />
   } else {
     return null
   }

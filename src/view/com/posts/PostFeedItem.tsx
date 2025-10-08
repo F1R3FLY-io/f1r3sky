@@ -456,18 +456,22 @@ let FeedItemInner = ({
               />
             )}
           <LabelsOnMyPost post={post} />
-          <PostContent
-            moderation={moderation}
-            richText={richText}
-            postEmbed={post.embed}
-            postAuthor={post.author}
-            onOpenEmbed={onOpenEmbed}
-            post={post}
-            threadgateRecord={threadgateRecord}
-          />
-          {(record as any).tipWalletAddress && (
-            <PostTip walletAddress={(record as any).tipWalletAddress} />
-          )}
+          <View style={[a.flex_row, a.gap_sm]}>
+            <View style={[a.flex_1]}>
+              <PostContent
+                moderation={moderation}
+                richText={richText}
+                postEmbed={post.embed}
+                postAuthor={post.author}
+                onOpenEmbed={onOpenEmbed}
+                post={post}
+                threadgateRecord={threadgateRecord}
+              />
+            </View>
+            {(record as any).tipWalletAddress && (
+              <PostTip walletAddress={(record as any).tipWalletAddress} />
+            )}
+          </View>
           <PostControls
             post={post}
             record={record}

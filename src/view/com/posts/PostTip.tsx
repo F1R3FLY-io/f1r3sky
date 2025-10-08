@@ -1,4 +1,3 @@
-import {View} from 'react-native'
 import {msg} from '@lingui/macro'
 import {useLingui} from '@lingui/react'
 
@@ -20,21 +19,19 @@ export function PostTip({walletAddress}: PostTipProps) {
   }
 
   return (
-    <View style={[a.flex_row, a.align_center, a.pt_sm, a.pb_xs]}>
-      <Button
-        label={_(msg`Tip`)}
-        accessibilityHint={_(msg`Send tip to this post`)}
-        variant="ghost"
-        shape="round"
-        color="primary"
-        size="small"
-        style={[a.p_sm]}
-        onPress={onPressTip}>
-        <DollarBillIcon
-          size="md"
-          style={[{color: t.palette.contrast_500} as any]}
-        />
-      </Button>
-    </View>
+    <Button
+      label={_(msg`Tip`)}
+      accessibilityHint={_(msg`Send tip to this post`)}
+      variant="ghost"
+      shape="round"
+      color="secondary"
+      hoverStyle={t.atoms.bg_contrast_25}
+      style={[a.bg_transparent, a.p_sm]}
+      onPress={onPressTip}>
+      <DollarBillIcon
+        size="md"
+        style={[{color: t.palette.contrast_500} as any]}
+      />
+    </Button>
   )
 }

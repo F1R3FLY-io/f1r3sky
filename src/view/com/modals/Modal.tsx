@@ -12,7 +12,7 @@ import * as ChangePasswordModal from './ChangePassword'
 import * as CreateOrEditListModal from './CreateOrEditList'
 import * as CreateWallet from './CreateWallet'
 import * as DeleteAccountModal from './DeleteAccount'
-import * as LinkedWallet from './DeleteLinkedWallet'
+import * as DeleteLinkedWallet from './DeleteLinkedWallet'
 import * as InviteCodesModal from './InviteCodes'
 import * as ContentLanguagesSettingsModal from './lang-settings/ContentLanguagesSettings'
 import * as PostLanguagesSettingsModal from './lang-settings/PostLanguagesSettings'
@@ -85,8 +85,8 @@ export function ModalsContainer() {
     snapPoints = SelectWallet.snapPoints
     element = <SelectWallet.Component {...activeModal} />
   } else if (activeModal?.name === 'linked-wallet') {
-    snapPoints = LinkedWallet.snapPoints
-    element = <LinkedWallet.Component {...activeModal} />
+    snapPoints = DeleteLinkedWallet.snapPoints
+    element = <DeleteLinkedWallet.Component {...activeModal} />
   } else {
     return null
   }
