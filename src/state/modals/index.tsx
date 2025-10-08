@@ -68,6 +68,12 @@ export interface SelectWallet {
   onSelectWalletByAddress?: (walletAddress: string) => void
 }
 
+export interface LinkedWallet {
+  name: 'linked-wallet'
+  walletAddress: string
+  onRemoveWallet: () => void
+}
+
 export type Modal =
   // Account
   | DeleteAccountModal
@@ -90,6 +96,7 @@ export type Modal =
   | CreateWallet
   | AddWallet
   | SelectWallet
+  | LinkedWallet
 
 const ModalContext = React.createContext<{
   isModalActive: boolean

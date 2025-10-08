@@ -44,7 +44,7 @@ export function Component({skipNavigation = false, onWalletCreated}: Props) {
 
     const saveRes = await saveWalletToFS(wallet)
 
-    if (!saveRes) {
+    if (saveRes) {
       Toast.show(_(msg`File saved successfully!`))
     } else {
       Toast.show(_(msg`Failed to save file!`))

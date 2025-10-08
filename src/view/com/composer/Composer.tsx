@@ -1185,6 +1185,7 @@ function ComposerPills({
   bottomBarAnimatedStyle: StyleProp<ViewStyle>
 }) {
   const {_} = useLingui()
+  const {openModal} = useModalControls()
   const t = useTheme()
   const media = post.embed.media
   const hasMedia = media?.type === 'images' || media?.type === 'video'
@@ -1227,16 +1228,22 @@ function ComposerPills({
             size="small"
             label={_(msg`Linked wallet`)}
             onPress={() => {
-              dispatch({
-                type: 'update_post',
-                postId: post.id,
-                postAction: {
-                  type: 'set_tip_wallet',
-                  address: undefined,
+              openModal({
+                name: 'linked-wallet',
+                walletAddress: post.tipWalletAddress!,
+                onRemoveWallet: () => {
+                  dispatch({
+                    type: 'update_post',
+                    postId: post.id,
+                    postAction: {
+                      type: 'set_tip_wallet',
+                      address: undefined,
+                    },
+                  })
                 },
               })
             }}
-            accessibilityHint={_(msg`Remove linked wallet`)}
+            accessibilityHint={_(msg`View linked wallet`)}
             style={[
               native({
                 paddingHorizontal: 8,
