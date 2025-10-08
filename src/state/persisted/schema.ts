@@ -127,6 +127,12 @@ const schema = z.object({
   mutedThreads: z.array(z.string()),
   trendingDisabled: z.boolean().optional(),
   trendingVideoDisabled: z.boolean().optional(),
+  tipPrefs: z
+    .object({
+      defaultTipAmount: z.string().optional(), // stored as string to preserve precision
+      defaultTippingWalletIndex: z.number().optional(),
+    })
+    .optional(),
 })
 export type Schema = z.infer<typeof schema>
 
@@ -174,6 +180,10 @@ export const defaults: Schema = {
   subtitlesEnabled: true,
   trendingDisabled: false,
   trendingVideoDisabled: false,
+  tipPrefs: {
+    defaultTipAmount: '10',
+    defaultTippingWalletIndex: 0,
+  },
 }
 
 export function tryParse(rawData: string): Schema | undefined {
