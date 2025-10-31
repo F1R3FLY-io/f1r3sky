@@ -1,10 +1,10 @@
-import {useEffect, useState} from 'react'
+import {useCallback, useEffect, useState} from 'react'
 import {TouchableOpacity, View} from 'react-native'
 import {type WalletStateAndHistory} from '@f1r3fly-io/embers-client-sdk'
 import {msg, Trans} from '@lingui/macro'
 import {useLingui} from '@lingui/react'
 import {type RouteProp} from '@react-navigation/native'
-import {useRoute} from '@react-navigation/native'
+import {useFocusEffect, useRoute} from '@react-navigation/native'
 import {useNavigation} from '@react-navigation/native'
 
 import {
@@ -49,86 +49,114 @@ export function Wallet({}: NativeStackScreenProps<
   const wallet = getByIndex(+params.position)
   const [walletState, setWalletState] = useState<WalletStateAndHistory>()
   const [screenState, changeScreenState] = useState(SCREEN_STATE.LOADING)
+  const [, setIsRefreshing] = useState(false)
 
-  useEffect(() => {
-    if (wallet === undefined) {
-      changeScreenState(SCREEN_STATE.ABSENT)
-      return
-    }
-
-    switch (wallet.walletType) {
-      case WalletType.F1R3CAP:
-        wallet.embers?.wallets.getWalletState().then(state => {
-          setWalletState(state)
-          changeScreenState(SCREEN_STATE.LOADED)
-        })
-        break
-      // todo dropped ethereum support for now
-      // case WalletType.ETHEREUM:
-      //   const account = privateKeyToAccount(wallet.privateKey)
-      //
-      //   const publicClient = createTestClient({
-      //     account,
-      //     chain: hardhat,
-      //     mode: 'hardhat',
-      //     transport: http(),
-      //   })
-      //     .extend(publicActions)
-      //     .extend(walletActions)
-      //
-      //   publicClient
-      //     .getBalance({
-      //       address: account.address,
-      //     })
-      //     .then(async balance => {
-      //       const blockNumber = await publicClient.getBlockNumber()
-      //
-      //       const endBlock = blockNumber
-      //       const startBlock = endBlock === 0n ? 0n : endBlock - BigInt(1)
-      //       const transfers = []
-      //
-      //       for (let i = startBlock; i <= endBlock; i++) {
-      //         const block = await publicClient.getBlock({
-      //           blockNumber: BigInt(i),
-      //         })
-      //
-      //         for (const hash of block.transactions) {
-      //           const transaction = await publicClient.getTransaction({
-      //             hash,
-      //           })
-      //
-      //           if (
-      //             isAddressEqual(transaction.from, account.address) ||
-      //             isAddressEqual(transaction.to!, account.address)
-      //           ) {
-      //             transfers.push({
-      //               id: transaction.hash,
-      //               direction: isAddressEqual(transaction.from, account.address)
-      //                 ? ('outgoing' as const)
-      //                 : ('incoming' as const),
-      //               to_address: transaction.to!,
-      //               cost: transaction.gas,
-      //               amount: transaction.value,
-      //               date: new Date(1000 * Number(block.timestamp)),
-      //             })
-      //           }
-      //         }
-      //       }
-      //
-      //       setWalletState({
-      //         balance,
-      //         requests: [],
-      //         boosts: [],
-      //         transfers,
-      //       })
-      //       changeScreenState(SCREEN_STATE.LOADED)
-      //     })
-      //
-      //   break
-      default:
+  // Function to fetch wallet state
+  const fetchWalletState = useCallback(
+    (showLoading: boolean = false) => {
+      if (wallet === undefined) {
         changeScreenState(SCREEN_STATE.ABSENT)
-    }
-  }, [wallet])
+        return
+      }
+
+      if (showLoading) {
+        setIsRefreshing(true)
+      }
+
+      switch (wallet.walletType) {
+        case WalletType.F1R3CAP:
+          wallet.embers?.wallets
+            .getWalletState()
+            .then(state => {
+              console.log(
+                '[Wallet] Fetched wallet state, balance:',
+                state.balance.toString(),
+              )
+              setWalletState(state)
+              changeScreenState(SCREEN_STATE.LOADED)
+              setIsRefreshing(false)
+            })
+            .catch(error => {
+              console.error('[Wallet] Failed to fetch wallet state:', error)
+              changeScreenState(SCREEN_STATE.ERROR)
+              setIsRefreshing(false)
+            })
+          break
+        // todo dropped ethereum support for now
+        // case WalletType.ETHEREUM:
+        //   const account = privateKeyToAccount(wallet.privateKey)
+        //
+        //   const publicClient = createTestClient({
+        //     account,
+        //     chain: hardhat,
+        //     mode: 'hardhat',
+        //     transport: http(),
+        //   })
+        //     .extend(publicActions)
+        //     .extend(walletActions)
+        //
+        //   publicClient
+        //     .getBalance({
+        //       address: account.address,
+        //     })
+        //     .then(async balance => {
+        //       const blockNumber = await publicClient.getBlockNumber()
+        //
+        //       const endBlock = blockNumber
+        //       const startBlock = endBlock === 0n ? 0n : endBlock - BigInt(1)
+        //       const transfers = []
+        //
+        //       for (let i = startBlock; i <= endBlock; i++) {
+        //         const block = await publicClient.getBlock({
+        //           blockNumber: BigInt(i),
+        //         })
+        //
+        //         for (const hash of block.transactions) {
+        //           const transaction = await publicClient.getTransaction({
+        //             hash,
+        //           })
+        //
+        //           if (
+        //             isAddressEqual(transaction.from, account.address) ||
+        //             isAddressEqual(transaction.to!, account.address)
+        //           ) {
+        //             transfers.push({
+        //               id: transaction.hash,
+        //               direction: isAddressEqual(transaction.from, account.address)
+        //                 ? ('outgoing' as const)
+        //                 : ('incoming' as const),
+        //               to_address: transaction.to!,
+        //               cost: transaction.gas,
+        //               amount: transaction.value,
+        //               date: new Date(1000 * Number(block.timestamp)),
+        //             })
+        //           }
+        //         }
+        //       }
+        //
+        //       setWalletState({
+        //         balance,
+        //         requests: [],
+        //         boosts: [],
+        //         transfers,
+        //       })
+        //       changeScreenState(SCREEN_STATE.LOADED)
+        //     })
+        //
+        //   break
+        default:
+          changeScreenState(SCREEN_STATE.ABSENT)
+      }
+    },
+    [wallet],
+  )
+
+  // Refetch wallet state whenever the screen is focused (includes initial mount)
+  useFocusEffect(
+    useCallback(() => {
+      fetchWalletState()
+    }, [fetchWalletState]),
+  )
 
   useEffect(() => {
     if (screenState === SCREEN_STATE.ABSENT) {

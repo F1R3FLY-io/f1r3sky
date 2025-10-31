@@ -122,6 +122,7 @@ export async function post(
       embed,
       langs,
       labels,
+      ...(draft.tipWalletAddress && {tipWalletAddress: draft.tipWalletAddress}),
     }
     writes.push({
       $type: 'com.atproto.repo.applyWrites#create',

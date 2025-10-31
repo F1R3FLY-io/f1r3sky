@@ -19,7 +19,12 @@ import {ScrollView} from './util'
 
 export const snapPoints = ['90%']
 
-export function Component() {
+export type Props = {
+  skipNavigation?: boolean
+  onWalletAdded?: () => void
+}
+
+export function Component({skipNavigation = false, onWalletAdded}: Props) {
   const t = useTheme()
   const pal = usePalette('default')
   const {_} = useLingui()
@@ -54,13 +59,23 @@ export function Component() {
       .then(wallet => {
         let position = addWallet(wallet)
         Toast.show(_(msg`Walled added successfully!`))
-        navigation.navigate('Wallet', {position})
+
+        if (!skipNavigation) {
+          navigation.navigate('Wallet', {position})
+        }
+
+        closeModal()
+
+        // Call the callback to return to wallet selector
+        if (onWalletAdded) {
+          onWalletAdded()
+        }
       })
       .catch(() => {
         Toast.show(_(msg`Failed to load file with wallet's private key!`))
         return
       })
-  }, [_, addWallet, navigation])
+  }, [_, addWallet, navigation, skipNavigation, onWalletAdded, closeModal])
 
   return (
     <SafeAreaView style={[pal.view, a.flex_1]}>

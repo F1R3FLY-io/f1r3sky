@@ -61,6 +61,7 @@ import {ProfileHoverCard} from '#/components/ProfileHoverCard'
 import {RichText} from '#/components/RichText'
 import {SubtleWebHover} from '#/components/SubtleWebHover'
 import * as bsky from '#/types/bsky'
+import {PostTip} from './PostTip'
 
 interface FeedItemProps {
   record: AppBskyFeedPost.Record
@@ -455,15 +456,26 @@ let FeedItemInner = ({
               />
             )}
           <LabelsOnMyPost post={post} />
-          <PostContent
-            moderation={moderation}
-            richText={richText}
-            postEmbed={post.embed}
-            postAuthor={post.author}
-            onOpenEmbed={onOpenEmbed}
-            post={post}
-            threadgateRecord={threadgateRecord}
-          />
+          <View style={[a.flex_row, a.gap_sm]}>
+            <View style={[a.flex_1]}>
+              <PostContent
+                moderation={moderation}
+                richText={richText}
+                postEmbed={post.embed}
+                postAuthor={post.author}
+                onOpenEmbed={onOpenEmbed}
+                post={post}
+                threadgateRecord={threadgateRecord}
+              />
+            </View>
+            {(record as any).tipWalletAddress && (
+              <PostTip
+                post={post}
+                walletAddress={(record as any).tipWalletAddress}
+                postAuthor={post.author}
+              />
+            )}
+          </View>
           <PostControls
             post={post}
             record={record}

@@ -43,6 +43,7 @@ import {type OnPostSuccessData} from '#/state/shell/composer'
 import {useMergedThreadgateHiddenReplies} from '#/state/threadgate-hidden-replies'
 import {type PostSource} from '#/state/unstable-post-source'
 import {PostThreadFollowBtn} from '#/view/com/post-thread/PostThreadFollowBtn'
+import {PostTip} from '#/view/com/posts/PostTip'
 import {ErrorMessage} from '#/view/com/util/error/ErrorMessage'
 import {Link} from '#/view/com/util/Link'
 import {formatCount} from '#/view/com/util/numeric/format'
@@ -454,16 +455,27 @@ let PostThreadItemLoaded = ({
                 style={[a.pb_sm]}
                 additionalCauses={additionalPostAlerts}
               />
-              {richText?.text ? (
-                <RichText
-                  enableTags
-                  selectable
-                  value={richText}
-                  style={[a.flex_1, a.text_xl]}
-                  authorHandle={post.author.handle}
-                  shouldProxyLinks={true}
-                />
-              ) : undefined}
+              <View style={[a.flex_row, a.gap_sm]}>
+                <View style={[a.flex_1]}>
+                  {richText?.text ? (
+                    <RichText
+                      enableTags
+                      selectable
+                      value={richText}
+                      style={[a.flex_1, a.text_xl]}
+                      authorHandle={post.author.handle}
+                      shouldProxyLinks={true}
+                    />
+                  ) : undefined}
+                </View>
+                {(record as any).tipWalletAddress && (
+                  <PostTip
+                    post={post}
+                    walletAddress={(record as any).tipWalletAddress}
+                    postAuthor={post.author}
+                  />
+                )}
+              </View>
               {post.embed && (
                 <View style={[a.py_xs]}>
                   <Embed
@@ -676,24 +688,35 @@ let PostThreadItemLoaded = ({
                 style={[a.pb_2xs]}
                 additionalCauses={additionalPostAlerts}
               />
-              {richText?.text ? (
-                <View style={[a.pb_2xs, a.pr_sm]}>
-                  <RichText
-                    enableTags
-                    value={richText}
-                    style={[a.flex_1, a.text_md]}
-                    numberOfLines={limitLines ? MAX_POST_LINES : undefined}
-                    authorHandle={post.author.handle}
-                    shouldProxyLinks={true}
-                  />
-                  {limitLines && (
-                    <ShowMoreTextButton
-                      style={[a.text_md]}
-                      onPress={onPressShowMore}
-                    />
-                  )}
+              <View style={[a.flex_row, a.gap_sm]}>
+                <View style={[a.flex_1]}>
+                  {richText?.text ? (
+                    <View style={[a.pb_2xs, a.pr_sm]}>
+                      <RichText
+                        enableTags
+                        value={richText}
+                        style={[a.flex_1, a.text_md]}
+                        numberOfLines={limitLines ? MAX_POST_LINES : undefined}
+                        authorHandle={post.author.handle}
+                        shouldProxyLinks={true}
+                      />
+                      {limitLines && (
+                        <ShowMoreTextButton
+                          style={[a.text_md]}
+                          onPress={onPressShowMore}
+                        />
+                      )}
+                    </View>
+                  ) : undefined}
                 </View>
-              ) : undefined}
+                {(record as any).tipWalletAddress && (
+                  <PostTip
+                    post={post}
+                    walletAddress={(record as any).tipWalletAddress}
+                    postAuthor={post.author}
+                  />
+                )}
+              </View>
               {post.embed && (
                 <View style={[a.pb_xs]}>
                   <Embed

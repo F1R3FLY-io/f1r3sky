@@ -9,7 +9,7 @@ import {useLingui} from '@lingui/react'
 import {atoms as a, useTheme} from '#/alf'
 import * as Toggle from '#/components/forms/Toggle'
 
-const BALANCE_GRAPH_SCALES = ['1W', '1M', '3M', '6M'] as const
+const BALANCE_GRAPH_SCALES = ['1H', '1D', '1W', '1M', '3M', '6M'] as const
 type BalanceGraphScale = (typeof BALANCE_GRAPH_SCALES)[number]
 
 type GraphEntry = {
@@ -55,6 +55,26 @@ export default function WalletBalanceGraph({
     let maxDate = new Date()
     let labels: Date[]
     switch (activeScale) {
+      case '1H':
+        minDate.setHours(minDate.getHours() - 1)
+        // Generate labels for every 10 minutes
+        labels = []
+        for (let i = 0; i <= 60; i += 10) {
+          let date = new Date(minDate)
+          date.setMinutes(date.getMinutes() + i)
+          labels.push(date)
+        }
+        break
+      case '1D':
+        minDate.setHours(minDate.getHours() - 24)
+        // Generate labels for every 4 hours
+        labels = []
+        for (let i = 0; i <= 24; i += 4) {
+          let date = new Date(minDate)
+          date.setHours(date.getHours() + i)
+          labels.push(date)
+        }
+        break
       case '1W':
         minDate.setDate(minDate.getDate() - 7)
         labels = generateDatesByOffset(maxDate, 6, 1)
@@ -218,7 +238,7 @@ export default function WalletBalanceGraph({
         xMax={maxDate as any}
         xAccessor={({item}) => item.date as any}
         yAccessor={({item}) => Number(item.value)}
-        style={{height: 115}}
+        style={{height: 115, marginBottom: 25}}
         contentInset={{
           top: a.pt_2xl.paddingTop,
           bottom: a.pb_2xl.paddingBottom,
@@ -237,15 +257,20 @@ export default function WalletBalanceGraph({
         {...{min: minDate, max: maxDate}}
         xAccessor={({item}) => item as any}
         formatLabel={date =>
-          date.toLocaleString(undefined, {
-            month: '2-digit',
-            day: '2-digit',
-          })
+          activeScale === '1H' || activeScale === '1D'
+            ? date.toLocaleString(undefined, {
+                hour: '2-digit',
+                minute: '2-digit',
+              })
+            : date.toLocaleString(undefined, {
+                month: '2-digit',
+                day: '2-digit',
+              })
         }
         svg={{
           fill: t.atoms.text_contrast_medium.color,
           ...a.text_xs,
-          y: 10,
+          y: 5,
         }}
       />
     </View>
