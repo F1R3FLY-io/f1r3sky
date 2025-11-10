@@ -20,7 +20,7 @@ import {Loaded} from '../Loaded'
 
 export type WalletBoostProps = {
   destination: Address
-  message: string
+  message?: string
   handle: string
   wallets: UniWallet[]
 }
@@ -88,9 +88,12 @@ export function WalletBoost({
         <Text style={[a.text_xl, a.font_bold]}>
           <Trans>Boost for</Trans> {sanitizeHandle(handle, '@')}
         </Text>
-        <Text style={[a.text_md, a.text_center, t.atoms.text_contrast_medium]}>
-          {message}
-        </Text>
+        {message && (
+          <Text
+            style={[a.text_md, a.text_center, t.atoms.text_contrast_medium]}>
+            {message}
+          </Text>
+        )}
         <Loaded context={walletState}>
           {walletState => (
             <>
