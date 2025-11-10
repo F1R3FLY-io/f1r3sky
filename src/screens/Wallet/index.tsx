@@ -48,6 +48,10 @@ export function Wallet({}: NativeStackScreenProps<
     wallet === undefined && navigation.navigate('Wallets')
   }, [navigation, wallet])
 
+  if (wallet === undefined) {
+    return null
+  }
+
   return (
     <Layout.Screen>
       <Layout.Header.Outer>
@@ -55,9 +59,7 @@ export function Wallet({}: NativeStackScreenProps<
         <Layout.Header.Content align="left">
           <Layout.Header.TitleText>
             <Trans>Wallet</Trans> #
-            <Loaded context={wallet}>
-              {wallet => <WalletAddress value={wallet.address.value} />}
-            </Loaded>
+            <WalletAddress value={wallet.address.value} />
           </Layout.Header.TitleText>
         </Layout.Header.Content>
       </Layout.Header.Outer>
@@ -74,63 +76,57 @@ export function Wallet({}: NativeStackScreenProps<
               a.rounded_md,
               t.atoms.bg_contrast_50,
             ]}>
-            <Loaded context={wallet}>
-              {wallet => (
-                <>
-                  <View style={[a.flex_row, a.align_center, a.gap_sm]}>
-                    <View style={{flexBasis: 110}}>
-                      <Text
-                        style={[
-                          a.text_sm,
-                          a.font_bold,
-                          t.atoms.text_contrast_medium,
-                          a.flex_grow,
-                        ]}>
-                        <Trans>Wallet address</Trans>
-                      </Text>
-                    </View>
-                    <Text style={[a.text_sm]} numberOfLines={1}>
-                      {wallet.address.value}
-                    </Text>
-                    <TouchableOpacity
-                      onPress={() => shareUrl(wallet.address.value)}
-                      accessibilityRole="button">
-                      <Copy />
-                    </TouchableOpacity>
-                  </View>
-                  <View style={[a.flex_row, a.align_center, a.gap_sm]}>
-                    <View style={{flexBasis: 110}}>
-                      <Text
-                        style={[
-                          a.text_sm,
-                          a.font_bold,
-                          t.atoms.text_contrast_medium,
-                        ]}>
-                        <Trans>Private key</Trans>
-                      </Text>
-                    </View>
-                    <TouchableOpacity
-                      onPress={() => saveWalletToFS(wallet.privateKey)}
-                      accessibilityRole="button">
-                      <DownloadIcon />
-                    </TouchableOpacity>
-                  </View>
-                  <View style={[a.flex_row, a.align_center, a.gap_sm]}>
-                    <View style={{flexBasis: 110}}>
-                      <Text
-                        style={[
-                          a.text_sm,
-                          a.font_bold,
-                          t.atoms.text_contrast_medium,
-                        ]}>
-                        <Trans>Default token</Trans>
-                      </Text>
-                    </View>
-                    <Text>F1R3CAP</Text>
-                  </View>
-                </>
-              )}
-            </Loaded>
+            <View style={[a.flex_row, a.align_center, a.gap_sm]}>
+              <View style={{flexBasis: 110}}>
+                <Text
+                  style={[
+                    a.text_sm,
+                    a.font_bold,
+                    t.atoms.text_contrast_medium,
+                    a.flex_grow,
+                  ]}>
+                  <Trans>Wallet address</Trans>
+                </Text>
+              </View>
+              <Text style={[a.text_sm]} numberOfLines={1}>
+                {wallet.address.value}
+              </Text>
+              <TouchableOpacity
+                onPress={() => shareUrl(wallet.address.value)}
+                accessibilityRole="button">
+                <Copy />
+              </TouchableOpacity>
+            </View>
+            <View style={[a.flex_row, a.align_center, a.gap_sm]}>
+              <View style={{flexBasis: 110}}>
+                <Text
+                  style={[
+                    a.text_sm,
+                    a.font_bold,
+                    t.atoms.text_contrast_medium,
+                  ]}>
+                  <Trans>Private key</Trans>
+                </Text>
+              </View>
+              <TouchableOpacity
+                onPress={() => saveWalletToFS(wallet.privateKey)}
+                accessibilityRole="button">
+                <DownloadIcon />
+              </TouchableOpacity>
+            </View>
+            <View style={[a.flex_row, a.align_center, a.gap_sm]}>
+              <View style={{flexBasis: 110}}>
+                <Text
+                  style={[
+                    a.text_sm,
+                    a.font_bold,
+                    t.atoms.text_contrast_medium,
+                  ]}>
+                  <Trans>Default token</Trans>
+                </Text>
+              </View>
+              <Text>F1R3CAP</Text>
+            </View>
           </View>
         </View>
         <Divider />
@@ -143,42 +139,40 @@ export function Wallet({}: NativeStackScreenProps<
           </View>
           <View style={[a.rounded_md, t.atoms.bg_contrast_50]}>
             <View style={[a.p_2xl]}>
-              <View style={[a.flex_row, a.align_end, a.gap_sm]}>
-                <Loaded context={walletState}>
-                  {walletState => (
-                    <>
+              <Loaded loader context={walletState}>
+                {walletState => (
+                  <>
+                    <View style={[a.flex_row, a.align_end, a.gap_sm]}>
                       <Layout.Header.TitleText>
-                        {walletState?.balance.toString()}
+                        {walletState.balance}
                       </Layout.Header.TitleText>
                       <Text style={[a.text_xs, a.pb_xs]}>F1R3CAP</Text>
-                    </>
-                  )}
-                </Loaded>
-              </View>
-              <Loaded context={walletState}>
-                {walletState => <WalletBalanceGraph {...walletState} />}
+                    </View>
+                    <WalletBalanceGraph {...walletState} />
+                    <View style={[a.self_start, a.pt_xl]}>
+                      <Button
+                        color="secondary"
+                        size="small"
+                        label={_(msg`Transfer`)}
+                        style={[
+                          a.border,
+                          a.rounded_xs,
+                          {
+                            borderColor: t.palette.primary_500,
+                          },
+                        ]}
+                        onPress={control.open}>
+                        <View style={[a.flex_row, a.align_center, a.gap_sm]}>
+                          <Transfer />
+                          <Text style={[a.text_sm, a.font_bold]}>
+                            <Trans>Transfer</Trans>
+                          </Text>
+                        </View>
+                      </Button>
+                    </View>
+                  </>
+                )}
               </Loaded>
-              <View style={[a.self_start, a.pt_xl]}>
-                <Button
-                  color="secondary"
-                  size="small"
-                  label={_(msg`Transfer`)}
-                  style={[
-                    a.border,
-                    a.rounded_xs,
-                    {
-                      borderColor: t.palette.primary_500,
-                    },
-                  ]}
-                  onPress={control.open}>
-                  <View style={[a.flex_row, a.align_center, a.gap_sm]}>
-                    <Transfer />
-                    <Text style={[a.text_sm, a.font_bold]}>
-                      <Trans>Transfer</Trans>
-                    </Text>
-                  </View>
-                </Button>
-              </View>
             </View>
           </View>
         </View>
@@ -189,7 +183,7 @@ export function Wallet({}: NativeStackScreenProps<
             <Trans>Transactions history</Trans>
           </Layout.Header.TitleText>
         </View>
-        <Loaded context={walletState}>
+        <Loaded loader context={walletState}>
           {walletState => <TransactionHistory {...walletState} />}
         </Loaded>
         <Loaded context={walletState}>

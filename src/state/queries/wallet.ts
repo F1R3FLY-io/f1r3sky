@@ -14,7 +14,7 @@ export type TransferProps = {
 export function useWalletState(wallet?: UniWallet) {
   return useQuery({
     enabled: !!wallet,
-    queryKey: ['wallet-state', wallet!.address.value],
+    queryKey: ['wallet-state', wallet?.address.value],
     queryFn: async () => wallet!.embers.wallets.getState(),
   })
 }

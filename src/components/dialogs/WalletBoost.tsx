@@ -13,10 +13,10 @@ import {Button} from '#/components/Button'
 import * as Dialog from '#/components/Dialog'
 import {FormError} from '#/components/forms/FormError'
 import * as TextField from '#/components/forms/TextField'
+import {Loaded} from '#/components/Loaded'
 import * as Select from '#/components/Select'
 import * as Toast from '#/components/Toast'
 import {Text} from '#/components/Typography'
-import {Loaded} from '../Loaded'
 
 export type WalletBoostProps = {
   destination: Address
@@ -94,7 +94,7 @@ export function WalletBoost({
             {message}
           </Text>
         )}
-        <Loaded context={walletState}>
+        <Loaded loader context={walletState}>
           {walletState => (
             <>
               <View
