@@ -18,6 +18,9 @@ permissions:
   actions: write
   contents: read
 
+env:
+  NPM_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
 jobs:
   webpack-analyzer:
     runs-on: ubuntu-22.04
