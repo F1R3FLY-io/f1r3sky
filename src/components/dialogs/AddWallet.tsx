@@ -1,19 +1,19 @@
 import {useCallback} from 'react'
 import {View} from 'react-native'
 import * as DocumentPicker from 'expo-document-picker'
-import {Address, deserializeKey} from '@f1r3fly-io/embers-client-sdk'
+import {deserializeKey} from '@f1r3fly-io/embers-client-sdk'
 import {msg, Trans} from '@lingui/macro'
 import {useLingui} from '@lingui/react'
 import {useNavigation} from '@react-navigation/native'
 
 import {downloadDocument} from '#/lib/media/manip'
 import {type NavigationProp} from '#/lib/routes/types'
-import {useWallets, WalletType} from '#/state/wallets'
+import {useWallets} from '#/state/wallets'
 import {atoms as a, useTheme} from '#/alf'
+import {Button} from '#/components/Button'
 import * as Dialog from '#/components/Dialog'
 import * as Toast from '#/components/Toast'
 import {Text} from '#/components/Typography'
-import {Button} from './Button'
 
 export function AddWallet() {
   const t = useTheme()
@@ -34,20 +34,9 @@ export function AddWallet() {
     }
 
     await downloadDocument(result.assets[0])
-      .then(content => {
-        const privateKey = deserializeKey(content)
-        const publicKey = privateKey.getPublicKey()
-        const address = Address.fromPublicKey(publicKey)
-
-        return {
-          privateKey,
-          publicKey,
-          address,
-          walletType: WalletType.F1R3CAP as const,
-        }
-      })
-      .then(wallet => {
-        let position = addWallet(wallet)
+      .then(deserializeKey)
+      .then(key => {
+        let position = addWallet(key)
         Toast.show(_(msg`Walled added successfully!`), {
           type: 'success',
         })

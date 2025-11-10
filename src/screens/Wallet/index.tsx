@@ -1,6 +1,5 @@
-import {useEffect, useState} from 'react'
+import {useEffect} from 'react'
 import {TouchableOpacity, View} from 'react-native'
-import {type WalletStateAndHistory} from '@f1r3fly-io/embers-client-sdk'
 import {msg, Trans} from '@lingui/macro'
 import {useLingui} from '@lingui/react'
 import {type RouteProp} from '@react-navigation/native'
@@ -14,11 +13,13 @@ import {
 import {type NavigationProp} from '#/lib/routes/types'
 import {shareUrl} from '#/lib/sharing'
 import {saveWalletToFS} from '#/lib/wallet'
-import {useWallets, WalletType} from '#/state/wallets'
+import {useWalletState} from '#/state/queries/wallet'
+import {useWallets} from '#/state/wallets'
 import {atoms as a, useTheme} from '#/alf'
 import {Button} from '#/components/Button'
 import {useDialogControl} from '#/components/Dialog'
 import * as Dialog from '#/components/Dialog'
+import {WalletTransfer} from '#/components/dialogs/WalletTransfer'
 import {Divider} from '#/components/Divider'
 import {Download_Stroke2_Corner0_Rounded as DownloadIcon} from '#/components/icons/Download'
 import {Copy, Transfer, WalletTranscation} from '#/components/icons/Wallet'
@@ -27,15 +28,7 @@ import {Loaded} from '#/components/Loaded'
 import {TransactionHistory} from '#/components/TransactionHistory'
 import {Text} from '#/components/Typography'
 import {WalletAddress} from '#/components/WalletAddress'
-import {WalletTransfer} from '#/components/WalletTransfer'
 import WalletBalanceGraph from '../Wallets/WalletBalanceGraph'
-
-enum SCREEN_STATE {
-  LOADING,
-  LOADED,
-  ABSENT,
-  ERROR,
-}
 
 export function Wallet({}: NativeStackScreenProps<
   CommonNavigatorParams,
@@ -49,30 +42,11 @@ export function Wallet({}: NativeStackScreenProps<
   const {params} = useRoute<RouteProp<CommonNavigatorParams, 'Wallet'>>()
 
   const wallet = getByIndex(+params.position)
-  const [walletState, setWalletState] = useState<WalletStateAndHistory>()
-  const [screenState, changeScreenState] = useState(SCREEN_STATE.LOADING)
+  const {data: walletState} = useWalletState(wallet)
 
   useEffect(() => {
-    if (wallet === undefined) {
-      changeScreenState(SCREEN_STATE.ABSENT)
-      return
-    }
-
-    switch (wallet.walletType) {
-      case WalletType.F1R3CAP:
-        wallet.embers?.wallets.getState().then(state => {
-          setWalletState(state)
-          changeScreenState(SCREEN_STATE.LOADED)
-        })
-        break
-    }
-  }, [wallet])
-
-  useEffect(() => {
-    if (screenState === SCREEN_STATE.ABSENT) {
-      navigation.navigate('Wallets')
-    }
-  }, [navigation, screenState])
+    wallet === undefined && navigation.navigate('Wallets')
+  }, [navigation, wallet])
 
   return (
     <Layout.Screen>
@@ -81,7 +55,7 @@ export function Wallet({}: NativeStackScreenProps<
         <Layout.Header.Content align="left">
           <Layout.Header.TitleText>
             <Trans>Wallet</Trans> #
-            <Loaded loaded={!!wallet} context={wallet}>
+            <Loaded context={wallet}>
               {wallet => <WalletAddress value={wallet.address.value} />}
             </Loaded>
           </Layout.Header.TitleText>
@@ -100,9 +74,7 @@ export function Wallet({}: NativeStackScreenProps<
               a.rounded_md,
               t.atoms.bg_contrast_50,
             ]}>
-            <Loaded
-              loaded={screenState === SCREEN_STATE.LOADED}
-              context={wallet}>
+            <Loaded context={wallet}>
               {wallet => (
                 <>
                   <View style={[a.flex_row, a.align_center, a.gap_sm]}>
@@ -138,7 +110,7 @@ export function Wallet({}: NativeStackScreenProps<
                       </Text>
                     </View>
                     <TouchableOpacity
-                      onPress={() => saveWalletToFS(wallet)}
+                      onPress={() => saveWalletToFS(wallet.privateKey)}
                       accessibilityRole="button">
                       <DownloadIcon />
                     </TouchableOpacity>
@@ -154,7 +126,7 @@ export function Wallet({}: NativeStackScreenProps<
                         <Trans>Default token</Trans>
                       </Text>
                     </View>
-                    <Text>{wallet.walletType}</Text>
+                    <Text>F1R3CAP</Text>
                   </View>
                 </>
               )}
@@ -172,9 +144,7 @@ export function Wallet({}: NativeStackScreenProps<
           <View style={[a.rounded_md, t.atoms.bg_contrast_50]}>
             <View style={[a.p_2xl]}>
               <View style={[a.flex_row, a.align_end, a.gap_sm]}>
-                <Loaded
-                  loaded={screenState === SCREEN_STATE.LOADED}
-                  context={walletState}>
+                <Loaded context={walletState}>
                   {walletState => (
                     <>
                       <Layout.Header.TitleText>
@@ -185,9 +155,7 @@ export function Wallet({}: NativeStackScreenProps<
                   )}
                 </Loaded>
               </View>
-              <Loaded
-                loaded={screenState === SCREEN_STATE.LOADED}
-                context={walletState}>
+              <Loaded context={walletState}>
                 {walletState => <WalletBalanceGraph {...walletState} />}
               </Loaded>
               <View style={[a.self_start, a.pt_xl]}>
@@ -221,14 +189,10 @@ export function Wallet({}: NativeStackScreenProps<
             <Trans>Transactions history</Trans>
           </Layout.Header.TitleText>
         </View>
-        <Loaded
-          loaded={screenState === SCREEN_STATE.LOADED}
-          context={walletState}>
+        <Loaded context={walletState}>
           {walletState => <TransactionHistory {...walletState} />}
         </Loaded>
-        <Loaded
-          loaded={screenState === SCREEN_STATE.LOADED}
-          context={walletState}>
+        <Loaded context={walletState}>
           {walletState => (
             <Dialog.Outer
               control={control}

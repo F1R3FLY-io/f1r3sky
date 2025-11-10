@@ -6,28 +6,21 @@ import {
   type PublicKey,
 } from '@f1r3fly-io/embers-client-sdk'
 
-export enum WalletType {
-  F1R3CAP = 'F1R3CAP',
-}
-
-export type FireCAPWallet = {
+export type UniWallet = {
   privateKey: PrivateKey
   publicKey: PublicKey
   address: Address
-  walletType: WalletType.F1R3CAP
-  embers?: EmbersApiSdk | undefined
+  embers: EmbersApiSdk
 }
 
-export type UniWallet = FireCAPWallet
-
 export type WalletsStateContext = {
-  addWallet: (key: UniWallet) => number
+  addWallet: (key: PrivateKey) => number
   getByIndex: (index: number) => UniWallet | undefined
   readonly wallets: UniWallet[]
 }
 
 const WalletsContext = React.createContext<WalletsStateContext>({
-  addWallet: (_: UniWallet) => 0,
+  addWallet: (_: PrivateKey) => 0,
   getByIndex: () => undefined,
   wallets: [],
 })
@@ -35,28 +28,25 @@ const WalletsContext = React.createContext<WalletsStateContext>({
 export function Provider({children}: React.PropsWithChildren<{}>) {
   const [wallets, setWallets] = React.useState<UniWallet[]>([])
 
-  function getByIndex(index: number): UniWallet | undefined {
-    return wallets.at(index - 1)
-  }
+  const getByIndex = (index: number) => wallets.at(index - 1)
 
-  function addWallet(wallet: UniWallet): number {
-    if (wallet.walletType === WalletType.F1R3CAP) {
-      const walletWithEmbers: FireCAPWallet = {
-        ...wallet,
-        embers: new EmbersApiSdk({
-          basePath: process.env.EXPO_PUBLIC_EMBERS_API_URL,
-          privateKey: wallet.privateKey,
-        }),
-      }
+  const addWallet = (privateKey: PrivateKey) => {
+    const publicKey = privateKey.getPublicKey()
+    const address = publicKey.getAddress()
 
-      const newWallets = [...wallets, walletWithEmbers]
-      setWallets(newWallets)
-      return newWallets.length
-    } else {
-      const newWallets = [...wallets, wallet]
-      setWallets(newWallets)
-      return newWallets.length
+    const walletWithEmbers = {
+      privateKey,
+      publicKey,
+      address,
+      embers: new EmbersApiSdk({
+        basePath: process.env.EXPO_PUBLIC_EMBERS_API_URL,
+        privateKey,
+      }),
     }
+
+    const newWallets = [...wallets, walletWithEmbers]
+    setWallets(newWallets)
+    return newWallets.length
   }
 
   return (
