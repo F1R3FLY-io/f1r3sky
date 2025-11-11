@@ -1,18 +1,18 @@
 import {useCallback} from 'react'
 import {View} from 'react-native'
-import {Address, PrivateKey} from '@f1r3fly-io/embers-client-sdk'
+import {PrivateKey} from '@f1r3fly-io/embers-client-sdk'
 import {msg, Trans} from '@lingui/macro'
 import {useLingui} from '@lingui/react'
 import {useNavigation} from '@react-navigation/native'
 
 import {type NavigationProp} from '#/lib/routes/types'
 import {saveWalletToFS} from '#/lib/wallet'
-import {useWallets, WalletType} from '#/state/wallets'
+import {useWallets} from '#/state/wallets'
 import {atoms as a, useTheme} from '#/alf'
+import {Button} from '#/components/Button'
 import * as Dialog from '#/components/Dialog'
 import * as Toast from '#/components/Toast'
 import {Text} from '#/components/Typography'
-import {Button} from './Button'
 
 export function CreateWallet() {
   const t = useTheme()
@@ -23,16 +23,7 @@ export function CreateWallet() {
   const navigation = useNavigation<NavigationProp>()
   const createWallet = useCallback(async () => {
     const privateKey = PrivateKey.new()
-    const publicKey = privateKey.getPublicKey()
-    const address = Address.fromPublicKey(publicKey)
-    const wallet = {
-      privateKey,
-      address,
-      publicKey,
-      walletType: WalletType.F1R3CAP as const,
-    }
-
-    const saveRes = await saveWalletToFS(wallet)
+    const saveRes = await saveWalletToFS(privateKey)
 
     if (saveRes) {
       Toast.show(_(msg`File saved successfully!`), {type: 'success'})
@@ -40,7 +31,7 @@ export function CreateWallet() {
       Toast.show(_(msg`Failed to save file!`), {type: 'error'})
     }
 
-    const position = addWallet(wallet)
+    const position = addWallet(privateKey)
     navigation.navigate('Wallet', {position})
   }, [_, addWallet, navigation])
 

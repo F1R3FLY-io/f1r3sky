@@ -1,11 +1,26 @@
 import type React from 'react'
 
-type LoadedProps<T> = {
-  loaded: boolean
-  context?: T
-  children: (context: T) => React.ReactNode
-}
+import {Loader} from '#/components/Loader'
 
-export function Loaded<T>({loaded, children, context}: LoadedProps<T>) {
-  return loaded ? children(context!) : null
+export function Loaded<T>(props: {
+  loaded: boolean
+  context: T
+  loader?: boolean
+  children: (context: T) => React.ReactNode
+}): React.ReactNode
+
+export function Loaded<T>(props: {
+  context?: T
+  loader?: boolean
+  children: (context: T) => React.ReactNode
+}): React.ReactNode
+
+export function Loaded(props: any) {
+  const loaded = 'loaded' in props ? props.loaded : props.context !== undefined
+
+  if (loaded) {
+    return props.children(props.context)
+  }
+
+  return props.loader ? <Loader size="xl" /> : null
 }

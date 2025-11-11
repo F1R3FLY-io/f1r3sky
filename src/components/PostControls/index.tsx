@@ -29,6 +29,7 @@ import {atoms as a, flatten, useBreakpoints} from '#/alf'
 import {Reply as Bubble} from '#/components/icons/Reply'
 import {useFormatPostStatCount} from '#/components/PostControls/util'
 import {BookmarkButton} from './BookmarkButton'
+import {BoostButton} from './BoostButton'
 import {
   PostControlButton,
   PostControlButtonIcon,
@@ -288,6 +289,13 @@ let PostControls = ({
               hasBeenToggled={hasLikeIconBeenToggled}
             />
           </PostControlButton>
+        </View>
+        <View style={[a.flex_1, a.align_start]}>
+          <BoostButton
+            big={big}
+            did={post.author.did}
+            handle={post.author.displayName || post.author.handle}
+          />
         </View>
         {/* Spacer! */}
         <View />

@@ -17,6 +17,10 @@ permissions:
   pull-requests: write
   actions: write
   contents: read
+  packages: read
+
+env:
+  NPM_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 jobs:
   webpack-analyzer:

@@ -9,7 +9,9 @@ import * as SettingsList from '#/screens/Settings/components/SettingsList'
 import {atoms as a, useTheme} from '#/alf'
 import {AgeAssuranceAccountCard} from '#/components/ageAssurance/AgeAssuranceAccountCard'
 import {useDialogControl} from '#/components/Dialog'
+import * as Dialog from '#/components/Dialog'
 import {BirthDateSettingsDialog} from '#/components/dialogs/BirthDateSettings'
+import {BoostSettingsDialog} from '#/components/dialogs/BoostSettings'
 import {
   EmailDialogScreenID,
   useEmailDialogControl,
@@ -23,6 +25,7 @@ import {Lock_Stroke2_Corner2_Rounded as LockIcon} from '#/components/icons/Lock'
 import {PencilLine_Stroke2_Corner2_Rounded as PencilIcon} from '#/components/icons/Pencil'
 import {ShieldCheck_Stroke2_Corner0_Rounded as ShieldIcon} from '#/components/icons/Shield'
 import {Trash_Stroke2_Corner2_Rounded} from '#/components/icons/Trash'
+import {BoostIcon} from '#/components/icons/Wallet'
 import * as Layout from '#/components/Layout'
 import {ChangeHandleDialog} from './components/ChangeHandleDialog'
 import {ChangePasswordDialog} from './components/ChangePasswordDialog'
@@ -37,6 +40,7 @@ export function AccountSettingsScreen({}: Props) {
   const {openModal} = useModalControls()
   const emailDialogControl = useEmailDialogControl()
   const birthdayControl = useDialogControl()
+  const boostControl = useDialogControl()
   const changeHandleControl = useDialogControl()
   const changePasswordControl = useDialogControl()
   const exportCarControl = useDialogControl()
@@ -146,6 +150,16 @@ export function AccountSettingsScreen({}: Props) {
               onPress={() => birthdayControl.open()}
             />
           </SettingsList.Item>
+          <SettingsList.Item>
+            <SettingsList.ItemIcon icon={BoostIcon} />
+            <SettingsList.ItemText>
+              <Trans>Boost config</Trans>
+            </SettingsList.ItemText>
+            <SettingsList.BadgeButton
+              label={_(msg`Edit`)}
+              onPress={() => boostControl.open()}
+            />
+          </SettingsList.Item>
           <AgeAssuranceAccountCard style={[a.px_xl, a.pt_xs, a.pb_md]} />
           <SettingsList.Divider />
           <SettingsList.PressableItem
@@ -181,6 +195,12 @@ export function AccountSettingsScreen({}: Props) {
       </Layout.Content>
 
       <BirthDateSettingsDialog control={birthdayControl} />
+      <Dialog.Outer
+        control={boostControl}
+        nativeOptions={{preventExpansion: true}}>
+        <Dialog.Handle />
+        <BoostSettingsDialog />
+      </Dialog.Outer>
       <ChangeHandleDialog control={changeHandleControl} />
       <ChangePasswordDialog control={changePasswordControl} />
       <ExportCarDialog control={exportCarControl} />
