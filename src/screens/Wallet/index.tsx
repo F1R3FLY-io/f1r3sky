@@ -148,7 +148,10 @@ export function Wallet({}: NativeStackScreenProps<
                       </Layout.Header.TitleText>
                       <Text style={[a.text_xs, a.pb_xs]}>F1R3CAP</Text>
                     </View>
-                    <WalletBalanceGraph {...walletState} />
+                    <WalletBalanceGraph
+                      address={wallet.address}
+                      {...walletState}
+                    />
                     <View style={[a.self_start, a.pt_xl]}>
                       <Button
                         color="secondary"
@@ -184,7 +187,9 @@ export function Wallet({}: NativeStackScreenProps<
           </Layout.Header.TitleText>
         </View>
         <Loaded loader context={walletState}>
-          {walletState => <TransactionHistory {...walletState} />}
+          {walletState => (
+            <TransactionHistory address={wallet.address} {...walletState} />
+          )}
         </Loaded>
         <Loaded context={walletState}>
           {walletState => (

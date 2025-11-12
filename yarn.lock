@@ -3677,10 +3677,10 @@
   resolved "https://registry.yarnpkg.com/@bufbuild/protobuf/-/protobuf-1.7.0.tgz#cecddc8162a231642b410bc7b99309cd5969733c"
   integrity sha512-jIsRadRsyxf6ERBU1auY2c1k3doFdqh15F4HRZs4BELVuBtpN+3ipkXqcsWE+rD+EQNigeR29SfQ+ES6UX/jGg==
 
-"@bufbuild/protobuf@^2.10.0":
-  version "2.10.0"
-  resolved "https://registry.yarnpkg.com/@bufbuild/protobuf/-/protobuf-2.10.0.tgz#b444f8aafdfa8c497313c8c0f0e7e2e978c53df5"
-  integrity sha512-fdRs9PSrBF7QUntpZpq6BTw58fhgGJojgg39m9oFOJGZT+nip9b0so5cYY1oWl5pvemDLr0cPPsH46vwThEbpQ==
+"@bufbuild/protobuf@^2.10.1":
+  version "2.10.1"
+  resolved "https://registry.yarnpkg.com/@bufbuild/protobuf/-/protobuf-2.10.1.tgz#012f6d7d110f8c45198c7e6a96cb217c45d0c696"
+  integrity sha512-ckS3+vyJb5qGpEYv/s1OebUHDi/xSNtfgw1wqKZo7MR9F2z+qXr0q5XagafAG/9O0QPVIUfST0smluYSTpYFkg==
 
 "@cbor-extract/cbor-extract-darwin-arm64@2.1.1":
   version "2.1.1"
@@ -4436,13 +4436,13 @@
     find-up "^5.0.0"
     js-yaml "^4.1.0"
 
-"@f1r3fly-io/embers-client-sdk@^0.0.66":
-  version "0.0.66"
-  resolved "https://npm.pkg.github.com/download/@f1r3fly-io/embers-client-sdk/0.0.66/70db15d91612664f5ab757298dc2a406588178a5#70db15d91612664f5ab757298dc2a406588178a5"
-  integrity sha512-guVix92k9fkbVS15gsAbVwYPvjbFBRYh1IUG9MTWuZqkKKn5yKeMdRv3/xsUY5IDcwGxTX2R5hYIVJn06BSOPA==
+"@f1r3fly-io/embers-client-sdk@^0.0.70":
+  version "0.0.70"
+  resolved "https://npm.pkg.github.com/download/@f1r3fly-io/embers-client-sdk/0.0.70/db181157a53cde5f5d8acc3df2e8208313cd4a3c#db181157a53cde5f5d8acc3df2e8208313cd4a3c"
+  integrity sha512-e02gHd08Q4OX3e/MSeB80z9gjEGzk3AFG/rnG6D090puOsN6LGwILmT8rZLoRKG+rW38AZXFQRxpIpZST9kFig==
   dependencies:
-    "@bufbuild/protobuf" "^2.10.0"
-    "@f1r3fly-io/graphl-parser" "^0.0.24"
+    "@bufbuild/protobuf" "^2.10.1"
+    "@f1r3fly-io/graphl-parser" "^0.0.27"
     "@noble/curves" "^2.0.1"
     "@scure/base" "^2.0.0"
     blakejs "^1.2.1"
@@ -4451,10 +4451,10 @@
     z32 "^1.1.0"
     zod "^4.1.12"
 
-"@f1r3fly-io/graphl-parser@^0.0.24":
-  version "0.0.24"
-  resolved "https://npm.pkg.github.com/download/@f1r3fly-io/graphl-parser/0.0.24/a92807262dcb4af234a55b42d37b8963fe0f7aa3#a92807262dcb4af234a55b42d37b8963fe0f7aa3"
-  integrity sha512-NLY9T2gHcibOfSytqAOEZk8C9T2+EY3/7v0PhAzz5c1vhcpWTRLVJjmo3zczpfozQ9uWa0WOc7r2DoSH100Odg==
+"@f1r3fly-io/graphl-parser@^0.0.27":
+  version "0.0.27"
+  resolved "https://npm.pkg.github.com/download/@f1r3fly-io/graphl-parser/0.0.27/a1db52c7aef7488a200b8df6e1259a4d65114ff1#a1db52c7aef7488a200b8df6e1259a4d65114ff1"
+  integrity sha512-K5xbjde4YfuU6Q6RT0Qdvd2T2KnZSJePnab7dYxBf8LzSnad/M4W00H9acWNCj95mKuyKkCyZWLohISAGq7zaQ==
 
 "@fastify/busboy@^2.0.0":
   version "2.1.0"

@@ -1,6 +1,10 @@
 import {Fragment, type JSX, useMemo, useState} from 'react'
 import {TouchableOpacity, View} from 'react-native'
-import {type Request, type Transfer} from '@f1r3fly-io/embers-client-sdk'
+import {
+  type Address,
+  type Request,
+  type Transfer,
+} from '@f1r3fly-io/embers-client-sdk'
 import {
   type Boost,
   type WalletStateAndHistory,
@@ -8,7 +12,6 @@ import {
 import {type LinkProps} from '@react-navigation/native'
 
 import {type AllNavigatorParams} from '#/lib/routes/types'
-import {sanitizeHandle} from '#/lib/strings/handles'
 import {PagerWithHeader} from '#/view/com/pager/PagerWithHeader'
 import {atoms as a, useTheme} from '#/alf'
 import {Divider} from '#/components/Divider'
@@ -23,12 +26,22 @@ import {InlineLinkText} from '#/components/Link'
 import {Text} from '#/components/Typography'
 
 const TABLE_VIEWS = ['Requests', 'Exchanges', 'Transfers', 'Boosts']
+type TransactionHistoryProps = {
+  requests: WalletStateAndHistory['requests']
+  boosts: WalletStateAndHistory['boosts']
+  transfers: WalletStateAndHistory['transfers']
+  address: Address
+}
 
-export function TransactionHistory(walletState: WalletStateAndHistory) {
-  const {requests, boosts, transfers} = walletState
+export function TransactionHistory({
+  requests,
+  boosts,
+  transfers,
+  address,
+}: TransactionHistoryProps) {
   const requestsData = useRequestTableDate(requests)
-  const transfersData = useTransferTableDate(transfers)
-  const boostsData = useBoostTableData(boosts)
+  const transfersData = useTransferTableDate(address, transfers)
+  const boostsData = useBoostTableData(address, boosts)
 
   return (
     <PagerWithHeader items={TABLE_VIEWS} isHeaderReady initialPage={2}>
@@ -66,14 +79,14 @@ type TextRow<T> = {
   type: 'text'
   maxLineNumber: number
   field: KeyOfType<T, string>
-  navigate?: (data: T) => LinkProps<AllNavigatorParams>
+  navigate?: (data: T) => LinkProps<AllNavigatorParams> | undefined
 }
 
 type CustomRow<T> = {
   type: 'custom'
   maxLineNumber: number
   formatCel: (data: T) => string
-  navigate?: (data: T) => LinkProps<AllNavigatorParams>
+  navigate?: (data: T) => LinkProps<AllNavigatorParams> | undefined
 }
 
 type JSXRow<T> = {
@@ -151,48 +164,54 @@ const Table = <T extends string, V>({
                   <Text style={[a.text_sm, a.font_bold]}>{rowConfig.name}</Text>
                 )}
               </View>
-              {dataPage.map((item, i) => (
-                <Fragment key={i}>
-                  {rowConfig.type === 'text' && rowConfig.navigate && (
-                    <InlineLinkText
-                      to={rowConfig.navigate(item)}
-                      label={rowConfig.name}
-                      numberOfLines={rowConfig.maxLineNumber}
-                      style={[a.leading_relaxed, ...commonCelStyles]}>
-                      {item[rowConfig.field] as any}
-                    </InlineLinkText>
-                  )}
-                  {rowConfig.type === 'text' && !rowConfig.navigate && (
-                    <Text
-                      numberOfLines={rowConfig.maxLineNumber}
-                      style={[a.leading_relaxed, ...commonCelStyles]}>
-                      {item[rowConfig.field] as any}
-                    </Text>
-                  )}
-                  {rowConfig.type === 'custom' && rowConfig.navigate && (
-                    <InlineLinkText
-                      to={rowConfig.navigate(item)}
-                      label={rowConfig.name}
-                      numberOfLines={rowConfig.maxLineNumber}
-                      style={[a.leading_relaxed, ...commonCelStyles]}>
-                      {rowConfig.formatCel(item)}
-                    </InlineLinkText>
-                  )}
-                  {rowConfig.type === 'custom' && !rowConfig.navigate && (
-                    <Text
-                      numberOfLines={rowConfig.maxLineNumber}
-                      style={[a.leading_relaxed, ...commonCelStyles]}>
-                      {rowConfig.formatCel(item)}
-                    </Text>
-                  )}
-                  {rowConfig.type === 'jsx' && (
-                    <View style={commonCelStyles}>
-                      {rowConfig.renderCel(item)}
-                    </View>
-                  )}
-                  <Divider />
-                </Fragment>
-              ))}
+              {dataPage.map((item, i) => {
+                let to =
+                  (rowConfig.type === 'text' || rowConfig.type === 'custom') &&
+                  rowConfig.navigate?.(item)
+
+                return (
+                  <Fragment key={i}>
+                    {rowConfig.type === 'text' && to && (
+                      <InlineLinkText
+                        to={to}
+                        label={rowConfig.name}
+                        numberOfLines={rowConfig.maxLineNumber}
+                        style={[a.leading_relaxed, ...commonCelStyles]}>
+                        {item[rowConfig.field] as any}
+                      </InlineLinkText>
+                    )}
+                    {rowConfig.type === 'text' && !to && (
+                      <Text
+                        numberOfLines={rowConfig.maxLineNumber}
+                        style={[a.leading_relaxed, ...commonCelStyles]}>
+                        {item[rowConfig.field] as any}
+                      </Text>
+                    )}
+                    {rowConfig.type === 'custom' && to && (
+                      <InlineLinkText
+                        to={to}
+                        label={rowConfig.name}
+                        numberOfLines={rowConfig.maxLineNumber}
+                        style={[a.leading_relaxed, ...commonCelStyles]}>
+                        {rowConfig.formatCel(item)}
+                      </InlineLinkText>
+                    )}
+                    {rowConfig.type === 'custom' && !to && (
+                      <Text
+                        numberOfLines={rowConfig.maxLineNumber}
+                        style={[a.leading_relaxed, ...commonCelStyles]}>
+                        {rowConfig.formatCel(item)}
+                      </Text>
+                    )}
+                    {rowConfig.type === 'jsx' && (
+                      <View style={commonCelStyles}>
+                        {rowConfig.renderCel(item)}
+                      </View>
+                    )}
+                    <Divider />
+                  </Fragment>
+                )
+              })}
             </View>
           )
         })}
@@ -261,40 +280,33 @@ const Table = <T extends string, V>({
   )
 }
 
-type Sort<T> = {
+type SortConfig<T> = {
   desc: boolean
-  col: keyof T
+  key: keyof T
+  pred: (l: T, r: T) => number
 }
 
-function flipSortOrder<T>(current: Sort<T>, flip: keyof T): Sort<T> {
-  return current.col === flip
+function flipSortOrder<T>(
+  current: SortConfig<T>,
+  flip: keyof T,
+  pred: (l: T, r: T) => number,
+): SortConfig<T> {
+  return current.key === flip
     ? {
         ...current,
         desc: !current.desc,
       }
     : {
-        col: flip,
+        key: flip,
         desc: true,
+        pred,
       }
 }
 
-function compare<T>(l: T, r: T): number {
-  if (l instanceof Date && r instanceof Date) {
-    return r.getTime() - l.getTime()
-  } else if (typeof l === 'string' && typeof r === 'string') {
-    return r.localeCompare(l)
-  } else if (typeof l === 'number' && typeof r === 'number') {
-    return r - l
-  }
-  throw new Error('wrong types')
-}
-
-function sortBySortOrder<T>(data: T[], sort: Sort<T>): T[] {
-  return [...data].sort((litem, ritem) => {
-    const l = litem[sort.col]
-    const r = ritem[sort.col]
-    return sort.desc ? compare(l, r) : compare(r, l)
-  })
+function sortBySortOrder<T>(data: T[], {pred, desc}: SortConfig<T>): T[] {
+  return [...data].sort((litem, ritem) =>
+    desc ? pred(litem, ritem) : pred(ritem, litem),
+  )
 }
 
 const REQUEST_COLUMNS = ['ID', 'Date', 'Amount'] as const
@@ -303,9 +315,10 @@ type RequestColumn = (typeof REQUEST_COLUMNS)[number]
 function useRequestTableDate(
   requests: Array<Request>,
 ): TableProps<RequestColumn, Request> {
-  const [requestsOrder, setRequestsOrder] = useState<Sort<Request>>({
+  const [requestsOrder, setRequestsOrder] = useState<SortConfig<Request>>({
     desc: true,
-    col: 'date',
+    key: 'timestamp',
+    pred: (l, r) => r.timestamp.getTime() - l.timestamp.getTime(),
   })
 
   return useMemo(
@@ -325,7 +338,7 @@ function useRequestTableDate(
           type: 'custom',
           maxLineNumber: 2,
           formatCel: request =>
-            `${request.date.toLocaleDateString()}\n${request.date.toLocaleTimeString()}`,
+            `${request.timestamp.toLocaleDateString()}\n${request.timestamp.toLocaleTimeString()}`,
         },
         {
           name: REQUEST_COLUMNS[2],
@@ -339,7 +352,13 @@ function useRequestTableDate(
       rowsPerPage: 5,
       onOrder: (index: number) => {
         if (index === 1) {
-          setRequestsOrder(state => flipSortOrder(state, 'date'))
+          setRequestsOrder(state =>
+            flipSortOrder(
+              state,
+              'timestamp',
+              (l, r) => r.timestamp.getTime() - l.timestamp.getTime(),
+            ),
+          )
         }
       },
     }),
@@ -351,11 +370,13 @@ const TRANSFER_COLUMNS = ['ID', 'Date', 'Amount', 'Address'] as const
 type TransferColumn = (typeof TRANSFER_COLUMNS)[number]
 
 function useTransferTableDate(
+  address: Address,
   transfers: Transfer[],
 ): TableProps<TransferColumn, Transfer> {
-  const [transfersOrder, setTransfersOrder] = useState<Sort<Transfer>>({
+  const [transfersOrder, setTransfersOrder] = useState<SortConfig<Transfer>>({
     desc: true,
-    col: 'date',
+    key: 'timestamp',
+    pred: (l, r) => r.timestamp.getTime() - l.timestamp.getTime(),
   })
 
   return useMemo(
@@ -375,7 +396,7 @@ function useTransferTableDate(
           type: 'custom',
           maxLineNumber: 2,
           formatCel: transfer =>
-            `${transfer.date.toLocaleDateString()}\n${transfer.date.toLocaleTimeString()}`,
+            `${transfer.timestamp.toLocaleDateString()}\n${transfer.timestamp.toLocaleTimeString()}`,
         },
         {
           name: TRANSFER_COLUMNS[2],
@@ -389,19 +410,27 @@ function useTransferTableDate(
           flex: 3,
           type: 'custom',
           maxLineNumber: 1,
-          field: 'toAddress',
-          formatCel: request => request.toAddress.toString(),
+          formatCel: request =>
+            address.value !== request.to.value
+              ? request.to.value
+              : request.from.value,
         },
       ],
       data: sortBySortOrder(transfers, transfersOrder),
       rowsPerPage: 5,
       onOrder: (index: number) => {
         if (index === 1) {
-          setTransfersOrder(state => flipSortOrder(state, 'date'))
+          setTransfersOrder(state =>
+            flipSortOrder(
+              state,
+              'timestamp',
+              (l, r) => r.timestamp.getTime() - l.timestamp.getTime(),
+            ),
+          )
         }
       },
     }),
-    [transfersOrder, transfers],
+    [transfers, transfersOrder, address.value],
   )
 }
 
@@ -409,11 +438,13 @@ const BOOST_COLUMNS = ['Date', 'Type', 'Amount', 'Username', 'Post'] as const
 type BoostColumn = (typeof BOOST_COLUMNS)[number]
 
 function useBoostTableData(
+  address: Address,
   boosts: Array<Boost>,
 ): TableProps<BoostColumn, Boost> {
-  const [boostOrder, setBoostOrder] = useState<Sort<Boost>>({
+  const [boostOrder, setBoostOrder] = useState<SortConfig<Boost>>({
     desc: true,
-    col: 'date',
+    key: 'timestamp',
+    pred: (l, r) => r.timestamp.getTime() - l.timestamp.getTime(),
   })
 
   return useMemo(
@@ -426,7 +457,7 @@ function useBoostTableData(
           type: 'custom',
           maxLineNumber: 2,
           formatCel: boost =>
-            `${boost.date.toLocaleDateString()}\n${boost.date.toLocaleTimeString()}`,
+            `${boost.timestamp.toLocaleDateString()}\n${boost.timestamp.toLocaleTimeString()}`,
         },
         {
           name: BOOST_COLUMNS[1],
@@ -434,7 +465,7 @@ function useBoostTableData(
           flex: 2,
           type: 'jsx',
           renderCel: boost =>
-            boost.direction === 'incoming' ? <Incoming /> : <Outgoing />,
+            address.value === boost.to.value ? <Incoming /> : <Outgoing />,
         },
         {
           name: BOOST_COLUMNS[2],
@@ -444,43 +475,47 @@ function useBoostTableData(
           formatCel: request => request.amount.toString(),
         },
         {
-          name: BOOST_COLUMNS[3],
-          flex: 3,
-          navigate: boost => ({
-            screen: 'Profile',
-            params: {
-              name: boost.username,
-            },
-          }),
-          type: 'custom',
-          maxLineNumber: 1,
-          formatCel: boost => '@' + sanitizeHandle(boost.username),
-        },
-        {
           name: BOOST_COLUMNS[4],
           flex: 3,
-          navigate: boost => ({
-            screen: 'PostThread',
-            params: {
-              name: boost.username,
-              rkey: boost.post,
-            },
-          }),
-          type: 'text',
+          navigate: boost =>
+            boost.postId
+              ? {
+                  screen: 'PostThread',
+                  params: {
+                    name: boost.postAuthorDid,
+                    rkey: boost.postId,
+                  },
+                }
+              : undefined,
+          type: 'custom',
           maxLineNumber: 1,
-          field: 'post',
+          formatCel: boost => boost.postId || '-',
         },
       ],
       data: sortBySortOrder(boosts, boostOrder),
       rowsPerPage: 5,
       onOrder: (index: number) => {
         if (index === 0) {
-          setBoostOrder(state => flipSortOrder(state, 'date'))
+          setBoostOrder(state =>
+            flipSortOrder(
+              state,
+              'timestamp',
+              (l, r) => r.timestamp.getTime() - l.timestamp.getTime(),
+            ),
+          )
         } else if (index === 1) {
-          setBoostOrder(state => flipSortOrder(state, 'direction'))
+          setBoostOrder(state =>
+            flipSortOrder(
+              state,
+              'to',
+              (l, r) =>
+                Number(address.value === l.to.value) -
+                Number(address.value === r.to.value),
+            ),
+          )
         }
       },
     }),
-    [boostOrder, boosts],
+    [address.value, boostOrder, boosts],
   )
 }

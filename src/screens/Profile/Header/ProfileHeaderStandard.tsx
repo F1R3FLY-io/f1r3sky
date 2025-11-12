@@ -38,6 +38,7 @@ import * as Prompt from '#/components/Prompt'
 import {RichText} from '#/components/RichText'
 import {Text} from '#/components/Typography'
 import {VerificationCheckButton} from '#/components/verification/VerificationCheckButton'
+import {BoostProfileButton} from './BoostProfileButton'
 import {EditProfileDialog} from './EditProfileDialog'
 import {ProfileHeaderHandle} from './Handle'
 import {ProfileHeaderMetrics} from './Metrics'
@@ -229,6 +230,11 @@ let ProfileHeaderStandard = ({
                   />
                 )}
                 {hasSession && <MessageProfileButton profile={profile} />}
+
+                <BoostProfileButton
+                  did={profile.did}
+                  handle={profile.displayName || profile.handle}
+                />
 
                 <Button
                   testID={

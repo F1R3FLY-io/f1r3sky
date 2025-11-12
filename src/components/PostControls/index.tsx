@@ -291,11 +291,7 @@ let PostControls = ({
           </PostControlButton>
         </View>
         <View style={[a.flex_1, a.align_start]}>
-          <BoostButton
-            big={big}
-            did={post.author.did}
-            handle={post.author.displayName || post.author.handle}
-          />
+          <BoostButton big={big} post={post} />
         </View>
         {/* Spacer! */}
         <View />

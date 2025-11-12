@@ -1,15 +1,9 @@
-import {type Amount, type Description} from '@f1r3fly-io/embers-client-sdk'
+import {type Amount} from '@f1r3fly-io/embers-client-sdk'
 import {Address} from '@f1r3fly-io/embers-client-sdk'
 import {useMutation, useQuery, useQueryClient} from '@tanstack/react-query'
 
 import {useAgent, useSession} from '#/state/session'
 import {type UniWallet} from '../wallets'
-
-export type TransferProps = {
-  amount: Amount
-  toAddress: Address
-  description?: Description
-}
 
 export function useWalletState(wallet?: UniWallet) {
   return useQuery({
@@ -19,13 +13,52 @@ export function useWalletState(wallet?: UniWallet) {
   })
 }
 
+export type TransferProps = {
+  amount: Amount
+  toAddress: Address
+  description?: string
+}
+
 export function useTransferMutation(wallet: UniWallet) {
   const queryClient = useQueryClient()
 
   return useMutation({
     mutationFn: async ({amount, toAddress, description}: TransferProps) =>
       wallet.embers.wallets
-        .sendTokens(toAddress, amount, description)
+        .transfer(toAddress, amount, description)
+        .then(({waitForFinalization}) => waitForFinalization)
+        .then(async () => {
+          await queryClient.invalidateQueries({
+            queryKey: ['wallet-state', wallet.address.value],
+          })
+          await queryClient.invalidateQueries({
+            queryKey: ['wallet-state', toAddress.value],
+          })
+        }),
+  })
+}
+
+export type BoostProps = {
+  amount: Amount
+  toAddress: Address
+  postAuthorDid: string
+  description?: string
+  postId?: string
+}
+
+export function useBoostMutation(wallet: UniWallet) {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: async ({
+      amount,
+      toAddress,
+      postAuthorDid,
+      description,
+      postId,
+    }: BoostProps) =>
+      wallet.embers.wallets
+        .boost(toAddress, amount, postAuthorDid, description, postId)
         .then(({waitForFinalization}) => waitForFinalization)
         .then(async () => {
           await queryClient.invalidateQueries({

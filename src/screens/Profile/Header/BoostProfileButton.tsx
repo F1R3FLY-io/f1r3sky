@@ -1,30 +1,26 @@
-import {useMemo} from 'react'
-import {type AppBskyFeedDefs} from '@atproto/api'
-import {AtUri} from '@atproto/api'
-import {msg} from '@lingui/macro'
+import {msg, Trans} from '@lingui/macro'
 import {useLingui} from '@lingui/react'
 
-import {type Shadow} from '#/state/cache/types'
 import {useUserBoostQuery} from '#/state/queries/wallet'
 import {useWallets} from '#/state/wallets'
+import {atoms as a} from '#/alf'
+import {Button, ButtonIcon, ButtonText} from '#/components/Button'
 import * as Dialog from '#/components/Dialog'
 import {WalletBoost} from '#/components/dialogs/WalletBoost'
 import {BoostIcon} from '#/components/icons/Wallet'
-import {PostControlButton, PostControlButtonIcon} from './PostControlButton'
 
-type BoostButtonProps = {
-  big?: boolean
-  post: Shadow<AppBskyFeedDefs.PostView>
+type BoostProfileButtonProps = {
+  handle: string
+  did: string
 }
 
-export function BoostButton({big, post}: BoostButtonProps) {
+export function BoostProfileButton({handle, did}: BoostProfileButtonProps) {
   const {_} = useLingui()
 
   const dialogControl = Dialog.useDialogControl()
   const wallets = useWallets()
 
-  const rkey = useMemo(() => new AtUri(post.uri).rkey, [post.uri])
-  const {data: boost} = useUserBoostQuery(post.author.did)
+  const {data: boost} = useUserBoostQuery(did)
 
   if (wallets.wallets.length === 0 || boost === undefined) {
     return null
@@ -32,12 +28,17 @@ export function BoostButton({big, post}: BoostButtonProps) {
 
   return (
     <>
-      <PostControlButton
-        big={big}
+      <Button
+        size="small"
+        color="primary"
+        label={_(msg`Boost user`)}
         onPress={dialogControl.open}
-        label={_(msg`Boost author`)}>
-        <PostControlButtonIcon icon={BoostIcon} />
-      </PostControlButton>
+        style={[a.rounded_full]}>
+        <ButtonIcon icon={BoostIcon} />
+        <ButtonText>
+          <Trans>Boost</Trans>
+        </ButtonText>
+      </Button>
       <Dialog.Outer
         control={dialogControl}
         nativeOptions={{preventExpansion: true}}>
@@ -45,10 +46,9 @@ export function BoostButton({big, post}: BoostButtonProps) {
         <WalletBoost
           destination={boost.walletAddress}
           message={boost.message}
-          handle={post.author.displayName || post.author.handle}
+          handle={handle}
           wallets={wallets.wallets}
-          postId={rkey}
-          postAuthorDid={post.author.did}
+          postAuthorDid={did}
         />
       </Dialog.Outer>
     </>

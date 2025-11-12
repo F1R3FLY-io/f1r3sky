@@ -33,7 +33,7 @@ export function BoostSettingsDialog() {
 
   useEffect(() => {
     if (boost !== undefined) {
-      dispatch({type: 'address', payload: [boost.walletAddress.value]})
+      dispatch({type: 'address', payload: [boost.walletAddress]})
       dispatch({type: 'description', payload: [boost.message]})
     }
   }, [boost, dispatch])
@@ -52,7 +52,7 @@ export function BoostSettingsDialog() {
       try {
         await editBoost.mutateAsync({
           walletAddress: state.address.value,
-          message: state.description.value?.value,
+          message: state.description.value,
         })
         Toast.show(_(msg`Boost config updated`), {type: 'success'})
       } catch {

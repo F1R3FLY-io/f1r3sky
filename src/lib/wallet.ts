@@ -2,7 +2,6 @@ import {useMemo, useReducer} from 'react'
 import {
   Address,
   Amount,
-  Description,
   type PrivateKey,
   serializeKey,
 } from '@f1r3fly-io/embers-client-sdk'
@@ -32,8 +31,15 @@ type ValidationResult<T, P, E extends string> =
 
 const transferFieldValidators = {
   address: (
-    value: string | undefined,
+    value: Address | string | undefined,
   ): ValidationResult<Address, string, 'invalid'> => {
+    if (value instanceof Address) {
+      return {
+        value,
+        state: 'valid',
+      }
+    }
+
     if (value === undefined) {
       return {
         state: 'invalid',
@@ -78,8 +84,15 @@ const transferFieldValidators = {
 
   amount: (
     currentBalance: bigint,
-    value: bigint | undefined,
+    value: Amount | bigint | undefined,
   ): ValidationResult<Amount, bigint, 'invalid' | 'lowBalance'> => {
+    if (value instanceof Amount) {
+      return {
+        value,
+        state: 'valid',
+      }
+    }
+
     if (value === undefined) {
       return {
         state: 'invalid',
@@ -114,27 +127,10 @@ const transferFieldValidators = {
 
   description: (
     value: string | undefined,
-  ): ValidationResult<Description | undefined, string, 'invalid'> => {
-    if (value === undefined) {
-      return {
-        state: 'valid',
-        value,
-      }
-    }
-
-    try {
-      const description = Description.tryFrom(value)
-
-      return {
-        state: 'valid',
-        value: description,
-      }
-    } catch (e) {
-      return {
-        state: 'invalid',
-        value,
-        error: 'invalid',
-      }
+  ): ValidationResult<string | undefined, never, never> => {
+    return {
+      state: 'valid',
+      value,
     }
   },
 }
@@ -193,7 +189,7 @@ export function useTransferValidator<Fields extends TransferFieldName>(
               break
             }
             case 'valid': {
-              value = fieldState.value?.value
+              value = fieldState.value
               break
             }
           }
@@ -258,17 +254,6 @@ function useFormatTransferError<Fields extends TransferFieldName>(
           return _(msg`Invalid address`)
         case 'sameAddress':
           return _(msg`Destination address and source address are the same`)
-      }
-    }
-  }
-
-  if ('description' in state) {
-    const descriptionState =
-      state.description as TransferValidatorState<'description'>['description']
-    if (descriptionState.state === 'invalid') {
-      switch (descriptionState.error) {
-        case 'invalid':
-          return _(msg`Description is too long`)
       }
     }
   }
