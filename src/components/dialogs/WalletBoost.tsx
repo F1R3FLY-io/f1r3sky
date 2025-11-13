@@ -6,7 +6,7 @@ import {useLingui} from '@lingui/react'
 
 import {sanitizeHandle} from '#/lib/strings/handles'
 import {useTransferValidator} from '#/lib/wallet'
-import {useTransferMutation, useWalletState} from '#/state/queries/wallet'
+import {useBoostMutation, useWalletState} from '#/state/queries/wallet'
 import {type UniWallet} from '#/state/wallets'
 import {atoms as a, useTheme} from '#/alf'
 import {Button} from '#/components/Button'
@@ -23,6 +23,8 @@ export type WalletBoostProps = {
   message?: string
   handle: string
   wallets: UniWallet[]
+  postId?: string
+  postAuthorDid: string
 }
 
 export function WalletBoost({
@@ -30,6 +32,8 @@ export function WalletBoost({
   handle,
   wallets,
   message,
+  postId,
+  postAuthorDid,
 }: WalletBoostProps) {
   const t = useTheme()
   const {_} = useLingui()
@@ -51,7 +55,7 @@ export function WalletBoost({
     'description',
   ])
 
-  const {mutateAsync: submit, isPending} = useTransferMutation(selectedWallet)
+  const {mutateAsync: submit, isPending} = useBoostMutation(selectedWallet)
   const {data: walletState} = useWalletState(selectedWallet)
 
   const onSubmitClick = useCallback(async () => {
@@ -65,6 +69,8 @@ export function WalletBoost({
           amount: state.amount.value,
           toAddress: destination,
           description: state.description.value,
+          postId,
+          postAuthorDid,
         })
         Toast.show(_(msg`Boost submitted`), {type: 'success'})
       } catch {
@@ -80,7 +86,17 @@ export function WalletBoost({
         },
       })
     }
-  }, [_, control, dispatch, walletState, destination, state, submit])
+  }, [
+    walletState,
+    state,
+    control,
+    submit,
+    destination,
+    postId,
+    postAuthorDid,
+    _,
+    dispatch,
+  ])
 
   return (
     <Dialog.ScrollableInner label={_(msg`Boost dialog`)}>

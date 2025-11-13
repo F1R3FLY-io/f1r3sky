@@ -2,7 +2,10 @@ import {useMemo, useState} from 'react'
 import {View} from 'react-native'
 import {Defs, LinearGradient, Path, Stop} from 'react-native-svg'
 import {AreaChart, XAxis} from 'react-native-svg-charts'
-import {type WalletStateAndHistory} from '@f1r3fly-io/embers-client-sdk'
+import {
+  type Address,
+  type WalletStateAndHistory,
+} from '@f1r3fly-io/embers-client-sdk'
 import {msg, Trans} from '@lingui/macro'
 import {useLingui} from '@lingui/react'
 
@@ -14,7 +17,7 @@ type BalanceGraphScale = (typeof BALANCE_GRAPH_SCALES)[number]
 
 type GraphEntry = {
   value: bigint
-  date: Date
+  timestamp: Date
 }
 
 const generateDatesByOffset = (
@@ -23,18 +26,26 @@ const generateDatesByOffset = (
   offset: number,
   initialOffset: number = offset,
 ) => {
-  let date = new Date(from)
+  let timestamp = new Date(from)
   let result = []
 
-  date.setDate(date.getDate() - initialOffset)
-  result.push(new Date(date))
+  timestamp.setDate(timestamp.getDate() - initialOffset)
+  result.push(new Date(timestamp))
 
   while (result.length !== size) {
-    date.setDate(date.getDate() - offset)
-    result.push(new Date(date))
+    timestamp.setDate(timestamp.getDate() - offset)
+    result.push(new Date(timestamp))
   }
 
   return result
+}
+
+type WalletBalanceGraphProps = {
+  balance: WalletStateAndHistory['balance']
+  boosts: WalletStateAndHistory['boosts']
+  requests: WalletStateAndHistory['requests']
+  transfers: WalletStateAndHistory['transfers']
+  address: Address
 }
 
 export default function WalletBalanceGraph({
@@ -42,7 +53,8 @@ export default function WalletBalanceGraph({
   boosts,
   requests,
   transfers,
-}: WalletStateAndHistory) {
+  address,
+}: WalletBalanceGraphProps) {
   const t = useTheme()
   const {_} = useLingui()
 
@@ -91,7 +103,7 @@ export default function WalletBalanceGraph({
         value,
       })),
     ]
-      .sort((l, r) => r.value.date.getTime() - l.value.date.getTime())
+      .sort((l, r) => r.value.timestamp.getTime() - l.value.timestamp.getTime())
       .reduce(
         ([allWalletStates, lastBalance], item) => {
           let value: bigint
@@ -102,16 +114,16 @@ export default function WalletBalanceGraph({
             }
             case 'boost': {
               value =
-                item.value.direction === 'incoming'
+                address.value === item.value.to.value
                   ? lastBalance - item.value.amount
                   : lastBalance + item.value.amount
               break
             }
             case 'transfer': {
               value =
-                item.value.direction === 'incoming'
+                address.value === item.value.to.value
                   ? lastBalance - item.value.amount
-                  : lastBalance + item.value.amount + item.value.cost
+                  : lastBalance + item.value.amount
               break
             }
           }
@@ -121,7 +133,7 @@ export default function WalletBalanceGraph({
               ...allWalletStates,
               {
                 value,
-                date: item.value.date,
+                timestamp: item.value.timestamp,
               },
             ],
             value,
@@ -131,29 +143,29 @@ export default function WalletBalanceGraph({
       )
 
     return allWalletStates
-  }, [balance, boosts, requests, transfers])
+  }, [address.value, balance, boosts, requests, transfers])
 
   const data = useMemo(() => {
     const maxBoundary = {
       value: balance,
-      date: maxDate,
+      timestamp: maxDate,
     }
 
-    const inRange = allWalletStates.filter(item => item.date > minDate)
+    const inRange = allWalletStates.filter(item => item.timestamp > minDate)
 
     let minBoundary: GraphEntry[] = []
     if (
       allWalletStates.length !== 0 &&
-      allWalletStates.at(-1)!.date <= minDate
+      allWalletStates.at(-1)!.timestamp <= minDate
     ) {
       // patch balance on minDate position when first transaction is out of range
       minBoundary = [
         allWalletStates.reduceRight(
           (state, item) =>
-            item.date <= minDate
+            item.timestamp <= minDate
               ? {
                   value: item.value,
-                  date: minDate,
+                  timestamp: minDate,
                 }
               : state,
           allWalletStates.at(-1)!,
@@ -161,7 +173,7 @@ export default function WalletBalanceGraph({
       ]
     } else if (inRange.length !== 0) {
       // patch balance on minDate position when first transaction is in range
-      inRange.at(-1)!.date = minDate
+      inRange.at(-1)!.timestamp = minDate
     }
 
     return [maxBoundary, ...inRange, ...minBoundary]
@@ -216,7 +228,7 @@ export default function WalletBalanceGraph({
         yMin={0}
         xMin={minDate as any}
         xMax={maxDate as any}
-        xAccessor={({item}) => item.date as any}
+        xAccessor={({item}) => item.timestamp as any}
         yAccessor={({item}) => Number(item.value)}
         style={{height: 115}}
         contentInset={{
@@ -236,8 +248,8 @@ export default function WalletBalanceGraph({
         data={labels}
         {...{min: minDate, max: maxDate}}
         xAccessor={({item}) => item as any}
-        formatLabel={date =>
-          date.toLocaleString(undefined, {
+        formatLabel={timestamp =>
+          timestamp.toLocaleString(undefined, {
             month: '2-digit',
             day: '2-digit',
           })
