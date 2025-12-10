@@ -4436,13 +4436,13 @@
     find-up "^5.0.0"
     js-yaml "^4.1.0"
 
-"@f1r3fly-io/embers-client-sdk@^0.0.70":
-  version "0.0.70"
-  resolved "https://npm.pkg.github.com/download/@f1r3fly-io/embers-client-sdk/0.0.70/db181157a53cde5f5d8acc3df2e8208313cd4a3c#db181157a53cde5f5d8acc3df2e8208313cd4a3c"
-  integrity sha512-e02gHd08Q4OX3e/MSeB80z9gjEGzk3AFG/rnG6D090puOsN6LGwILmT8rZLoRKG+rW38AZXFQRxpIpZST9kFig==
+"@f1r3fly-io/embers-client-sdk@^0.0.74":
+  version "0.0.74"
+  resolved "https://npm.pkg.github.com/download/@f1r3fly-io/embers-client-sdk/0.0.74/148199d6863d067bf46e4aa6c0052ec1f310e1c3#148199d6863d067bf46e4aa6c0052ec1f310e1c3"
+  integrity sha512-0zfWlnK5VwtA7nkTBDlXcjTBov1MorvS7Pl1zLVhx+386lVjEj3x5E76kOecPAow3SaBsA2WyO8VhtX1SqgLpQ==
   dependencies:
     "@bufbuild/protobuf" "^2.10.1"
-    "@f1r3fly-io/graphl-parser" "^0.0.27"
+    "@f1r3fly-io/graphl-parser" "^0.0.28"
     "@noble/curves" "^2.0.1"
     "@scure/base" "^2.0.0"
     blakejs "^1.2.1"
@@ -4451,10 +4451,10 @@
     z32 "^1.1.0"
     zod "^4.1.12"
 
-"@f1r3fly-io/graphl-parser@^0.0.27":
-  version "0.0.27"
-  resolved "https://npm.pkg.github.com/download/@f1r3fly-io/graphl-parser/0.0.27/a1db52c7aef7488a200b8df6e1259a4d65114ff1#a1db52c7aef7488a200b8df6e1259a4d65114ff1"
-  integrity sha512-K5xbjde4YfuU6Q6RT0Qdvd2T2KnZSJePnab7dYxBf8LzSnad/M4W00H9acWNCj95mKuyKkCyZWLohISAGq7zaQ==
+"@f1r3fly-io/graphl-parser@^0.0.28":
+  version "0.0.28"
+  resolved "https://npm.pkg.github.com/download/@f1r3fly-io/graphl-parser/0.0.28/edf81adb0694b9a2882079df89db83beee403ed7#edf81adb0694b9a2882079df89db83beee403ed7"
+  integrity sha512-vcPjHsedq1nb5fxl3+YQUSrz7XFJmMMOP2BxWtNcXSsBd7qTQiTv/heZKQLtiE4JG7YjGRQE1CtNwY8afVJSSA==
 
 "@fastify/busboy@^2.0.0":
   version "2.1.0"
