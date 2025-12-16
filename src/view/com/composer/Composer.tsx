@@ -92,12 +92,14 @@ import {
   useLanguagePrefs,
   useLanguagePrefsApi,
 } from '#/state/preferences/languages'
+import {sendBotInfo} from '#/state/queries/agent-teams'
 import {usePreferencesQuery} from '#/state/queries/preferences'
 import {useProfileQuery} from '#/state/queries/profile'
 import {type Gif} from '#/state/queries/tenor'
 import {useAgent, useSession} from '#/state/session'
 import {useComposerControls} from '#/state/shell/composer'
 import {type ComposerOpts, type OnPostSuccessData} from '#/state/shell/composer'
+import {useWallets} from '#/state/wallets.tsx'
 import {CharProgress} from '#/view/com/composer/char-progress/CharProgress'
 import {ComposerReplyTo} from '#/view/com/composer/ComposerReplyTo'
 import {
@@ -111,10 +113,6 @@ import {Gallery} from '#/view/com/composer/photos/Gallery'
 import {OpenCameraBtn} from '#/view/com/composer/photos/OpenCameraBtn'
 import {SelectGifBtn} from '#/view/com/composer/photos/SelectGifBtn'
 import {SuggestedLanguage} from '#/view/com/composer/select-language/SuggestedLanguage'
-import {
-  sendBotInfo,
-  extractMentionedDids,
-} from '#/state/queries/agent-teams'
 // TODO: Prevent naming components that coincide with RN primitives
 // due to linting false positives
 import {TextInput} from '#/view/com/composer/text-input/TextInput'
@@ -160,8 +158,6 @@ import {
 import {type TextInputRef} from './text-input/TextInput.types'
 import {getVideoMetadata} from './videos/pickVideo'
 import {clearThumbnailCache} from './videos/VideoTranscodeBackdrop'
-import {useWalletState} from "#/state/queries/wallet.ts";
-import {useWallets} from "#/state/wallets.tsx";
 
 type CancelRef = {
   onPressCancel: () => void
@@ -202,7 +198,7 @@ export const ComposePost = ({
   const [isPublishing, setIsPublishing] = useState(false)
   const [publishingStage, setPublishingStage] = useState('')
   const [error, setError] = useState('')
-  const wallets = useWallets();
+  const wallets = useWallets()
 
   /**
    * A temporary local reference to a language suggestion that the user has
@@ -500,11 +496,17 @@ export const ComposePost = ({
             posts,
           }
           try {
-            const chosenWallet = wallets[0] //for now
-            if(!chosenWallet) {
-              console.warn('No wallets found');
+            const chosenWallet = wallets.wallets[0] //for now
+            if (!chosenWallet) {
+              console.warn('No wallets found')
             }
-            const botSent = await sendBotInfo(agent, chosenWallet, thread, postUri, postSuccessData?.posts)
+            const botSent = await sendBotInfo(
+              agent,
+              chosenWallet,
+              thread,
+              postUri,
+              postSuccessData?.posts,
+            )
             if (botSent) {
               console.log('Bot info sent:', {
                 postUri,
