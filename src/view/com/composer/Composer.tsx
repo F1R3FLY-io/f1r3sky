@@ -495,25 +495,14 @@ export const ComposePost = ({
             replyToUri: replyTo?.uri,
             posts,
           }
-          try {
-            const chosenWallet = wallets.wallets[0] //for now
-            if (!chosenWallet) {
-              console.warn('No wallets found')
-            }
-            const botSent = await sendBotInfo(
+          if (wallets.wallets.length > 0) {
+            sendBotInfo(
               agent,
-              chosenWallet,
+              wallets.wallets[0],
               thread,
               postUri,
               postSuccessData?.posts,
             )
-            if (botSent) {
-              console.log('Bot info sent:', {
-                postUri,
-              })
-            }
-          } catch (e) {
-            console.error('Error sending bot info:', e)
           }
         }
       } catch (waitErr: any) {
@@ -629,6 +618,7 @@ export const ComposePost = ({
     setLangPrefs,
     queryClient,
     navigation,
+    wallets.wallets,
   ])
 
   // Preserves the referential identity passed to each post item.
