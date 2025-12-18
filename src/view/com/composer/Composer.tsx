@@ -92,7 +92,6 @@ import {
   useLanguagePrefs,
   useLanguagePrefsApi,
 } from '#/state/preferences/languages'
-import {sendBotInfo} from '#/state/queries/agent-teams'
 import {usePreferencesQuery} from '#/state/queries/preferences'
 import {useProfileQuery} from '#/state/queries/profile'
 import {type Gif} from '#/state/queries/tenor'
@@ -456,6 +455,7 @@ export const ComposePost = ({
           replyTo: replyTo?.uri,
           onStateChange: setPublishingStage,
           langs: currentLanguages,
+          wallet: wallets.wallets.at(0),
         })
       ).uris[0]
 
@@ -494,15 +494,6 @@ export const ComposePost = ({
           postSuccessData = {
             replyToUri: replyTo?.uri,
             posts,
-          }
-          if (wallets.wallets.length > 0) {
-            sendBotInfo(
-              agent,
-              wallets.wallets[0],
-              thread,
-              postUri,
-              postSuccessData?.posts,
-            )
           }
         }
       } catch (waitErr: any) {

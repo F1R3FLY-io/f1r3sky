@@ -26,6 +26,7 @@ import {isNetworkError} from '#/lib/strings/errors'
 import {shortenLinks, stripInvalidMentions} from '#/lib/strings/rich-text-manip'
 import {logger} from '#/logger'
 import {compressImage} from '#/state/gallery'
+import {runAgentsTeam} from '#/state/queries/agent-teams'
 import {
   fetchResolveGifQuery,
   fetchResolveLinkQuery,
@@ -34,6 +35,7 @@ import {
   createThreadgateRecord,
   threadgateAllowUISettingToAllowRecordValue,
 } from '#/state/queries/threadgate'
+import {type UniWallet} from '#/state/wallets'
 import {
   type EmbedDraft,
   type PostDraft,
@@ -49,6 +51,7 @@ interface PostOpts {
   replyTo?: string
   onStateChange?: (state: string) => void
   langs?: string[]
+  wallet?: UniWallet
 }
 
 export async function post(
@@ -80,6 +83,8 @@ export async function post(
 
   let now = new Date()
   let tid: TID | undefined
+
+  let agentsPostData: {post: PostDraft; reply: AppBskyFeedPost.ReplyRef}[] = []
 
   for (let i = 0; i < thread.posts.length; i++) {
     const draft = thread.posts[i]
@@ -169,6 +174,8 @@ export async function post(
       root: reply?.root ?? ref,
       parent: ref,
     }
+
+    agentsPostData.push({post: draft, reply: replyPromise})
   }
 
   try {
@@ -188,6 +195,12 @@ export async function post(
     } else {
       throw e
     }
+  }
+
+  if (opts.wallet !== undefined) {
+    agentsPostData.forEach(({post, reply}) =>
+      runAgentsTeam(agent, opts.wallet!, post, reply),
+    )
   }
 
   return {uris}

@@ -1,10 +1,10 @@
 import {type BskyAgent} from '@atproto/api'
-import {Amount, Uri} from '@f1r3fly-io/embers-client-sdk'
-import {useMutation, useQuery} from '@tanstack/react-query'
+import {Amount, type FireskyReply, Uri} from '@f1r3fly-io/embers-client-sdk'
+import {useQuery} from '@tanstack/react-query'
 
 import {useAgent} from '#/state/session'
 import {type UniWallet} from '#/state/wallets.tsx'
-import {type ThreadDraft} from '#/view/com/composer/state/composer.ts'
+import {type PostDraft} from '#/view/com/composer/state/composer.ts'
 
 type BotConfigRecord = {
   $type: 'com.f1r3sky.bot.config'
@@ -36,35 +36,13 @@ export function useBotConfigQuery(did?: string) {
   })
 }
 
-export function useCheckIsBotMutation() {
-  const agent = useAgent()
-
-  return useMutation({
-    mutationFn: async ({did}: {did: string}) => {
-      try {
-        await agent.com.atproto.repo.getRecord({
-          repo: did,
-          collection: BOT_CONFIG_COLLECTION,
-          rkey: BOT_CONFIG_RKEY,
-        })
-        return {did, isBot: true}
-      } catch {
-        return {did, isBot: false}
-      }
-    },
-  })
-}
-
-export function extractMentionedDids(thread: ThreadDraft): string[] {
+function extractMentionedDids(post: PostDraft): string[] {
   const dids = new Set<string>()
 
-  for (const post of thread.posts) {
-    for (const facet of post.richtext.facets ?? []) {
-      console.log(facet.features)
-      for (const feature of facet.features ?? []) {
-        if (feature.$type === 'app.bsky.richtext.facet#mention') {
-          dids.add(feature?.did)
-        }
+  for (const facet of post.richtext.facets ?? []) {
+    for (const feature of facet.features ?? []) {
+      if (feature.$type === 'app.bsky.richtext.facet#mention') {
+        dids.add((feature as any).did)
       }
     }
   }
@@ -72,108 +50,58 @@ export function extractMentionedDids(thread: ThreadDraft): string[] {
   return [...dids]
 }
 
-async function getBotAgentTeamUri(
+async function getAgentsTeamUri(
   agent: BskyAgent,
   did: string,
 ): Promise<Uri | null> {
   try {
     const res = await agent.com.atproto.repo.getRecord({
       repo: did,
-      collection: 'com.f1r3sky.bot.config',
-      rkey: 'self',
+      collection: BOT_CONFIG_COLLECTION,
+      rkey: BOT_CONFIG_RKEY,
     })
 
     const record = res.data.value as BotConfigRecord
-    return Uri.tryFrom(record?.uri) ?? null
+    return Uri.tryFrom(record.uri)
   } catch {
     return null
   }
 }
 
-function removeMentionFacets(text: string, facets?: any[]): string {
-  if (!facets?.length) return text
+function buildPromptFromPost(post: PostDraft): string {
+  while (true) {
+    const facet = post.richtext.facets?.find(facet =>
+      facet.features.find(
+        feature => feature.$type === 'app.bsky.richtext.facet#mention',
+      ),
+    )
 
-  // Collect byte ranges of mention facets
-  const ranges: Array<{start: number; end: number}> = []
-  for (const facet of facets) {
-    for (const f of facet.features ?? []) {
-      if (f.$type === 'app.bsky.richtext.facet#mention') {
-        ranges.push({start: facet.index.byteStart, end: facet.index.byteEnd})
-      }
+    if (!facet) {
+      return post.richtext.text
     }
+
+    post.richtext.delete(facet.index.byteStart, facet.index.byteEnd)
   }
-  if (!ranges.length) return text
-
-  // Merge overlapping ranges
-  ranges.sort((a, b) => a.start - b.start)
-  const merged: typeof ranges = []
-  for (const r of ranges) {
-    const last = merged[merged.length - 1]
-    if (!last || r.start > last.end) merged.push({...r})
-    else last.end = Math.max(last.end, r.end)
-  }
-
-  // Remove from UTF-8 bytes
-  const enc = new TextEncoder()
-  const dec = new TextDecoder()
-  const bytes = enc.encode(text)
-
-  const out: number[] = []
-  let cursor = 0
-  for (const r of merged) {
-    out.push(...bytes.slice(cursor, r.start))
-    cursor = r.end
-  }
-  out.push(...bytes.slice(cursor))
-
-  // Normalize whitespace (mentions removal can leave double spaces)
-  return dec
-    .decode(new Uint8Array(out))
-    .replace(/\s{2,}/g, ' ')
-    .trim()
-}
-function buildPromptFromThread(thread: ThreadDraft): string {
-  const p0 = thread.posts[0]
-  return removeMentionFacets(p0.richtext.text, p0.richtext.facets)
 }
 
-type PostRef = {uri: string; cid: string}
-type FireskyReply = {parent: PostRef; root: PostRef}
-
-function buildReplyToFromAppViewThread(
-  appViewThreadItems: any[],
-): FireskyReply | null {
-  const first = appViewThreadItems?.[0]
-  const post = first?.value?.post
-  if (!post?.uri || !post?.cid) return null
-
-  const ref: PostRef = {uri: post.uri, cid: post.cid}
-  return {parent: ref, root: ref}
-}
-
-export async function sendBotInfo(
+export async function runAgentsTeam(
   agent: BskyAgent,
   wallet: UniWallet,
-  thread: ThreadDraft,
-  postUri: string,
-  appViewThreadItems: any[] | undefined,
+  post: PostDraft,
+  replyTo: FireskyReply,
 ): Promise<boolean> {
-  const mentionedDids = extractMentionedDids(thread)
-  const embers = wallet.embers
-
+  const mentionedDids = extractMentionedDids(post)
   if (!mentionedDids.length) return false
 
-  const prompt = buildPromptFromThread(thread)
+  const prompt = buildPromptFromPost(post)
   if (!prompt) return false
 
-  const replyTo = buildReplyToFromAppViewThread(appViewThreadItems ?? [])
-
   for (const did of mentionedDids) {
-    const agentTeamUri = await getBotAgentTeamUri(agent, did)
+    const agentTeamUri = await getAgentsTeamUri(agent, did)
     if (!agentTeamUri) continue
-    const phloLimit = Amount.tryFrom(50_000_000n)
 
-    await embers.agentsTeams.runOnFiresky(
+    const phloLimit = Amount.tryFrom(50_000_000n)
+    await wallet.embers.agentsTeams.runOnFiresky(
       agentTeamUri,
       prompt,
       phloLimit,
@@ -185,7 +113,6 @@ export async function sendBotInfo(
       agentTeamUri,
       prompt,
       replyTo,
-      postUri,
     })
     return true
   }
