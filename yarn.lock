@@ -4436,10 +4436,10 @@
     find-up "^5.0.0"
     js-yaml "^4.1.0"
 
-"@f1r3fly-io/embers-client-sdk@^0.0.74":
-  version "0.0.74"
-  resolved "https://npm.pkg.github.com/download/@f1r3fly-io/embers-client-sdk/0.0.74/148199d6863d067bf46e4aa6c0052ec1f310e1c3#148199d6863d067bf46e4aa6c0052ec1f310e1c3"
-  integrity sha512-0zfWlnK5VwtA7nkTBDlXcjTBov1MorvS7Pl1zLVhx+386lVjEj3x5E76kOecPAow3SaBsA2WyO8VhtX1SqgLpQ==
+"@f1r3fly-io/embers-client-sdk@^0.0.78":
+  version "0.0.78"
+  resolved "https://npm.pkg.github.com/download/@f1r3fly-io/embers-client-sdk/0.0.78/2e1cdce5bd2e93db486d84bc20290b27c59782a1#2e1cdce5bd2e93db486d84bc20290b27c59782a1"
+  integrity sha512-IohXBlGe4W2aXthAn8oe6hTjGlH1qZ10lDJ6BRwyzUuGciEz+Qi9g69OcBbmPXOglOmH5FC2788BnOX65G/U9g==
   dependencies:
     "@bufbuild/protobuf" "^2.10.1"
     "@f1r3fly-io/graphl-parser" "^0.0.28"

@@ -98,6 +98,7 @@ import {type Gif} from '#/state/queries/tenor'
 import {useAgent, useSession} from '#/state/session'
 import {useComposerControls} from '#/state/shell/composer'
 import {type ComposerOpts, type OnPostSuccessData} from '#/state/shell/composer'
+import {useWallets} from '#/state/wallets.tsx'
 import {CharProgress} from '#/view/com/composer/char-progress/CharProgress'
 import {ComposerReplyTo} from '#/view/com/composer/ComposerReplyTo'
 import {
@@ -196,6 +197,7 @@ export const ComposePost = ({
   const [isPublishing, setIsPublishing] = useState(false)
   const [publishingStage, setPublishingStage] = useState('')
   const [error, setError] = useState('')
+  const wallets = useWallets()
 
   /**
    * A temporary local reference to a language suggestion that the user has
@@ -453,6 +455,7 @@ export const ComposePost = ({
           replyTo: replyTo?.uri,
           onStateChange: setPublishingStage,
           langs: currentLanguages,
+          wallet: wallets.wallets.at(0),
         })
       ).uris[0]
 
@@ -606,6 +609,7 @@ export const ComposePost = ({
     setLangPrefs,
     queryClient,
     navigation,
+    wallets.wallets,
   ])
 
   // Preserves the referential identity passed to each post item.
