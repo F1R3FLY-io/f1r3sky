@@ -6,29 +6,29 @@ import {useAgent} from '#/state/session'
 import {type UniWallet} from '#/state/wallets.tsx'
 import {type PostDraft} from '#/view/com/composer/state/composer.ts'
 
-type BotConfigRecord = {
-  $type: 'com.f1r3sky.bot.config'
+type AgentsTeamConfig = {
+  $type: 'com.f1r3sky.agentsteam.config'
   uri: string
 }
 
-const BOT_CONFIG_COLLECTION: BotConfigRecord['$type'] = 'com.f1r3sky.bot.config'
-const BOT_CONFIG_RKEY = 'self'
+const AGENTS_TEAM_CONFIG_COLLECTION: AgentsTeamConfig['$type'] =
+  'com.f1r3sky.agentsteam.config'
 
 export function useBotConfigQuery(did?: string) {
   const agent = useAgent()
 
   return useQuery({
     enabled: !!did,
-    queryKey: [BOT_CONFIG_COLLECTION, did],
+    queryKey: [AGENTS_TEAM_CONFIG_COLLECTION, did],
     queryFn: async () => {
       try {
         const res = await agent.com.atproto.repo.getRecord({
           repo: did!,
-          collection: BOT_CONFIG_COLLECTION,
-          rkey: BOT_CONFIG_RKEY,
+          collection: AGENTS_TEAM_CONFIG_COLLECTION,
+          rkey: 'self',
         })
 
-        return res.data.value as BotConfigRecord
+        return res.data.value as AgentsTeamConfig
       } catch {
         return null
       }
@@ -57,11 +57,11 @@ async function getAgentsTeamUri(
   try {
     const res = await agent.com.atproto.repo.getRecord({
       repo: did,
-      collection: BOT_CONFIG_COLLECTION,
-      rkey: BOT_CONFIG_RKEY,
+      collection: AGENTS_TEAM_CONFIG_COLLECTION,
+      rkey: 'self',
     })
 
-    const record = res.data.value as BotConfigRecord
+    const record = res.data.value as AgentsTeamConfig
     return Uri.tryFrom(record.uri)
   } catch {
     return null
