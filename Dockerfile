@@ -42,6 +42,13 @@ ARG EXPO_PUBLIC_SENTRY_DSN
 ENV EXPO_PUBLIC_SENTRY_DSN=$EXPO_PUBLIC_SENTRY_DSN
 
 #
+# NPM Authentication (for GitHub Packages)
+# Must be declared before yarn install since @f1r3fly-io packages require auth
+# Using ARG only (not ENV) so the token isn't persisted in the final image
+#
+ARG NPM_TOKEN
+
+#
 # Copy everything into the container
 #
 COPY . .
