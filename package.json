@@ -72,6 +72,8 @@
     "icons:optimize": "svgo -f ./assets/icons"
   },
   "dependencies": {
+    "@atcute/identity": "^1.1.3",
+    "@atcute/identity-resolver": "^1.2.2",
     "@atproto/api": "^0.17.6",
     "@bitdrift/react-native": "^0.6.8",
     "@braintree/sanitize-url": "^6.0.2",

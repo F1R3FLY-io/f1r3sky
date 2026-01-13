@@ -4,6 +4,7 @@ import {useMutation, useQuery, useQueryClient} from '@tanstack/react-query'
 
 import {useAgent, useSession} from '#/state/session'
 import {type UniWallet} from '../wallets'
+import {resolveDidPds} from './util'
 
 export function useWalletState(wallet?: UniWallet) {
   return useQuery({
@@ -86,12 +87,11 @@ export type BoostConfig = {
 }
 
 export function useUserBoostQuery(did?: string) {
-  const agent = useAgent()
-
   return useQuery({
     enabled: !!did,
     queryKey: [BOOST_COLLECTION, did],
     queryFn: async () => {
+      const agent = await resolveDidPds(did!)
       const res = await agent.com.atproto.repo.getRecord({
         repo: did!,
         collection: BOOST_COLLECTION,
