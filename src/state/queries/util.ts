@@ -1,9 +1,15 @@
 import {
+  CompositeDidDocumentResolver,
+  PlcDidDocumentResolver,
+  WebDidDocumentResolver,
+} from '@atcute/identity-resolver'
+import {
   type AppBskyActorDefs,
   AppBskyEmbedRecord,
   AppBskyEmbedRecordWithMedia,
   type AppBskyFeedDefs,
   AppBskyFeedPost,
+  AtpAgent,
   type AtUri,
 } from '@atproto/api'
 import {
@@ -12,6 +18,7 @@ import {
   type QueryKey,
 } from '@tanstack/react-query'
 
+import {ENV} from '#/env'
 import * as bsky from '#/types/bsky'
 
 export async function truncateAndInvalidate<T = any>(
@@ -91,4 +98,25 @@ export function embedViewRecordToPostView(
     replyCount: v.replyCount,
     repostCount: v.repostCount,
   }
+}
+
+const DID_RESOLVER = new CompositeDidDocumentResolver({
+  methods: {
+    plc: new PlcDidDocumentResolver(
+      ENV !== 'production'
+        ? {
+            apiUrl: 'http://localhost:2582',
+          }
+        : undefined,
+    ),
+    web: new WebDidDocumentResolver(),
+  },
+})
+
+export async function resolveDidPds(did: string) {
+  const document = await DID_RESOLVER.resolve(did as any)
+  const service = document.service?.find(
+    service => service.id === '#atproto_pds',
+  )?.serviceEndpoint
+  return new AtpAgent({service: service as string})
 }

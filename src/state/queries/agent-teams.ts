@@ -2,9 +2,9 @@ import {type BskyAgent} from '@atproto/api'
 import {Amount, type FireskyReply, Uri} from '@f1r3fly-io/embers-client-sdk'
 import {useQuery} from '@tanstack/react-query'
 
-import {useAgent} from '#/state/session'
 import {type UniWallet} from '#/state/wallets.tsx'
 import {type PostDraft} from '#/view/com/composer/state/composer.ts'
+import {resolveDidPds} from './util'
 
 type AgentsTeamConfig = {
   $type: 'com.f1r3sky.agentsteam.config'
@@ -15,13 +15,12 @@ const AGENTS_TEAM_CONFIG_COLLECTION: AgentsTeamConfig['$type'] =
   'com.f1r3sky.agentsteam.config'
 
 export function useBotConfigQuery(did?: string) {
-  const agent = useAgent()
-
   return useQuery({
     enabled: !!did,
     queryKey: [AGENTS_TEAM_CONFIG_COLLECTION, did],
     queryFn: async () => {
       try {
+        const agent = await resolveDidPds(did!)
         const res = await agent.com.atproto.repo.getRecord({
           repo: did!,
           collection: AGENTS_TEAM_CONFIG_COLLECTION,
@@ -89,12 +88,12 @@ export async function runAgentsTeam(
   wallet: UniWallet,
   post: PostDraft,
   replyTo: FireskyReply,
-): Promise<boolean> {
+) {
   const mentionedDids = extractMentionedDids(post)
-  if (!mentionedDids.length) return false
+  if (!mentionedDids.length) return
 
   const prompt = buildPromptFromPost(post)
-  if (!prompt) return false
+  if (!prompt) return
 
   for (const did of mentionedDids) {
     const agentTeamUri = await getAgentsTeamUri(agent, did)
@@ -105,17 +104,7 @@ export async function runAgentsTeam(
       agentTeamUri,
       prompt,
       phloLimit,
-      replyTo ?? undefined,
-    )
-
-    console.log('Would run bot on Firesky:', {
-      did,
-      agentTeamUri,
-      prompt,
       replyTo,
-    })
-    return true
+    )
   }
-
-  return false
 }

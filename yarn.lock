@@ -20,6 +20,52 @@
     "@jridgewell/gen-mapping" "^0.3.0"
     "@jridgewell/trace-mapping" "^0.3.9"
 
+"@atcute/identity-resolver@^1.2.2":
+  version "1.2.2"
+  resolved "https://registry.yarnpkg.com/@atcute/identity-resolver/-/identity-resolver-1.2.2.tgz#e148f3bfeabf28cd315c39804d3cf3b70acbce57"
+  integrity sha512-eUh/UH4bFvuXS0X7epYCeJC/kj4rbBXfSRumLEH4smMVwNOgTo7cL/0Srty+P/qVPoZEyXdfEbS0PHJyzoXmHw==
+  dependencies:
+    "@atcute/lexicons" "^1.2.6"
+    "@atcute/util-fetch" "^1.0.5"
+    "@badrap/valita" "^0.4.6"
+
+"@atcute/identity@^1.1.3":
+  version "1.1.3"
+  resolved "https://registry.yarnpkg.com/@atcute/identity/-/identity-1.1.3.tgz#7d952aa163d3be160764f98606d5e90da1f49f9d"
+  integrity sha512-oIqPoI8TwWeQxvcLmFEZLdN2XdWcaLVtlm8pNk0E72As9HNzzD9pwKPrLr3rmTLRIoULPPFmq9iFNsTeCIU9ng==
+  dependencies:
+    "@atcute/lexicons" "^1.2.4"
+    "@badrap/valita" "^0.4.6"
+
+"@atcute/lexicons@^1.2.4", "@atcute/lexicons@^1.2.6":
+  version "1.2.6"
+  resolved "https://registry.yarnpkg.com/@atcute/lexicons/-/lexicons-1.2.6.tgz#180904bf17413a7276e505a84a5f1a4d9c7bf8ca"
+  integrity sha512-s76UQd8D+XmHIzrjD9CJ9SOOeeLPHc+sMmcj7UFakAW/dDFXc579fcRdRfuUKvXBL5v1Gs2VgDdlh/IvvQZAwA==
+  dependencies:
+    "@atcute/uint8array" "^1.0.6"
+    "@atcute/util-text" "^0.0.1"
+    "@standard-schema/spec" "^1.1.0"
+    esm-env "^1.2.2"
+
+"@atcute/uint8array@^1.0.6":
+  version "1.0.6"
+  resolved "https://registry.yarnpkg.com/@atcute/uint8array/-/uint8array-1.0.6.tgz#ed4437d426c947e2918ec49c681882e3ea44b3d2"
+  integrity sha512-ucfRBQc7BFT8n9eCyGOzDHEMKF/nZwhS2pPao4Xtab1ML3HdFYcX2DM1tadCzas85QTGxHe5urnUAAcNKGRi9A==
+
+"@atcute/util-fetch@^1.0.5":
+  version "1.0.5"
+  resolved "https://registry.yarnpkg.com/@atcute/util-fetch/-/util-fetch-1.0.5.tgz#c780f7c68407683a57173507765fed187ddebc3f"
+  integrity sha512-qjHj01BGxjSjIFdPiAjSARnodJIIyKxnCMMEcXMESo9TAyND6XZQqrie5fia+LlYWVXdpsTds8uFQwc9jdKTig==
+  dependencies:
+    "@badrap/valita" "^0.4.6"
+
+"@atcute/util-text@^0.0.1":
+  version "0.0.1"
+  resolved "https://registry.yarnpkg.com/@atcute/util-text/-/util-text-0.0.1.tgz#1cbe4c02555fa0ecdba5e427013cc77f0ab0400c"
+  integrity sha512-t1KZqvn0AYy+h2KcJyHnKF9aEqfRfMUmyY8j1ELtAEIgqN9CxINAjxnoRCJIFUlvWzb+oY3uElQL/Vyk3yss0g==
+  dependencies:
+    unicode-segmenter "^0.14.4"
+
 "@atproto-labs/fetch-node@0.1.10", "@atproto-labs/fetch-node@^0.1.10":
   version "0.1.10"
   resolved "https://registry.yarnpkg.com/@atproto-labs/fetch-node/-/fetch-node-0.1.10.tgz#bfed87125503d8227e6755399a3d6c8f1fade941"
@@ -3641,6 +3687,11 @@
   dependencies:
     "@babel/helper-string-parser" "^7.27.1"
     "@babel/helper-validator-identifier" "^7.27.1"
+
+"@badrap/valita@^0.4.6":
+  version "0.4.6"
+  resolved "https://registry.yarnpkg.com/@badrap/valita/-/valita-0.4.6.tgz#becdb603d3150f353425da610b3b258be223f90d"
+  integrity sha512-4kdqcjyxo/8RQ8ayjms47HCWZIF5981oE5nIenbfThKDxWXtEHKipAOWlflpPJzZx9y/JWYQkp18Awr7VuepFg==
 
 "@bcoe/v8-coverage@^0.2.3":
   version "0.2.3"
@@ -7298,6 +7349,11 @@
   integrity sha512-4aUIteuyxtBUhVdiQqcDhKFitwfd9hqoSDYY2KRXiWtgoWJ9Bmise+KfEPDiVHWeJepvF8xJO9/9+WDIciMFFw==
   dependencies:
     tslib "^2.6.2"
+
+"@standard-schema/spec@^1.1.0":
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/@standard-schema/spec/-/spec-1.1.0.tgz#a79b55dbaf8604812f52d140b2c9ab41bc150bb8"
+  integrity sha512-l2aFy5jALhniG5HgqrD6jXLi/rUWrKvqN/qJx6yoJsgKhblVd+iqqU4RCXavm/jPityDo5TCvKMnpjKnOriy0w==
 
 "@tanstack/query-async-storage-persister@^5.25.0":
   version "5.25.0"
@@ -11363,6 +11419,11 @@ eslint@^8.19.0:
     optionator "^0.9.3"
     strip-ansi "^6.0.1"
     text-table "^0.2.0"
+
+esm-env@^1.2.2:
+  version "1.2.2"
+  resolved "https://registry.yarnpkg.com/esm-env/-/esm-env-1.2.2.tgz#263c9455c55861f41618df31b20cb571fc20b75e"
+  integrity sha512-Epxrv+Nr/CaL4ZcFGPJIYLWFom+YeV1DqMLHJoEd9SYRxNbaFruBwfEX/kkHUJf55j2+TUbmDcmuilbP1TmXHA==
 
 espree@^9.6.0, espree@^9.6.1:
   version "9.6.1"
@@ -19713,6 +19774,11 @@ unicode-property-aliases-ecmascript@^2.0.0:
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/unicode-property-aliases-ecmascript/-/unicode-property-aliases-ecmascript-2.1.0.tgz#43d41e3be698bd493ef911077c9b131f827e8ccd"
   integrity sha512-6t3foTQI9qne+OZoVQB/8x8rk2k1eVy1gRXhV3oFQ5T6R1dqQ1xtin3XqSlx3+ATBkliTaR/hHyJBm+LVPNM8w==
+
+unicode-segmenter@^0.14.4:
+  version "0.14.5"
+  resolved "https://registry.yarnpkg.com/unicode-segmenter/-/unicode-segmenter-0.14.5.tgz#c658f6dd30de172cdcd94542adc205ba43fb63c6"
+  integrity sha512-jHGmj2LUuqDcX3hqY12Ql+uhUTn8huuxNZGq7GvtF6bSybzH3aFgedYu/KTzQStEgt1Ra2F3HxadNXsNjb3m3g==
 
 unimodules-app-loader@~6.0.7:
   version "6.0.7"
