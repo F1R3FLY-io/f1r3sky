@@ -38,9 +38,9 @@ ENV EXPO_PUBLIC_BUNDLE_IDENTIFIER=${EXPO_PUBLIC_BUNDLE_IDENTIFIER:-$RENDER_GIT_C
 # These MUST be set at build time - the bskyweb Go binary cannot inject them at runtime.
 #
 ARG EXPO_PUBLIC_EMBERS_API_URL
-ENV EXPO_PUBLIC_EMBERS_API_URL=${EXPO_PUBLIC_EMBERS_API_URL:-http://localhost:8080}
+ENV EXPO_PUBLIC_EMBERS_API_URL=${EXPO_PUBLIC_EMBERS_API_URL}
 ARG EXPO_PUBLIC_EMBERS_URL
-ENV EXPO_PUBLIC_EMBERS_URL=${EXPO_PUBLIC_EMBERS_URL:-http://localhost:5173}
+ENV EXPO_PUBLIC_EMBERS_URL=${EXPO_PUBLIC_EMBERS_URL}
 
 #
 # Sentry
@@ -79,8 +79,8 @@ RUN \. "$NVM_DIR/nvm.sh" && \
   yarn && \
   yarn intl:build 2>&1 | tee i18n.log && \
   if grep -q "invalid syntax" "i18n.log"; then echo "\n\nFound compilation errors!\n\n" && exit 1; else echo "\n\nNo compile errors!\n\n"; fi && \
-  SENTRY_AUTH_TOKEN=$SENTRY_AUTH_TOKEN SENTRY_RELEASE=$EXPO_PUBLIC_RELEASE_VERSION SENTRY_DIST=$EXPO_PUBLIC_BUNDLE_IDENTIFIER yarn build-web
-
+  SENTRY_AUTH_TOKEN=$SENTRY_AUTH_TOKEN SENTRY_RELEASE=$EXPO_PUBLIC_RELEASE_VERSION SENTRY_DIST=$EXPO_PUBLIC_BUNDLE_IDENTIFIER yarn build-web && \
+  cat .env
 # DEBUG
 RUN find ./bskyweb/static && find ./web-build/static
 
@@ -114,7 +114,7 @@ ENTRYPOINT ["dumb-init", "--"]
 WORKDIR /bskyweb
 COPY --from=build-env /bskyweb /usr/bin/bskyweb
 
-CMD ["/usr/bin/bskyweb"]
+CMD ["/usr/bin/bskyweb","serve"]
 
 LABEL org.opencontainers.image.source=https://github.com/bluesky-social/social-app
 LABEL org.opencontainers.image.description="bsky.app Web App"
