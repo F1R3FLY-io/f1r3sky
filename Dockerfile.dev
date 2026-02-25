@@ -21,15 +21,12 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 COPY package.json yarn.lock .npmrc ./
 
 # Install dependencies without postinstall (postinstall needs lingui.config.js which isn't copied yet)
-# NPM_TOKEN secret is read from /run/secrets/npm_token to satisfy project .npmrc's ${NPM_TOKEN}
 RUN --mount=type=secret,id=npm_token \
     NPM_TOKEN=$(cat /run/secrets/npm_token) \
     yarn install --frozen-lockfile --ignore-scripts && \
-    rm -f .npmrc
 
 # Copy source
 COPY . .
-RUN rm -f .npmrc
 
 # Run patch-package (ok to fail on some patches)
 RUN npx patch-package || true
