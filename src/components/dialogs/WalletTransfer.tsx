@@ -7,10 +7,11 @@ import {useTransferValidator} from '#/lib/wallet'
 import {useTransferMutation} from '#/state/queries/wallet'
 import {type UniWallet} from '#/state/wallets'
 import {atoms as a, useTheme} from '#/alf'
-import {Button} from '#/components/Button'
+import {Button, ButtonIcon, ButtonText} from '#/components/Button'
 import * as Dialog from '#/components/Dialog'
 import {FormError} from '#/components/forms/FormError'
 import * as TextField from '#/components/forms/TextField'
+import {Loader} from '#/components/Loader'
 import * as Toast from '#/components/Toast'
 import {Text} from '#/components/Typography'
 
@@ -33,16 +34,18 @@ export function WalletTransfer(props: WalletTransferProps) {
   const {mutateAsync: submit, isPending} = useTransferMutation(props.wallet)
 
   const onSubmitClick = useCallback(async () => {
+    const description =
+      state.description.state === 'valid' ? state.description.value : undefined
+
     if (
       state.amount.state === 'valid' &&
-      state.transferAddress.state === 'valid' &&
-      state.description.state === 'valid'
+      state.transferAddress.state === 'valid'
     ) {
       try {
         await submit({
           amount: state.amount.value,
           toAddress: state.transferAddress.value,
-          description: state.description.value,
+          description,
         })
         Toast.show(_(msg`Transfer submitted`), {type: 'success'})
       } catch {
@@ -174,9 +177,10 @@ export function WalletTransfer(props: WalletTransferProps) {
             disabled={isPending}
             onPress={onSubmitClick}
             label={_(msg`Transfer tokens`)}>
-            <Text style={[a.text_sm, a.font_bold]}>
+            <ButtonText style={[a.text_sm, a.font_bold]}>
               <Trans>Transfer tokens</Trans>
-            </Text>
+            </ButtonText>
+            {isPending && <ButtonIcon icon={Loader} />}
           </Button>
           <Button
             color="secondary"
