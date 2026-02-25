@@ -177,7 +177,7 @@ export function WalletTransfer(props: WalletTransferProps) {
             disabled={isPending}
             onPress={onSubmitClick}
             label={_(msg`Transfer tokens`)}>
-            <ButtonText style={[a.font_bold]}>
+            <ButtonText style={[a.text_sm, a.font_bold]}>
               <Trans>Transfer tokens</Trans>
             </ButtonText>
             {isPending && <ButtonIcon icon={Loader} />}
