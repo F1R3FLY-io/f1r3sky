@@ -34,6 +34,18 @@ ARG EXPO_PUBLIC_BUNDLE_IDENTIFIER
 ENV EXPO_PUBLIC_BUNDLE_IDENTIFIER=${EXPO_PUBLIC_BUNDLE_IDENTIFIER:-$RENDER_GIT_COMMIT}
 
 #
+# NPM Token (for @f1r3fly-io GitHub Packages)
+#
+ARG NPM_TOKEN
+ENV NPM_TOKEN=$NPM_TOKEN
+
+#
+# Embers
+#
+ARG EXPO_PUBLIC_EMBERS_API_URL
+ENV EXPO_PUBLIC_EMBERS_API_URL=${EXPO_PUBLIC_EMBERS_API_URL:-http://localhost:8080}
+
+#
 # Sentry
 #
 ARG SENTRY_AUTH_TOKEN
@@ -64,6 +76,7 @@ RUN \. "$NVM_DIR/nvm.sh" && \
   echo "EXPO_PUBLIC_BUNDLE_IDENTIFIER=$EXPO_PUBLIC_BUNDLE_IDENTIFIER" >> .env && \
   echo "EXPO_PUBLIC_BUNDLE_DATE=$(date -u +"%y%m%d%H")" >> .env && \
   echo "EXPO_PUBLIC_SENTRY_DSN=$EXPO_PUBLIC_SENTRY_DSN" >> .env && \
+  echo "EXPO_PUBLIC_EMBERS_API_URL=$EXPO_PUBLIC_EMBERS_API_URL" >> .env && \
   npm install --global yarn && \
   yarn && \
   yarn intl:build 2>&1 | tee i18n.log && \
